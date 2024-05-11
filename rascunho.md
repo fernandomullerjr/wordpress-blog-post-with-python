@@ -203,3 +203,336 @@ if __name__ == "__main__":
     myEnvironment()
 ~~~~
 
+
+
+
+<https://py-googletrans.readthedocs.io/en/latest/>
+
+
+
+
+
+# #################################################################################################################################################
+# #################################################################################################################################################
+# #################################################################################################################################################
+# #################################################################################################################################################
+# #################################################################################################################################################
+## Checks
+
+<https://blog.finxter.com/how-to-publish-a-wordpress-post-using-python/>
+Enable the REST API in WordPress: WordPress has a REST API built in that you can use to interact with the site via Python. The REST API is enabled by default in WordPress 4.7 and later. You can check if it’s available by visiting http://your-site-url/wp-json/.
+
+- Validando:
+<https://palegreen-hornet-335449.hostingersite.com/wp-json/>
+
+~~~~json
+name	"palegreen-hornet-335449.hostingersite.com"
+description	""
+url	"https://palegreen-hornet-335449.hostingersite.com"
+home	"https://palegreen-hornet-335449.hostingersite.com"
+gmt_offset	-3
+timezone_string	"America/Sao_Paulo"
+namespaces	[…]
+authentication	{…}
+routes	{…}
+site_logo	0
+site_icon	0
+site_icon_url	""
+_links	{…}
+~~~~
+
+
+
+python -m pip install requests
+python3 -m pip3 install requests
+python3 -m pip install requests
+
+pip3 install requests
+
+
+fernando@debian10x64:~/cursos/python/wordpress-blog-post-with-python$ pip3 install requests
+Requirement already satisfied: requests in /usr/lib/python3/dist-packages (2.21.0)
+fernando@debian10x64:~/cursos/python/wordpress-blog-post-with-python$
+
+
+
+
+# #################################################################################################################################################
+# #################################################################################################################################################
+# #################################################################################################################################################
+# #################################################################################################################################################
+# #################################################################################################################################################
+##  TESTES
+
+- Testando v1,
+
+~~~~python
+import requests
+import json
+import random
+from googletrans import Translator
+from requests.auth import HTTPBasicAuth
+import os #provides ways to access the Operating System and allows us to read the environment variables
+from dotenv import load_dotenv
+
+load_dotenv()  # take environment variables from .env.
+
+# Code of your application, which uses environment variables (e.g. from `os.environ` or
+# `os.getenv`) as if they came from the actual environment.
+source_url = os.getenv("SOURCE_URL")
+base_url = os.getenv("BASE_URL")
+source_language = os.getenv("SOURCE_LANGUAGE")
+target_language = os.getenv("TARGET_LANGUAGE")
+wp_app_username = os.getenv("WP_APP_USERNAME")
+wp_app_password = os.getenv("WP_APP_PASSWORD")
+
+def post_creator(sourceURL, wpBaseURL, sourceLang, targetLang, postStatus):
+    response_API = requests.get(sourceURL)
+    data = response_API.text
+    parse_json = json.loads(data)
+    get_article_title = parse_json['title']
+    get_article_content = parse_json['body']
+#    image_list = ["1689","1594","1612"]
+
+    translator = Translator()
+
+    title_translation = translator.translate(get_article_title, src=sourceLang, dest=targetLang)
+    title_translation_text = title_translation.text 
+
+    content_translation = translator.translate(get_article_content, src=sourceLang, dest=targetLang)
+    content_translation_text = content_translation.text 
+
+#    random_image_list = random.choice(image_list)
+
+    WP_url = wpBaseURL + "/wp-json/wp/v2/posts"
+
+    auth = HTTPBasicAuth({wp_app_username}, {wp_app_password})
+
+    headers = {
+    "Accept": "application/json",
+    "Content-Type": "application/json"
+    }
+
+    payload = json.dumps({ 
+        "status":postStatus,
+        "title": title_translation_text,
+        "content": content_translation_text,
+#        "featured_media": random_image_list
+    })
+
+    response = requests.request(
+    "POST",
+    WP_url,
+    data=payload,
+    headers=headers,
+    auth=auth
+    )
+
+    print(response)
+#    print(random_image_list)
+
+
+post_creator({source_url}, {base_url}, {source_language}, {target_language}, "publish")
+~~~~
+
+
+
+
+
+fernando@debian10x64:~$ python3 /home/fernando/cursos/python/wordpress-blog-post-with-python/script.py
+Traceback (most recent call last):
+  File "/home/fernando/cursos/python/wordpress-blog-post-with-python/script.py", line 1, in <module>
+    import requests
+ModuleNotFoundError: No module named 'requests'
+fernando@debian10x64:~$
+
+
+
+fernando@debian10x64:~/cursos/python/wordpress-blog-post-with-python$ python3 script.py
+Traceback (most recent call last):
+  File "script.py", line 1, in <module>
+    import requests
+ModuleNotFoundError: No module named 'requests'
+fernando@debian10x64:~/cursos/python/wordpress-blog-post-with-python$
+
+
+
+
+
+fernando@debian10x64:~/cursos/python/wordpress-blog-post-with-python$ python -m pip show requests
+fernando@debian10x64:~/cursos/python/wordpress-blog-post-with-python$ python3 -m pip show requests
+/usr/local/bin/python3: No module named pip
+fernando@debian10x64:~/cursos/python/wordpress-blog-post-with-python$
+
+
+
+
+fernando@debian10x64:~/cursos/python/wordpress-blog-post-with-python$ pip install requests
+Collecting requests
+  Downloading https://files.pythonhosted.org/packages/2d/61/08076519c80041bc0ffa1a8af0cbd3bf3e2b62af10435d269a9d0f40564d/requests-2.27.1-py2.py3-none-any.whl (63kB)
+    100% |████████████████████████████████| 71kB 3.1MB/s
+Collecting urllib3<1.27,>=1.21.1 (from requests)
+  Downloading https://files.pythonhosted.org/packages/b0/53/aa91e163dcfd1e5b82d8a890ecf13314e3e149c05270cc644581f77f17fd/urllib3-1.26.18-py2.py3-none-any.whl (143kB)
+    100% |████████████████████████████████| 153kB 4.8MB/s
+Collecting certifi>=2017.4.17 (from requests)
+  Downloading https://files.pythonhosted.org/packages/37/45/946c02767aabb873146011e665728b680884cd8fe70dde973c640e45b775/certifi-2021.10.8-py2.py3-none-any.whl (149kB)
+    100% |████████████████████████████████| 153kB 11.1MB/s
+Collecting idna<3,>=2.5; python_version < "3" (from requests)
+  Downloading https://files.pythonhosted.org/packages/a2/38/928ddce2273eaa564f6f50de919327bf3a00f091b5baba8dfa9460f3a8a8/idna-2.10-py2.py3-none-any.whl (58kB)
+    100% |████████████████████████████████| 61kB 16.6MB/s
+Collecting chardet<5,>=3.0.2; python_version < "3" (from requests)
+  Downloading https://files.pythonhosted.org/packages/19/c7/fa589626997dd07bd87d9269342ccb74b1720384a4d739a1872bd84fbe68/chardet-4.0.0-py2.py3-none-any.whl (178kB)
+    100% |████████████████████████████████| 184kB 9.5MB/s
+Installing collected packages: urllib3, certifi, idna, chardet, requests
+Successfully installed certifi-2021.10.8 chardet-4.0.0 idna-2.10 requests-2.27.1 urllib3-1.26.18
+fernando@debian10x64:~/cursos/python/wordpress-blog-post-with-python$
+
+
+fernando@debian10x64:~/cursos/python/wordpress-blog-post-with-python$ pip3 install requests
+Requirement already satisfied: requests in /usr/lib/python3/dist-packages (2.21.0)
+fernando@debian10x64:~/cursos/python/wordpress-blog-post-with-python$
+
+
+
+sudo apt-get install python3-requests
+
+Reading package lists... Done
+Building dependency tree
+Reading state information... Done
+python3-requests is already the newest version (2.21.0-1+deb10u1).
+python3-requests set to manually installed.
+0 upgraded, 0 newly installed, 0 to remove and 49 not upgraded.
+
+
+
+
+pip freeze | grep requests
+
+pip3 freeze | grep requests
+
+
+fernando@debian10x64:~/cursos/python/wordpress-blog-post-with-python$ pip3 freeze | grep requests
+requests==2.21.0
+fernando@debian10x64:~/cursos/python/wordpress-blog-post-with-python$
+
+fernando@debian10x64:~/cursos/python/wordpress-blog-post-with-python$ pip3 uninstall requests
+Not uninstalling requests at /usr/lib/python3/dist-packages, outside environment /usr
+Can't uninstall 'requests'. No files were found to uninstall.
+fernando@debian10x64:~/cursos/python/wordpress-blog-post-with-python$
+
+
+sudo apt remove python3-requests
+
+fernando@debian10x64:~/cursos/python/wordpress-blog-post-with-python$ sudo apt remove python3-requests
+Reading package lists... Done
+Building dependency tree
+Reading state information... Done
+The following packages were automatically installed and are no longer required:
+  gir1.2-dazzle-1.0 gir1.2-grilo-0.3 gir1.2-mediaart-2.0 hyphen-en-us libreoffice-help-common libreoffice-help-en-us mythes-en-us node-normalize.css python3-certifi python3-cups python3-debian python3-debianbts python3-httplib2 python3-idna python3-pysimplesoap
+  python3-smbc python3-urllib3
+Use 'sudo apt autoremove' to remove them.
+The following packages will be REMOVED:
+  chrome-gnome-shell gnome gnome-core gnome-music python3-cupshelpers python3-reportbug python3-requests reportbug system-config-printer-common system-config-printer-udev task-gnome-desktop
+0 upgraded, 0 newly installed, 11 to remove and 49 not upgraded.
+After this operation, 8,253 kB disk space will be freed.
+Do you want to continue? [Y/n] Y
+(Reading database ... 183276 files and directories currently installed.)
+Removing chrome-gnome-shell (10.1-5) ...
+Removing gnome (1:3.30+1) ...
+Removing task-gnome-desktop (3.53) ...
+Removing gnome-core (1:3.30+1) ...
+Removing gnome-music (3.30.2-1) ...
+Removing system-config-printer-udev (1.5.11-4) ...
+Removing system-config-printer-common (1.5.11-4) ...
+Removing python3-cupshelpers (1.5.11-4) ...
+Removing reportbug (7.5.3~deb10u2) ...
+Removing python3-reportbug (7.5.3~deb10u2) ...
+Removing python3-requests (2.21.0-1+deb10u1) ...
+Processing triggers for mime-support (3.62) ...
+Processing triggers for hicolor-icon-theme (0.17-2) ...
+Processing triggers for gnome-menus (3.31.4-3) ...
+Processing triggers for libglib2.0-0:amd64 (2.58.3-2+deb10u5) ...
+Processing triggers for man-db (2.8.5-2+deb10u1) ...
+Processing triggers for desktop-file-utils (0.23-4) ...
+fernando@debian10x64:~/cursos/python/wordpress-blog-post-with-python$
+fernando@debian10x64:~/cursos/python/wordpress-blog-post-with-python$
+
+fernando@debian10x64:~/cursos/python/wordpress-blog-post-with-python$ pip3 freeze | grep requests
+fernando@debian10x64:~/cursos/python/wordpress-blog-post-with-python$
+
+
+
+
+
+
+pip3 install requests
+
+
+fernando@debian10x64:~/cursos/python/wordpress-blog-post-with-python$ pip3 install requests
+Collecting requests
+  Downloading https://files.pythonhosted.org/packages/70/8e/0e2d847013cb52cd35b38c009bb167a1a26b2ce6cd6965bf26b47bc0bf44/requests-2.31.0-py3-none-any.whl (62kB)
+    100% |████████████████████████████████| 71kB 3.2MB/s
+Collecting charset-normalizer<4,>=2 (from requests)
+  Downloading https://files.pythonhosted.org/packages/28/76/e6222113b83e3622caa4bb41032d0b1bf785250607392e1b778aca0b8a7d/charset_normalizer-3.3.2-py3-none-any.whl (48kB)
+    100% |████████████████████████████████| 51kB 9.9MB/s
+Requirement already satisfied: certifi>=2017.4.17 in /usr/lib/python3/dist-packages (from requests) (2018.8.24)
+Requirement already satisfied: urllib3<3,>=1.21.1 in /usr/lib/python3/dist-packages (from requests) (1.24.1)
+Requirement already satisfied: idna<4,>=2.5 in /usr/lib/python3/dist-packages (from requests) (2.6)
+Installing collected packages: charset-normalizer, requests
+Successfully installed charset-normalizer-3.3.2 requests-2.31.0
+fernando@debian10x64:~/cursos/python/wordpress-blog-post-with-python$
+fernando@debian10x64:~/cursos/python/wordpress-blog-post-with-python$ date
+Sat 11 May 2024 02:24:22 PM -03
+fernando@debian10x64:~/cursos/python/wordpress-blog-post-with-python$
+
+
+
+fernando@debian10x64:~/cursos/python/wordpress-blog-post-with-python$ python3 script.py
+Traceback (most recent call last):
+  File "script.py", line 1, in <module>
+    import requests
+ModuleNotFoundError: No module named 'requests'
+fernando@debian10x64:~/cursos/python/wordpress-blog-post-with-python$
+
+
+
+fernando@debian10x64:~/cursos/python/wordpress-blog-post-with-python$ which python3
+/usr/local/bin/python3
+fernando@debian10x64:~/cursos/python/wordpress-blog-post-with-python$
+
+
+
+
+Requirement already satisfied: requests in /home/fernando/.local/lib/python3.7/site-packages (2.31.0)
+Requirement already satisfied: urllib3<3,>=1.21.1 in /usr/lib/python3/dist-packages (from requests) (1.24.1)
+Requirement already satisfied: charset-normalizer<4,>=2 in /home/fernando/.local/lib/python3.7/site-packages (from requests) (3.3.2)
+Requirement already satisfied: idna<4,>=2.5 in /usr/lib/python3/dist-packages (from requests) (2.6)
+Requirement already satisfied: certifi>=2017.4.17 in /usr/lib/python3/dist-packages (from requests) (2018.8.24)
+fernando@debian10x64:/usr/local/bin$ sudo pip3 install requests
+[sudo] password for fernando:
+Collecting requests
+  Downloading https://files.pythonhosted.org/packages/70/8e/0e2d847013cb52cd35b38c009bb167a1a26b2ce6cd6965bf26b47bc0bf44/requests-2.31.0-py3-none-any.whl (62kB)
+    100% |████████████████████████████████| 71kB 3.3MB/s
+Requirement already satisfied: idna<4,>=2.5 in /usr/lib/python3/dist-packages (from requests) (2.6)
+Requirement already satisfied: urllib3<3,>=1.21.1 in /usr/lib/python3/dist-packages (from requests) (1.24.1)
+Requirement already satisfied: certifi>=2017.4.17 in /usr/lib/python3/dist-packages (from requests) (2018.8.24)
+Collecting charset-normalizer<4,>=2 (from requests)
+  Downloading https://files.pythonhosted.org/packages/28/76/e6222113b83e3622caa4bb41032d0b1bf785250607392e1b778aca0b8a7d/charset_normalizer-3.3.2-py3-none-any.whl (48kB)
+    100% |████████████████████████████████| 51kB 9.6MB/s
+Installing collected packages: charset-normalizer, requests
+Successfully installed charset-normalizer-3.3.2 requests-2.31.0
+fernando@debian10x64:/usr/local/bin$ date
+Sat 11 May 2024 02:28:14 PM -03
+fernando@debian10x64:/usr/local/bin$
+
+
+
+
+fernando@debian10x64:/usr/local/bin$ pip3 freeze | grep requests
+requests==2.31.0
+fernando@debian10x64:/usr/local/bin$ python3 /home/fernando/cursos/python/wordpress-blog-post-with-python/script.py
+Traceback (most recent call last):
+  File "/home/fernando/cursos/python/wordpress-blog-post-with-python/script.py", line 1, in <module>
+    import requests
+ModuleNotFoundError: No module named 'requests'
+fernando@debian10x64:/usr/local/bin$
