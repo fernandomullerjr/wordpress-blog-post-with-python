@@ -467,7 +467,7 @@ fernando@debian10x64:~/cursos/python/wordpress-blog-post-with-python$
 
 pip3 install requests
 
-
+~~~~bash
 fernando@debian10x64:~/cursos/python/wordpress-blog-post-with-python$ pip3 install requests
 Collecting requests
   Downloading https://files.pythonhosted.org/packages/70/8e/0e2d847013cb52cd35b38c009bb167a1a26b2ce6cd6965bf26b47bc0bf44/requests-2.31.0-py3-none-any.whl (62kB)
@@ -484,7 +484,7 @@ fernando@debian10x64:~/cursos/python/wordpress-blog-post-with-python$
 fernando@debian10x64:~/cursos/python/wordpress-blog-post-with-python$ date
 Sat 11 May 2024 02:24:22 PM -03
 fernando@debian10x64:~/cursos/python/wordpress-blog-post-with-python$
-
+~~~~
 
 
 fernando@debian10x64:~/cursos/python/wordpress-blog-post-with-python$ python3 script.py
@@ -539,7 +539,7 @@ fernando@debian10x64:/usr/local/bin$
 
 
 
-
+~~~~bash
 fernando@debian10x64:~/cursos/python/wordpress-blog-post-with-python$ git status
 On branch main
 Your branch is up to date with 'origin/main'.
@@ -553,3 +553,77 @@ Traceback (most recent call last):
     import requests
 ModuleNotFoundError: No module named 'requests'
 fernando@debian10x64:~/cursos/python/wordpress-blog-post-with-python$
+~~~~
+
+
+
+~~~~bash
+fernando@debian10x64:~/cursos/python/wordpress-blog-post-with-python$ pip3 install requests
+Requirement already satisfied: requests in /usr/lib/python3/dist-packages (2.21.0)
+fernando@debian10x64:~/cursos/python/wordpress-blog-post-with-python$
+~~~~
+
+
+
+
+
+
+
+
+- Testes utilizando o Python 2 mesmo:
+
+~~~~bash
+
+  949  pip install requests
+  950  pip install googletrans
+  951  pip install httpx
+  952  pip install http
+  953  pip install googletrans
+  954  pip install googletrans==2.3.0
+  955  python script.py
+  956  pip install dotenv
+  957  python script.py
+  958  pip install python-dotenv
+  959  python script.py
+  960  history
+fernando@debian10x64:~/cursos/python/wordpress-blog-post-with-python$
+fernando@debian10x64:~/cursos/python/wordpress-blog-post-with-python$
+fernando@debian10x64:~/cursos/python/wordpress-blog-post-with-python$ python script.py
+Traceback (most recent call last):
+  File "script.py", line 66, in <module>
+    post_creator({source_url}, {base_url}, {source_language}, {target_language}, "publish")
+  File "script.py", line 21, in post_creator
+    response_API = requests.get(sourceURL)
+  File "/home/fernando/.local/lib/python2.7/site-packages/requests/api.py", line 75, in get
+    return request('get', url, params=params, **kwargs)
+  File "/home/fernando/.local/lib/python2.7/site-packages/requests/api.py", line 61, in request
+    return session.request(method=method, url=url, **kwargs)
+  File "/home/fernando/.local/lib/python2.7/site-packages/requests/sessions.py", line 529, in request
+    resp = self.send(prep, **send_kwargs)
+  File "/home/fernando/.local/lib/python2.7/site-packages/requests/sessions.py", line 639, in send
+    adapter = self.get_adapter(url=request.url)
+  File "/home/fernando/.local/lib/python2.7/site-packages/requests/sessions.py", line 732, in get_adapter
+    raise InvalidSchema("No connection adapters were found for {!r}".format(url))
+requests.exceptions.InvalidSchema: No connection adapters were found for u"set(['https://palegreen-hornet-335449.hostingersite.com/ola-mundo/'])"
+fernando@debian10x64:~/cursos/python/wordpress-blog-post-with-python$
+
+~~~~
+
+
+
+
+# #################################################################################################################################################
+# #################################################################################################################################################
+# #################################################################################################################################################
+# #################################################################################################################################################
+# #################################################################################################################################################
+##  PENDENTE
+
+- Subir VM com Ubuntu 24 + Python3:
+instalar python mais recente
+configurar venv??
+instalar as dependencias do projeto via pip3
+efetuar teste do script
+
+- Tentar instalar dependencias no Python3 do Debian-10.
+configurar venv??
