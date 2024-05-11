@@ -536,3 +536,20 @@ Traceback (most recent call last):
     import requests
 ModuleNotFoundError: No module named 'requests'
 fernando@debian10x64:/usr/local/bin$
+
+
+
+
+fernando@debian10x64:~/cursos/python/wordpress-blog-post-with-python$ git status
+On branch main
+Your branch is up to date with 'origin/main'.
+
+nothing to commit, working tree clean
+fernando@debian10x64:~/cursos/python/wordpress-blog-post-with-python$ python3
+.git/      script.py
+fernando@debian10x64:~/cursos/python/wordpress-blog-post-with-python$ python3 script.py
+Traceback (most recent call last):
+  File "script.py", line 1, in <module>
+    import requests
+ModuleNotFoundError: No module named 'requests'
+fernando@debian10x64:~/cursos/python/wordpress-blog-post-with-python$
