@@ -627,3 +627,72 @@ efetuar teste do script
 
 - Tentar instalar dependencias no Python3 do Debian-10.
 configurar venv??
+
+
+
+
+
+
+
+
+
+
+
+## Dia 12/05/2024
+
+- Testar com docker
+docker container run -d python:3.13.0b1-bullseye
+
+
+docker run -d ubuntu
+
+<https://linuxconfig.org/how-to-start-a-docker-container-as-daemon-process>
+docker run -d --name ubuntu ubuntu /bin/bash -c 'while true; do sleep 30; done'
+
+<https://phoenixnap.com/kb/how-to-install-python-3-ubuntu>
+apt update
+apt install python3
+
+<https://phoenixnap.com/kb/how-to-install-pip-on-ubuntu>
+apt update
+apt install python3-pip
+pip3 --version
+
+
+<https://github.com/pypa/pipx>
+pipx
+apt update
+apt install pipx
+pipx ensurepath
+pipx ensurepath --global # optional to allow pipx actions with --global argument
+
+
+
+~~~~bash
+root@1c297bab36f0:/teste#
+root@1c297bab36f0:/teste# vi script.py
+root@1c297bab36f0:/teste#
+root@1c297bab36f0:/teste#
+root@1c297bab36f0:/teste#
+root@1c297bab36f0:/teste# ls -lhasp
+total 12K
+4.0K drwxr-xr-x 2 root root 4.0K May 12 10:37 ./
+4.0K drwxr-xr-x 1 root root 4.0K May 12 10:35 ../
+4.0K -rw-r--r-- 1 root root 2.1K May 12 10:37 script.py
+root@1c297bab36f0:/teste#
+root@1c297bab36f0:/teste#
+root@1c297bab36f0:/teste#
+root@1c297bab36f0:/teste# vi .env
+root@1c297bab36f0:/teste# pipx list
+nothing has been installed with pipx 😴
+root@1c297bab36f0:/teste#
+root@1c297bab36f0:/teste#
+root@1c297bab36f0:/teste#
+root@1c297bab36f0:/teste# pipx install googletrans
+  installed package googletrans 3.0.0, installed using Python 3.12.3
+  These apps are now globally available
+    - translate
+⚠️  Note: '/root/.local/bin' is not on your PATH environment variable. These apps will not be globally accessible until your PATH is updated. Run `pipx ensurepath` to automatically add it, or manually modify your PATH in your shell's config file (i.e. ~/.bashrc).
+done! ✨ 🌟 ✨
+root@1c297bab36f0:/teste#
+~~~~
