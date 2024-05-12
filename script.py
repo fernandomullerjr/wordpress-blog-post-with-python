@@ -37,7 +37,7 @@ def post_creator(sourceURL, wpBaseURL, sourceLang, targetLang, postStatus):
 
     WP_url = wpBaseURL + "/wp-json/wp/v2/posts"
 
-    auth = HTTPBasicAuth({wp_app_username}, {wp_app_password})
+    auth = HTTPBasicAuth(wp_app_username, wp_app_password)
 
     headers = {
     "Accept": "application/json",
@@ -63,4 +63,4 @@ def post_creator(sourceURL, wpBaseURL, sourceLang, targetLang, postStatus):
 #    print(random_image_list)
 
 
-post_creator({source_url}, {base_url}, {source_language}, {target_language}, "publish")
+post_creator(source_url, base_url, source_language, target_language, "publish")

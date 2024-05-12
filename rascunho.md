@@ -1043,3 +1043,174 @@ requests.exceptions.InvalidSchema: No connection adapters were found for "{'http
 
 
 - Fixar versões contidas no "requirements.txt"
+
+
+
+
+
+
+
+
+
+
+
+
+- Tratar erro ao executar script.py:
+
+~~~~bash
+  File "/teste/ambiente-virtual-novo/lib/python3.12/site-packages/requests/sessions.py", line 794, in get_adapter
+    raise InvalidSchema(f"No connection adapters were found for {url!r}")
+requests.exceptions.InvalidSchema: No connection adapters were found for "{'https://palegreen-hornet-335449.hostingersite.com/ola-mundo/'}"
+~~~~
+
+
+ erro que você está enfrentando é "InvalidSchema: No connection adapters were found for {url!r}". Isso geralmente ocorre quando a URL passada para a função requests.get() não tem um esquema válido, como "http://" ou "https://".
+
+Vou explicar como corrigir isso no seu script Python.
+
+No seu script, você está passando as variáveis entre chaves {} quando chama a função post_creator(), o que não é necessário. Você já extraiu essas variáveis do ambiente com os.getenv(), então você deve passá-las diretamente para a função. Além disso, ao passar essas variáveis, não é necessário colocá-las entre chaves. O uso de chaves cria um conjunto, não uma variável individual. Aqui está como você deve chamar a função post_creator():
+
+python
+
+post_creator(source_url, base_url, source_language, target_language, "publish")
+
+Além disso, você deve garantir que a variável source_url esteja corretamente definida no seu arquivo .env e inclua o esquema (por exemplo, "http://" ou "https://") na URL. Por exemplo:
+
+arduino
+
+SOURCE_URL=http://example.com/source
+
+Depois de corrigir isso, seu script deverá funcionar corretamente. Certifique-se de que todas as outras variáveis do ambiente, como BASE_URL, SOURCE_LANGUAGE, TARGET_LANGUAGE, WP_APP_USERNAME e WP_APP_PASSWORD, estejam definidas corretamente no seu arquivo .env.
+
+
+
+
+na linha "auth = HTTPBasicAuth({wp_app_username}, {wp_app_password})", estou usando corretamente as variáveis?
+
+preciso utilizar {}?
+ChatGPT
+
+Não, na linha "auth = HTTPBasicAuth({wp_app_username}, {wp_app_password})", você não precisa usar as chaves {}. A função HTTPBasicAuth() espera que você passe as strings diretamente como argumentos, não dentro de conjuntos {}. Então, você deve passar wp_app_username e wp_app_password diretamente, sem as chaves.
+
+Aqui está como você deve corrigir essa linha:
+
+python
+
+auth = HTTPBasicAuth(wp_app_username, wp_app_password)
+
+Essa correção permitirá que a função HTTPBasicAuth() receba as strings corretas para autenticação básica no WordPress.
+
+
+
+
+- Ajustando o código, v2:
+
+~~~~python
+import requests
+import json
+import random
+from googletrans import Translator
+from requests.auth import HTTPBasicAuth
+import os #provides ways to access the Operating System and allows us to read the environment variables
+from dotenv import load_dotenv
+
+load_dotenv()  # take environment variables from .env.
+
+# Code of your application, which uses environment variables (e.g. from `os.environ` or
+# `os.getenv`) as if they came from the actual environment.
+source_url = os.getenv("SOURCE_URL")
+base_url = os.getenv("BASE_URL")
+source_language = os.getenv("SOURCE_LANGUAGE")
+target_language = os.getenv("TARGET_LANGUAGE")
+wp_app_username = os.getenv("WP_APP_USERNAME")
+wp_app_password = os.getenv("WP_APP_PASSWORD")
+
+def post_creator(sourceURL, wpBaseURL, sourceLang, targetLang, postStatus):
+    response_API = requests.get(sourceURL)
+    data = response_API.text
+    parse_json = json.loads(data)
+    get_article_title = parse_json['title']
+    get_article_content = parse_json['body']
+#    image_list = ["1689","1594","1612"]
+
+    translator = Translator()
+
+    title_translation = translator.translate(get_article_title, src=sourceLang, dest=targetLang)
+    title_translation_text = title_translation.text 
+
+    content_translation = translator.translate(get_article_content, src=sourceLang, dest=targetLang)
+    content_translation_text = content_translation.text 
+
+#    random_image_list = random.choice(image_list)
+
+    WP_url = wpBaseURL + "/wp-json/wp/v2/posts"
+
+    auth = HTTPBasicAuth(wp_app_username, wp_app_password)
+
+    headers = {
+    "Accept": "application/json",
+    "Content-Type": "application/json"
+    }
+
+    payload = json.dumps({ 
+        "status":postStatus,
+        "title": title_translation_text,
+        "content": content_translation_text,
+#        "featured_media": random_image_list
+    })
+
+    response = requests.request(
+    "POST",
+    WP_url,
+    data=payload,
+    headers=headers,
+    auth=auth
+    )
+
+    print(response)
+#    print(random_image_list)
+
+
+post_creator(source_url, base_url, source_language, target_language, "publish")
+~~~~
+
+
+
+
+
+
+- OK, resolvido o erro :
+requests.exceptions.InvalidSchema: No connection adapters were found for "{'https://palegreen-hornet-335449.hostingersite.com/ola-mundo/'}"
+
+- Novo erro:
+
+~~~~bash
+
+(ambiente-virtual-novo) root@1c297bab36f0:/teste# python3 script.py
+Traceback (most recent call last):
+  File "/teste/script.py", line 66, in <module>
+    post_creator(source_url, base_url, source_language, target_language, "publish")
+  File "/teste/script.py", line 23, in post_creator
+    parse_json = json.loads(data)
+                 ^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/json/__init__.py", line 346, in loads
+    return _default_decoder.decode(s)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/json/decoder.py", line 337, in decode
+    obj, end = self.raw_decode(s, idx=_w(s, 0).end())
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/json/decoder.py", line 355, in raw_decode
+    raise JSONDecodeError("Expecting value", s, err.value) from None
+json.decoder.JSONDecodeError: Expecting value: line 1 column 1 (char 0)
+(ambiente-virtual-novo) root@1c297bab36f0:/teste#
+(ambiente-virtual-novo) root@1c297bab36f0:/teste# date
+Sun May 12 13:01:47 -03 2024
+(ambiente-virtual-novo) root@1c297bab36f0:/teste#
+
+~~~~
+
+
+
+
+git add .
+git commit -m "OK, RESOLVIDO O ERRO: requests.exceptions.InvalidSchema: No connection adapters were found for . NOVO ERRO, verificando: raise JSONDecodeError("Expecting value", s, err.value) from None"
