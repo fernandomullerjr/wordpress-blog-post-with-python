@@ -1365,8 +1365,13 @@ json.decoder.JSONDecodeError: Expecting value: line 1 column 1 (char 0)
     raise JSONDecodeError("Expecting value", s, err.value) from None
 json.decoder.JSONDecodeError: Expecting value: line 1 column 1 (char 0)
 
+Usar o endpoint "https://palegreen-hornet-335449.hostingersite.com/wp-json/wp/v2/posts/" ou verificar o exato, estilo "https://jsonplaceholder.typicode.com/posts/5" , ou "https://palegreen-hornet-335449.hostingersite.com/wp-json/wp/v2/posts/1"
+
 revisar dicas:
 <https://amazonwebshark.com/using-python-aws-to-extract-wordpress-api-data/>
+
+ver
+<https://kinsta.com/blog/python-wordpress/>
 
 - Adicionar try, exception, logs de erros.
 - Fixar versões contidas no "requirements.txt", definir versões exatas.
