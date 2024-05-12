@@ -1329,7 +1329,7 @@ By addressing these potential causes, you should be able to resolve the JSON dec
 
 
 
-
+~~~~BASH
 
 
 Traceback (most recent call last):
@@ -1347,8 +1347,32 @@ Traceback (most recent call last):
   File "/usr/lib/python3.12/json/decoder.py", line 355, in raw_decode
     raise JSONDecodeError("Expecting value", s, err.value) from None
 json.decoder.JSONDecodeError: Expecting value: line 1 column 1 (char 0)
+~~~~
 
 
+
+
+- Ajustando a variável:
+SOURCE_URL="https://palegreen-hornet-335449.hostingersite.com/wp-json/wp/v2/posts/1"
+
+
+- Teste
+
+- ERRO:
+
+~~~~BASH
+(ambiente-virtual-novo) root@1c297bab36f0:/teste#
+(ambiente-virtual-novo) root@1c297bab36f0:/teste# python3 script.py
+Traceback (most recent call last):
+  File "/teste/script.py", line 66, in <module>
+    post_creator(source_url, base_url, source_language, target_language, "publish")
+  File "/teste/script.py", line 25, in post_creator
+    get_article_content = parse_json['body']
+                          ~~~~~~~~~~^^^^^^^^
+KeyError: 'body'
+(ambiente-virtual-novo) root@1c297bab36f0:/teste#
+(ambiente-virtual-novo) root@1c297bab36f0:/teste#
+~~~~
 
 
 
