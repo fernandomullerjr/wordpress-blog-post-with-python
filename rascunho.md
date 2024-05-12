@@ -1332,6 +1332,28 @@ By addressing these potential causes, you should be able to resolve the JSON dec
 
 
 
+Traceback (most recent call last):
+  File "/teste/script.py", line 66, in <module>
+    post_creator(source_url, base_url, source_language, target_language, "publish")
+  File "/teste/script.py", line 23, in post_creator
+    parse_json = json.loads(data)
+                 ^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/json/__init__.py", line 346, in loads
+    return _default_decoder.decode(s)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/json/decoder.py", line 337, in decode
+    obj, end = self.raw_decode(s, idx=_w(s, 0).end())
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/json/decoder.py", line 355, in raw_decode
+    raise JSONDecodeError("Expecting value", s, err.value) from None
+json.decoder.JSONDecodeError: Expecting value: line 1 column 1 (char 0)
+
+
+
+
+
+
+
 # #################################################################################################################################################
 # #################################################################################################################################################
 # #################################################################################################################################################
@@ -1339,9 +1361,13 @@ By addressing these potential causes, you should be able to resolve the JSON dec
 # #################################################################################################################################################
 ## PENDENTE
 
-- Tratar erro ao executar script.py. Erro pode estar relacionado a não formação do JSON ou autenticação junto ao Wordpress, verificar.
+- Tratar erro ao executar script.py. Erro pode estar relacionado a não formação do JSON ou autenticação junto ao Wordpress, verificar. Ver como obter JSON do post.
     raise JSONDecodeError("Expecting value", s, err.value) from None
 json.decoder.JSONDecodeError: Expecting value: line 1 column 1 (char 0)
 
+revisar dicas:
+<https://amazonwebshark.com/using-python-aws-to-extract-wordpress-api-data/>
+
+- Adicionar try, exception, logs de erros.
 - Fixar versões contidas no "requirements.txt", definir versões exatas.
 - Criar Dockerfile e docker-compose, posteriormente.
