@@ -1,6 +1,47 @@
 
 
 
+
+
+
+# #################################################################################################################################################
+# #################################################################################################################################################
+# #################################################################################################################################################
+# #################################################################################################################################################
+# #################################################################################################################################################
+## COMANDOS
+
+    1  cd teste/
+    2  ls
+    3  python3 script.py
+    4  ls -lhasp
+    5  pip3 install virtualenv
+    6  apt install python3-venv
+    7  pwd
+    8  mkdir ambiente-virtual-novo
+    9  python3 -m venv /teste/ambiente-virtual-novo
+   10  source /teste/ambiente-virtual-novo/bin/activate
+   11  pip3 install requests
+   12  pip3 install googletrans
+   13  date
+   14  pip3 install python-dotenv
+   15  ls -lhasp
+   16  ls -lhasp ambiente-virtual-novo/
+   17  python3 script.py
+   18  history
+
+
+git add .
+git commit -m "Wordpress with Python."
+git push
+
+
+
+
+
+## TUTORIAL
+
+
 <https://www.freecodecamp.org/news/how-to-generate-wordpress-posts-automatically/>
 
 
@@ -1213,4 +1254,94 @@ Sun May 12 13:01:47 -03 2024
 
 
 git add .
-git commit -m "OK, RESOLVIDO O ERRO: requests.exceptions.InvalidSchema: No connection adapters were found for . NOVO ERRO, verificando: raise JSONDecodeError("Expecting value", s, err.value) from None"
+git commit -m "OK, RESOLVIDO O ERRO: requests.exceptions.InvalidSchema: No connection adapters were found for . NOVO ERRO, verificando: raise JSONDecodeError Expecting value  s, err.value from None"
+git push
+
+
+
+
+
+
+
+
+
+
+
+## GPT
+
+O erro que você está enfrentando indica que há um problema ao decodificar o JSON retornado pela solicitação GET para sourceURL. O erro específico é json.decoder.JSONDecodeError: Expecting value: line 1 column 1 (char 0), o que sugere que a resposta não contém um JSON válido.
+
+Existem algumas razões pelas quais isso pode estar acontecendo:
+
+    Resposta vazia ou não JSON: A solicitação GET para sourceURL pode estar retornando uma resposta vazia ou em um formato diferente de JSON. Isso pode ocorrer, por exemplo, se o URL estiver incorreto ou se o servidor não estiver respondendo como esperado.
+
+    Problemas de conexão ou autorização: Pode haver problemas de conexão com o URL especificado ou pode ser que o servidor requeira autenticação e as credenciais fornecidas não sejam válidas.
+
+Para diagnosticar o problema:
+
+    Certifique-se de que o URL em sourceURL esteja correto e que você possa acessá-lo manualmente em um navegador ou através de outras ferramentas de teste de API.
+
+    Verifique se as credenciais de autenticação (wp_app_username e wp_app_password) estão corretas e se o servidor do WordPress está configurado para aceitá-las.
+
+    Considere adicionar tratamento de erro ao seu código para lidar com possíveis problemas de rede ou resposta inválida, como uma resposta vazia. Isso pode ajudar a tornar o seu script mais robusto e fornecer informações mais úteis sobre o que está dando errado.
+
+
+
+## GEMINI
+
+The error "json.decoder.JSONDecodeError: Expecting value: line 1 column 1 (char 0)" indicates that the json.loads function is unable to parse the content retrieved from sourceURL as valid JSON. Here are some potential causes and solutions:
+
+1. The Response Might Not Be JSON:
+
+    The URL you're fetching data from might not actually return JSON data. Verify the source's documentation or inspect the response using a tool like Postman or browser developer tools to confirm the content type (it should be application/json).
+    If the source doesn't return JSON, you'll need to use a different parsing method appropriate for the actual data format (e.g., HTML parsing for HTML content).
+
+2. Empty Response:
+
+    If the source URL doesn't return any data or returns an error, response_API.text could be empty. Attempting to decode an empty string as JSON will lead to this error.
+    Consider adding error handling to check the response status code before processing the content:
+
+Python
+
+response_API = requests.get(sourceURL)
+if response_API.status_code == 200:
+    data = response_API.text
+    # ... rest of your code
+else:
+    print(f"Error fetching data: {response_API.status_code}")
+
+Use o código com cuidado.
+
+3. Malformed JSON:
+
+    The response might contain invalid JSON formatting (e.g., missing quotes, extra commas). You can use online JSON validators to check for such issues.
+    If you have control over the source, fix the JSON formatting to adhere to the standard.
+
+Debugging Tips:
+
+    Print the content of data (the response text) before attempting to decode it to see what you're actually working with.
+    Try using a simpler test URL that returns valid JSON data to isolate if the issue is with the script or the source URL.
+
+By addressing these potential causes, you should be able to resolve the JSON decoding error and proceed with processing the content successfully.
+
+
+
+
+
+
+
+
+
+# #################################################################################################################################################
+# #################################################################################################################################################
+# #################################################################################################################################################
+# #################################################################################################################################################
+# #################################################################################################################################################
+## PENDENTE
+
+- Tratar erro ao executar script.py. Erro pode estar relacionado a não formação do JSON ou autenticação junto ao Wordpress, verificar.
+    raise JSONDecodeError("Expecting value", s, err.value) from None
+json.decoder.JSONDecodeError: Expecting value: line 1 column 1 (char 0)
+
+- Fixar versões contidas no "requirements.txt", definir versões exatas.
+- Criar Dockerfile e docker-compose, posteriormente.
