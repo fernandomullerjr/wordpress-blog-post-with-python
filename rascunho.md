@@ -617,7 +617,7 @@ fernando@debian10x64:~/cursos/python/wordpress-blog-post-with-python$
 # #################################################################################################################################################
 # #################################################################################################################################################
 # #################################################################################################################################################
-##  PENDENTE
+## PENDENTE
 
 - Subir VM com Ubuntu 24 + Python3:
 instalar python mais recente
@@ -648,6 +648,7 @@ docker run -d ubuntu
 
 <https://linuxconfig.org/how-to-start-a-docker-container-as-daemon-process>
 docker run -d --name ubuntu ubuntu /bin/bash -c 'while true; do sleep 30; done'
+docker container exec -ti ubuntu bash
 
 <https://phoenixnap.com/kb/how-to-install-python-3-ubuntu>
 apt update
@@ -695,4 +696,350 @@ root@1c297bab36f0:/teste# pipx install googletrans
 ⚠️  Note: '/root/.local/bin' is not on your PATH environment variable. These apps will not be globally accessible until your PATH is updated. Run `pipx ensurepath` to automatically add it, or manually modify your PATH in your shell's config file (i.e. ~/.bashrc).
 done! ✨ 🌟 ✨
 root@1c297bab36f0:/teste#
+
+
+root@1c297bab36f0:/teste#
+root@1c297bab36f0:/teste# pipx install requests
+Note: Dependent package 'charset-normalizer' contains 1 apps
+  - normalizer
+
+No apps associated with package requests. Try again with '--include-deps' to include apps of dependent packages, which are listed above. If you are attempting to install a library, pipx should not be used. Consider using pip or a similar tool instead.
+root@1c297bab36f0:/teste# pipx ensurepath
+/root/.local/bin has been been added to PATH, but you need to open a new terminal or re-login for this PATH change to take effect.
+
+You will need to open a new terminal or re-login for the PATH changes to take effect.
+
+Otherwise pipx is ready to go! ✨ 🌟 ✨
+root@1c297bab36f0:/teste#
+root@1c297bab36f0:/teste#
+root@1c297bab36f0:/teste#
+root@1c297bab36f0:/teste#
+root@1c297bab36f0:/teste# pipx install requests --include-deps
+  installed package requests 2.31.0, installed using Python 3.12.3
+  These apps are now globally available
+    - normalizer
+⚠️  Note: '/root/.local/bin' is not on your PATH environment variable. These apps will not be globally accessible until your PATH is updated. Run `pipx ensurepath` to automatically add it, or manually modify your PATH in your shell's config file (i.e. ~/.bashrc).
+done! ✨ 🌟 ✨
+root@1c297bab36f0:/teste# pipx ensurepath
+/root/.local/bin has been been added to PATH, but you need to open a new terminal or re-login for this PATH change to take effect.
+
+You will need to open a new terminal or re-login for the PATH changes to take effect.
+
+Otherwise pipx is ready to go! ✨ 🌟 ✨
+root@1c297bab36f0:/teste#
+
+pipx install dotenv
+
+
+root@1c297bab36f0:/teste# pipx install dotenv
+Fatal error from pip prevented installation. Full pip output in file:
+    /root/.local/state/pipx/log/cmd_2024-05-12_10.44.01_pip_errors.log
+
+pip seemed to fail to build package:
+    dotenv
+
+Some possibly relevant errors from pip install:
+    error: subprocess-exited-with-error
+    error: invalid command 'dist_info'
+    error: metadata-generation-failed
+
+Error installing dotenv.
+root@1c297bab36f0:/teste#
+
+
+pipx install python-dotenv
+
+
+root@1c297bab36f0:/teste# pipx install python-dotenv
+  installed package python-dotenv 1.0.1, installed using Python 3.12.3
+  These apps are now globally available
+    - dotenv
+⚠️  Note: '/root/.local/bin' is not on your PATH environment variable. These apps will not be globally accessible until your PATH is updated. Run `pipx ensurepath` to automatically add it, or manually modify your PATH in your shell's config file (i.e. ~/.bashrc).
+done! ✨ 🌟 ✨
+root@1c297bab36f0:/teste#
+root@1c297bab36f0:/teste#
+root@1c297bab36f0:/teste# pipx ensurepath
+/root/.local/bin has been been added to PATH, but you need to open a new terminal or re-login for this PATH change to take effect.
+
+You will need to open a new terminal or re-login for the PATH changes to take effect.
+
+Otherwise pipx is ready to go! ✨ 🌟 ✨
+root@1c297bab36f0:/teste#
+
+
+docker container exec -ti ubuntu bash
+
+
+root@1c297bab36f0:/teste# ls
+script.py
+root@1c297bab36f0:/teste# python3 script.py
+Traceback (most recent call last):
+  File "/teste/script.py", line 4, in <module>
+    from googletrans import Translator
+ModuleNotFoundError: No module named 'googletrans'
+root@1c297bab36f0:/teste#
 ~~~~
+
+
+
+
+- Verificando que os pacotes não existem no pip ou pip3
+
+~~~~bash
+root@1c297bab36f0:/teste# pip3 list
+WARNING: Skipping /usr/lib/python3.12/dist-packages/argcomplete-3.1.4.dist-info due to invalid metadata entry 'name'
+Package      Version
+------------ ----------
+argcomplete  3.1.4
+certifi      2023.11.17
+chardet      5.2.0
+click        8.1.6
+colorama     0.4.6
+idna         3.6
+packaging    24.0
+pip          24.0
+pipx         1.4.3
+platformdirs 4.2.0
+psutil       5.9.8
+requests     2.31.0
+setuptools   68.1.2
+urllib3      2.0.7
+userpath     1.9.1
+wheel        0.42.0
+root@1c297bab36f0:/teste# pip3 install googletrans
+error: externally-managed-environment
+
+× This environment is externally managed
+╰─> To install Python packages system-wide, try apt install
+    python3-xyz, where xyz is the package you are trying to
+    install.
+
+    If you wish to install a non-Debian-packaged Python package,
+    create a virtual environment using python3 -m venv path/to/venv.
+    Then use path/to/venv/bin/python and path/to/venv/bin/pip. Make
+    sure you have python3-full installed.
+
+    If you wish to install a non-Debian packaged Python application,
+    it may be easiest to use pipx install xyz, which will manage a
+    virtual environment for you. Make sure you have pipx installed.
+
+    See /usr/share/doc/python3.12/README.venv for more information.
+
+note: If you believe this is a mistake, please contact your Python installation or OS distribution provider. You can override this, at the risk of breaking your Python installation or OS, by passing --break-system-packages.
+hint: See PEP 668 for the detailed specification.
+root@1c297bab36f0:/teste#
+
+~~~~
+
+
+
+
+
+<https://www.baeldung.com/linux/pip-fix-externally-managed-environment-error>
+
+apt install python3-venv
+mkdir ambiente-virtual-novo
+python3 -m venv /teste/ambiente-virtual-novo
+source /teste/ambiente-virtual-novo/bin/activate
+
+~~~~bash
+root@1c297bab36f0:/teste#
+root@1c297bab36f0:/teste# apt install python3-venv
+Reading package lists... Done
+Building dependency tree... Done
+Reading state information... Done
+python3-venv is already the newest version (3.12.3-0ubuntu1).
+python3-venv set to manually installed.
+0 upgraded, 0 newly installed, 0 to remove and 0 not upgraded.
+root@1c297bab36f0:/teste#
+
+root@1c297bab36f0:/teste#
+root@1c297bab36f0:/teste# pwd
+/teste
+root@1c297bab36f0:/teste# mkdir ambiente-virtual-novo
+root@1c297bab36f0:/teste# python3 -m venv /teste/ambiente-virtual-novo
+root@1c297bab36f0:/teste#
+root@1c297bab36f0:/teste#
+root@1c297bab36f0:/teste# source /teste/ambiente-virtual-novo/bin/activate
+(ambiente-virtual-novo) root@1c297bab36f0:/teste#
+(ambiente-virtual-novo) root@1c297bab36f0:/teste#
+(ambiente-virtual-novo) root@1c297bab36f0:/teste#
+(ambiente-virtual-novo) root@1c297bab36f0:/teste#
+(ambiente-virtual-novo) root@1c297bab36f0:/teste#
+(ambiente-virtual-novo) root@1c297bab36f0:/teste#
+(ambiente-virtual-novo) root@1c297bab36f0:/teste#
+~~~~
+
+
+
+- Instalando dependencias no ambiente virtual:
+
+~~~~bash
+(ambiente-virtual-novo) root@1c297bab36f0:/teste# pip3 install requests
+Collecting requests
+  Using cached requests-2.31.0-py3-none-any.whl.metadata (4.6 kB)
+Collecting charset-normalizer<4,>=2 (from requests)
+  Using cached charset_normalizer-3.3.2-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.whl.metadata (33 kB)
+Collecting idna<4,>=2.5 (from requests)
+  Using cached idna-3.7-py3-none-any.whl.metadata (9.9 kB)
+Collecting urllib3<3,>=1.21.1 (from requests)
+  Using cached urllib3-2.2.1-py3-none-any.whl.metadata (6.4 kB)
+Collecting certifi>=2017.4.17 (from requests)
+  Using cached certifi-2024.2.2-py3-none-any.whl.metadata (2.2 kB)
+Using cached requests-2.31.0-py3-none-any.whl (62 kB)
+Using cached certifi-2024.2.2-py3-none-any.whl (163 kB)
+Using cached charset_normalizer-3.3.2-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (141 kB)
+Using cached idna-3.7-py3-none-any.whl (66 kB)
+Using cached urllib3-2.2.1-py3-none-any.whl (121 kB)
+Installing collected packages: urllib3, idna, charset-normalizer, certifi, requests
+Successfully installed certifi-2024.2.2 charset-normalizer-3.3.2 idna-3.7 requests-2.31.0 urllib3-2.2.1
+(ambiente-virtual-novo) root@1c297bab36f0:/teste#
+(ambiente-virtual-novo) root@1c297bab36f0:/teste#
+(ambiente-virtual-novo) root@1c297bab36f0:/teste# pip3 install googletrans
+Collecting googletrans
+  Using cached googletrans-3.0.0-py3-none-any.whl
+Collecting httpx==0.13.3 (from googletrans)
+  Using cached httpx-0.13.3-py3-none-any.whl.metadata (25 kB)
+Requirement already satisfied: certifi in ./ambiente-virtual-novo/lib/python3.12/site-packages (from httpx==0.13.3->googletrans) (2024.2.2)
+Collecting hstspreload (from httpx==0.13.3->googletrans)
+  Using cached hstspreload-2024.5.1-py3-none-any.whl.metadata (2.1 kB)
+Collecting sniffio (from httpx==0.13.3->googletrans)
+  Using cached sniffio-1.3.1-py3-none-any.whl.metadata (3.9 kB)
+Collecting chardet==3.* (from httpx==0.13.3->googletrans)
+  Using cached chardet-3.0.4-py2.py3-none-any.whl.metadata (3.2 kB)
+Collecting idna==2.* (from httpx==0.13.3->googletrans)
+  Using cached idna-2.10-py2.py3-none-any.whl.metadata (9.1 kB)
+Collecting rfc3986<2,>=1.3 (from httpx==0.13.3->googletrans)
+  Using cached rfc3986-1.5.0-py2.py3-none-any.whl.metadata (6.5 kB)
+Collecting httpcore==0.9.* (from httpx==0.13.3->googletrans)
+  Using cached httpcore-0.9.1-py3-none-any.whl.metadata (4.6 kB)
+Collecting h11<0.10,>=0.8 (from httpcore==0.9.*->httpx==0.13.3->googletrans)
+  Using cached h11-0.9.0-py2.py3-none-any.whl.metadata (8.1 kB)
+Collecting h2==3.* (from httpcore==0.9.*->httpx==0.13.3->googletrans)
+  Using cached h2-3.2.0-py2.py3-none-any.whl.metadata (32 kB)
+Collecting hyperframe<6,>=5.2.0 (from h2==3.*->httpcore==0.9.*->httpx==0.13.3->googletrans)
+  Using cached hyperframe-5.2.0-py2.py3-none-any.whl.metadata (7.2 kB)
+Collecting hpack<4,>=3.0 (from h2==3.*->httpcore==0.9.*->httpx==0.13.3->googletrans)
+  Using cached hpack-3.0.0-py2.py3-none-any.whl.metadata (7.0 kB)
+Using cached httpx-0.13.3-py3-none-any.whl (55 kB)
+Using cached chardet-3.0.4-py2.py3-none-any.whl (133 kB)
+Using cached httpcore-0.9.1-py3-none-any.whl (42 kB)
+Using cached idna-2.10-py2.py3-none-any.whl (58 kB)
+Using cached sniffio-1.3.1-py3-none-any.whl (10 kB)
+Using cached h2-3.2.0-py2.py3-none-any.whl (65 kB)
+Using cached rfc3986-1.5.0-py2.py3-none-any.whl (31 kB)
+Using cached hstspreload-2024.5.1-py3-none-any.whl (1.1 MB)
+Using cached h11-0.9.0-py2.py3-none-any.whl (53 kB)
+Using cached hpack-3.0.0-py2.py3-none-any.whl (38 kB)
+Using cached hyperframe-5.2.0-py2.py3-none-any.whl (12 kB)
+Installing collected packages: rfc3986, hyperframe, hpack, h11, chardet, sniffio, idna, hstspreload, h2, httpcore, httpx, googletrans
+  Attempting uninstall: idna
+    Found existing installation: idna 3.7
+    Uninstalling idna-3.7:
+      Successfully uninstalled idna-3.7
+Successfully installed chardet-3.0.4 googletrans-3.0.0 h11-0.9.0 h2-3.2.0 hpack-3.0.0 hstspreload-2024.5.1 httpcore-0.9.1 httpx-0.13.3 hyperframe-5.2.0 idna-2.10 rfc3986-1.5.0 sniffio-1.3.1
+(ambiente-virtual-novo) root@1c297bab36f0:/teste# date
+Sun May 12 11:38:02 -03 2024
+(ambiente-virtual-novo) root@1c297bab36f0:/teste#
+(ambiente-virtual-novo) root@1c297bab36f0:/teste#
+(ambiente-virtual-novo) root@1c297bab36f0:/teste# pip3 install python-dotenv
+Collecting python-dotenv
+  Using cached python_dotenv-1.0.1-py3-none-any.whl.metadata (23 kB)
+Using cached python_dotenv-1.0.1-py3-none-any.whl (19 kB)
+Installing collected packages: python-dotenv
+Successfully installed python-dotenv-1.0.1
+(ambiente-virtual-novo) root@1c297bab36f0:/teste#
+~~~~
+
+
+
+- Testando:
+
+~~~~bash
+
+(ambiente-virtual-novo) root@1c297bab36f0:/teste# python3 script.py
+Traceback (most recent call last):
+  File "/teste/script.py", line 66, in <module>
+    post_creator({source_url}, {base_url}, {source_language}, {target_language}, "publish")
+  File "/teste/script.py", line 21, in post_creator
+    response_API = requests.get(sourceURL)
+                   ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/teste/ambiente-virtual-novo/lib/python3.12/site-packages/requests/api.py", line 73, in get
+    return request("get", url, params=params, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/teste/ambiente-virtual-novo/lib/python3.12/site-packages/requests/api.py", line 59, in request
+    return session.request(method=method, url=url, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/teste/ambiente-virtual-novo/lib/python3.12/site-packages/requests/sessions.py", line 589, in request
+    resp = self.send(prep, **send_kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/teste/ambiente-virtual-novo/lib/python3.12/site-packages/requests/sessions.py", line 697, in send
+    adapter = self.get_adapter(url=request.url)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/teste/ambiente-virtual-novo/lib/python3.12/site-packages/requests/sessions.py", line 794, in get_adapter
+    raise InvalidSchema(f"No connection adapters were found for {url!r}")
+requests.exceptions.InvalidSchema: No connection adapters were found for "{'https://palegreen-hornet-335449.hostingersite.com/ola-mundo/'}"
+(ambiente-virtual-novo) root@1c297bab36f0:/teste#
+
+~~~~
+
+
+
+
+  File "/teste/ambiente-virtual-novo/lib/python3.12/site-packages/requests/sessions.py", line 794, in get_adapter
+    raise InvalidSchema(f"No connection adapters were found for {url!r}")
+requests.exceptions.InvalidSchema: No connection adapters were found for "{'https://palegreen-hornet-335449.hostingersite.com/ola-mundo/'}"
+
+
+
+
+
+
+# #################################################################################################################################################
+# #################################################################################################################################################
+# #################################################################################################################################################
+# #################################################################################################################################################
+# #################################################################################################################################################
+## COMANDOS
+
+    1  cd teste/
+    2  ls
+    3  python3 script.py
+    4  ls -lhasp
+    5  pip3 install virtualenv
+    6  apt install python3-venv
+    7  pwd
+    8  mkdir ambiente-virtual-novo
+    9  python3 -m venv /teste/ambiente-virtual-novo
+   10  source /teste/ambiente-virtual-novo/bin/activate
+   11  pip3 install requests
+   12  pip3 install googletrans
+   13  date
+   14  pip3 install python-dotenv
+   15  ls -lhasp
+   16  ls -lhasp ambiente-virtual-novo/
+   17  python3 script.py
+   18  history
+
+
+
+
+
+
+
+
+# #################################################################################################################################################
+# #################################################################################################################################################
+# #################################################################################################################################################
+# #################################################################################################################################################
+# #################################################################################################################################################
+## PENDENTE
+
+- Tratar erro ao executar script.py:
+
+  File "/teste/ambiente-virtual-novo/lib/python3.12/site-packages/requests/sessions.py", line 794, in get_adapter
+    raise InvalidSchema(f"No connection adapters were found for {url!r}")
+requests.exceptions.InvalidSchema: No connection adapters were found for "{'https://palegreen-hornet-335449.hostingersite.com/ola-mundo/'}"
+
+
+- Fixar versões contidas no "requirements.txt"
