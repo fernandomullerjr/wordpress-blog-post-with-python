@@ -24,3 +24,34 @@ Para resolver isso, podemos tentar uma das seguintes abordagens:
     Usar uma biblioteca alternativa: Se a atualização não resolver o problema, considere usar uma biblioteca alternativa como deep-translator, que também oferece suporte para tradução com o Google Translate.
 
 Aqui está um exemplo de como usar a biblioteca deep-translator:
+
+
+
+# wordpress-blog-post-with-python
+
+Script que efetua a coleta de um post do Wordpress, traduz e efetua a publicação do post traduzido.
+
+## Índice
+
+- [Instalação](#instalacao)
+- [Uso](#uso)
+- [Observações](#observacoes)
+
+## Instalação
+
+Instruções sobre como instalar e configurar o ambiente necessário para o projeto.
+
+```bash
+pip3 install requests
+pip3 install python-dotenv
+pip3 install deep-translator
+```
+
+## Uso
+
+```bash
+docker start ubuntu
+docker container exec -ti ubuntu bash
+source /teste/ambiente-virtual-novo/bin/activate
+python3 script.py
+```
