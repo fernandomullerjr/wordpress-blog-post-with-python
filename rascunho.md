@@ -34,6 +34,12 @@ cd teste/
    18  history
 
 
+python3 -m venv /teste/ambiente-virtual-novo
+source /teste/ambiente-virtual-novo/bin/activate
+
+python3 script.py
+
+
 git add .
 git commit -m "Wordpress with Python."
 git push
@@ -1420,3 +1426,451 @@ ver
 
 docker start ubuntu
 docker container exec -ti ubuntu bash
+
+python3 -m venv /teste/ambiente-virtual-novo
+source /teste/ambiente-virtual-novo/bin/activate
+
+python3 script.py
+
+
+- Teste, erro:
+
+~~~~bash
+
+(ambiente-virtual-novo) root@1c297bab36f0:/teste# python3 script.py
+Traceback (most recent call last):
+  File "/teste/script.py", line 66, in <module>
+    post_creator(source_url, base_url, source_language, target_language, "publish")
+  File "/teste/script.py", line 25, in post_creator
+    get_article_content = parse_json['body']
+                          ~~~~~~~~~~^^^^^^^^
+KeyError: 'body'
+(ambiente-virtual-novo) root@1c297bab36f0:/teste#
+(ambiente-virtual-novo) root@1c297bab36f0:/teste# date
+Sat May 25 21:45:59 -03 2024
+(ambiente-virtual-novo) root@1c297bab36f0:/teste#
+
+~~~~
+
+
+
+- Atual
+SOURCE_URL="https://palegreen-hornet-335449.hostingersite.com/wp-json/wp/v2/posts/1"
+
+
+
+O erro KeyError: 'body' indica que a chave 'body' não está presente no dicionário parse_json que você está tentando acessar. Isso pode ocorrer se a resposta da API não contiver a chave esperada.
+
+Para resolver esse problema, é importante adicionar verificações para garantir que a resposta da API contenha as chaves esperadas antes de tentar acessá-las. Além disso, pode ser útil imprimir a resposta da API para depuração. Vamos modificar o código para incluir essas verificações e também para imprimir a resposta da API caso ocorra um erro:
+
+~~~~python
+import requests
+import json
+import random
+from googletrans import Translator
+from requests.auth import HTTPBasicAuth
+import os
+from dotenv import load_dotenv
+
+load_dotenv()  # take environment variables from .env.
+
+# Code of your application, which uses environment variables (e.g. from `os.environ` or
+# `os.getenv`) as if they came from the actual environment.
+source_url = os.getenv("SOURCE_URL")
+base_url = os.getenv("BASE_URL")
+source_language = os.getenv("SOURCE_LANGUAGE")
+target_language = os.getenv("TARGET_LANGUAGE")
+wp_app_username = os.getenv("WP_APP_USERNAME")
+wp_app_password = os.getenv("WP_APP_PASSWORD")
+
+def post_creator(sourceURL, wpBaseURL, sourceLang, targetLang, postStatus):
+    response_API = requests.get(sourceURL)
+    data = response_API.text
+    
+    try:
+        parse_json = json.loads(data)
+        get_article_title = parse_json['title']
+        get_article_content = parse_json['body']
+    except KeyError as e:
+        print(f"KeyError: {e}")
+        print(f"Response JSON: {parse_json}")
+        return
+
+    translator = Translator()
+
+    title_translation = translator.translate(get_article_title, src=sourceLang, dest=targetLang)
+    title_translation_text = title_translation.text 
+
+    content_translation = translator.translate(get_article_content, src=sourceLang, dest=targetLang)
+    content_translation_text = content_translation.text 
+
+    WP_url = wpBaseURL + "/wp-json/wp/v2/posts"
+
+    auth = HTTPBasicAuth(wp_app_username, wp_app_password)
+
+    headers = {
+        "Accept": "application/json",
+        "Content-Type": "application/json"
+    }
+
+    payload = json.dumps({ 
+        "status": postStatus,
+        "title": title_translation_text,
+        "content": content_translation_text,
+    })
+
+    response = requests.request(
+        "POST",
+        WP_url,
+        data=payload,
+        headers=headers,
+        auth=auth
+    )
+
+    print(response)
+
+post_creator(source_url, base_url, source_language, target_language, "publish")
+
+~~~~
+
+
+
+
+
+- Ajustando
+
+- Teste
+
+~~~~bash
+
+(ambiente-virtual-novo) root@1c297bab36f0:/teste# vi script.py
+(ambiente-virtual-novo) root@1c297bab36f0:/teste# python3 script.py
+KeyError: 'body'
+Response JSON: {'id': 1, 'date': '2024-05-11T12:14:35', 'date_gmt': '2024-05-11T15:14:35', 'guid': {'rendered': 'https://palegreen-hornet-335449.hostingersite.com/?p=1'}, 'modified': '2024-05-11T12:14:35', 'modified_gmt': '2024-05-11T15:14:35', 'slug': 'ola-mundo', 'status': 'publish', 'type': 'post', 'link': 'https://palegreen-hornet-335449.hostingersite.com/ola-mundo/', 'title': {'rendered': 'Olá, mundo!'}, 'content': {'rendered': '\n<p>Boas-vindas ao WordPress. Esse é o seu primeiro post. Edite-o ou exclua-o, e então comece a escrever!</p>\n', 'protected': False}, 'excerpt': {'rendered': '<p>Boas-vindas ao WordPress. Esse é o seu primeiro post. Edite-o ou exclua-o, e então comece a escrever!</p>\n', 'protected': False}, 'author': 1, 'featured_media': 0, 'comment_status': 'open', 'ping_status': 'open', 'sticky': False, 'template': '', 'format': 'standard', 'meta': {'site-sidebar-layout': 'default', 'site-content-layout': '', 'ast-site-content-layout': '', 'site-content-style': 'default', 'site-sidebar-style': 'default', 'ast-global-header-display': '', 'ast-banner-title-visibility': '', 'ast-main-header-display': '', 'ast-hfb-above-header-display': '', 'ast-hfb-below-header-display': '', 'ast-hfb-mobile-header-display': '', 'site-post-title': '', 'ast-breadcrumbs-content': '', 'ast-featured-img': '', 'footer-sml-layout': '', 'theme-transparent-header-meta': '', 'adv-header-id-meta': '', 'stick-header-meta': '', 'header-above-stick-meta': '', 'header-main-stick-meta': '', 'header-below-stick-meta': '', 'astra-migrate-meta-layouts': 'default', 'ast-page-background-enabled': 'default', 'ast-page-background-meta': {'desktop': {'background-color': 'var(--ast-global-color-4)', 'background-image': '', 'background-repeat': 'repeat', 'background-position': 'center center', 'background-size': 'auto', 'background-attachment': 'scroll', 'background-type': '', 'background-media': '', 'overlay-type': '', 'overlay-color': '', 'overlay-gradient': ''}, 'tablet': {'background-color': '', 'background-image': '', 'background-repeat': 'repeat', 'background-position': 'center center', 'background-size': 'auto', 'background-attachment': 'scroll', 'background-type': '', 'background-media': '', 'overlay-type': '', 'overlay-color': '', 'overlay-gradient': ''}, 'mobile': {'background-color': '', 'background-image': '', 'background-repeat': 'repeat', 'background-position': 'center center', 'background-size': 'auto', 'background-attachment': 'scroll', 'background-type': '', 'background-media': '', 'overlay-type': '', 'overlay-color': '', 'overlay-gradient': ''}}, 'ast-content-background-meta': {'desktop': {'background-color': 'var(--ast-global-color-5)', 'background-image': '', 'background-repeat': 'repeat', 'background-position': 'center center', 'background-size': 'auto', 'background-attachment': 'scroll', 'background-type': '', 'background-media': '', 'overlay-type': '', 'overlay-color': '', 'overlay-gradient': ''}, 'tablet': {'background-color': 'var(--ast-global-color-5)', 'background-image': '', 'background-repeat': 'repeat', 'background-position': 'center center', 'background-size': 'auto', 'background-attachment': 'scroll', 'background-type': '', 'background-media': '', 'overlay-type': '', 'overlay-color': '', 'overlay-gradient': ''}, 'mobile': {'background-color': 'var(--ast-global-color-5)', 'background-image': '', 'background-repeat': 'repeat', 'background-position': 'center center', 'background-size': 'auto', 'background-attachment': 'scroll', 'background-type': '', 'background-media': '', 'overlay-type': '', 'overlay-color': '', 'overlay-gradient': ''}}, 'footnotes': ''}, 'categories': [1], 'tags': [], 'aioseo_notices': [], '_links': {'self': [{'href': 'https://palegreen-hornet-335449.hostingersite.com/wp-json/wp/v2/posts/1'}], 'collection': [{'href': 'https://palegreen-hornet-335449.hostingersite.com/wp-json/wp/v2/posts'}], 'about': [{'href': 'https://palegreen-hornet-335449.hostingersite.com/wp-json/wp/v2/types/post'}], 'author': [{'embeddable': True, 'href': 'https://palegreen-hornet-335449.hostingersite.com/wp-json/wp/v2/users/1'}], 'replies': [{'embeddable': True, 'href': 'https://palegreen-hornet-335449.hostingersite.com/wp-json/wp/v2/comments?post=1'}], 'version-history': [{'count': 0, 'href': 'https://palegreen-hornet-335449.hostingersite.com/wp-json/wp/v2/posts/1/revisions'}], 'wp:attachment': [{'href': 'https://palegreen-hornet-335449.hostingersite.com/wp-json/wp/v2/media?parent=1'}], 'wp:term': [{'taxonomy': 'category', 'embeddable': True, 'href': 'https://palegreen-hornet-335449.hostingersite.com/wp-json/wp/v2/categories?post=1'}, {'taxonomy': 'post_tag', 'embeddable': True, 'href': 'https://palegreen-hornet-335449.hostingersite.com/wp-json/wp/v2/tags?post=1'}], 'curies': [{'name': 'wp', 'href': 'https://api.w.org/{rel}', 'templated': True}]}}
+(ambiente-virtual-novo) root@1c297bab36f0:/teste#
+(ambiente-virtual-novo) root@1c297bab36f0:/teste#
+(ambiente-virtual-novo) root@1c297bab36f0:/teste#
+(ambiente-virtual-novo) root@1c297bab36f0:/teste#
+(ambiente-virtual-novo) root@1c297bab36f0:/teste# date
+Sat May 25 22:02:40 -03 2024
+(ambiente-virtual-novo) root@1c297bab36f0:/teste#
+
+~~~~
+
+
+
+
+
+- Criando v2
+
+Para criar um script Python que faça uma requisição a uma API do WordPress para obter um post, traduzir o título e o conteúdo do post do português para o inglês usando a biblioteca googletrans, e publicar o post traduzido de volta no WordPress, siga o exemplo abaixo. Esse código usa a biblioteca requests para fazer as requisições HTTP e a biblioteca googletrans para a tradução.
+
+Primeiro, instale as bibliotecas necessárias se ainda não tiver feito isso:
+
+sh
+
+pip install requests googletrans-python python-dotenv
+
+Em seguida, crie um arquivo .env no mesmo diretório do seu script Python para armazenar as variáveis de ambiente:
+
+makefile
+
+SOURCE_URL=https://seu-site.com/wp-json/wp/v2/posts/1
+BASE_URL=https://seu-site.com
+SOURCE_LANGUAGE=pt
+TARGET_LANGUAGE=en
+WP_APP_USERNAME=seu-usuario
+WP_APP_PASSWORD=sua-senha
+
+Agora, aqui está o script Python completo:
+
+~~~~python
+
+import requests
+import json
+from googletrans import Translator
+from requests.auth import HTTPBasicAuth
+import os
+from dotenv import load_dotenv
+
+# Carrega as variáveis de ambiente do arquivo .env
+load_dotenv()
+
+source_url = os.getenv("SOURCE_URL")
+base_url = os.getenv("BASE_URL")
+source_language = os.getenv("SOURCE_LANGUAGE")
+target_language = os.getenv("TARGET_LANGUAGE")
+wp_app_username = os.getenv("WP_APP_USERNAME")
+wp_app_password = os.getenv("WP_APP_PASSWORD")
+
+def post_creator(sourceURL, wpBaseURL, sourceLang, targetLang, postStatus):
+    response_API = requests.get(sourceURL)
+    
+    if response_API.status_code != 200:
+        print(f"Erro ao acessar a URL: {response_API.status_code}")
+        return
+
+    data = response_API.json()
+    get_article_title = data['title']['rendered']
+    get_article_content = data['content']['rendered']
+
+    translator = Translator()
+
+    title_translation = translator.translate(get_article_title, src=sourceLang, dest=targetLang)
+    title_translation_text = title_translation.text 
+
+    content_translation = translator.translate(get_article_content, src=sourceLang, dest=targetLang)
+    content_translation_text = content_translation.text 
+
+    WP_url = wpBaseURL + "/wp-json/wp/v2/posts"
+
+    auth = HTTPBasicAuth(wp_app_username, wp_app_password)
+
+    headers = {
+        "Accept": "application/json",
+        "Content-Type": "application/json"
+    }
+
+    payload = json.dumps({ 
+        "status": postStatus,
+        "title": title_translation_text,
+        "content": content_translation_text
+    })
+
+    response = requests.post(
+        WP_url,
+        data=payload,
+        headers=headers,
+        auth=auth
+    )
+
+    if response.status_code == 201:
+        print("Post publicado com sucesso!")
+    else:
+        print(f"Erro ao publicar o post: {response.status_code}")
+        print(response.json())
+
+post_creator(source_url, base_url, source_language, target_language, "publish")
+~~~~
+
+Explicação do Código:
+
+    Carregamento das Variáveis de Ambiente: Usa a biblioteca dotenv para carregar variáveis de ambiente do arquivo .env.
+    Requisição do Post: Faz uma requisição GET à API do WordPress para obter o post.
+    Verificação de Erro na Requisição: Verifica se a requisição foi bem-sucedida (status code 200).
+    Extração e Tradução do Conteúdo: Extrai o título e o conteúdo do JSON da resposta e traduz usando googletrans.
+    Publicação do Post Traduzido: Cria um novo post com o título e conteúdo traduzidos, e publica usando uma requisição POST à API do WordPress.
+    Verificação de Erro na Publicação: Verifica se a publicação foi bem-sucedida (status code 201).
+
+Certifique-se de substituir os valores no arquivo .env pelos seus valores reais de URL, credenciais, e configurações de idioma.
+
+
+
+
+- Criada a v2
+
+- Testando, erro:
+
+ERRO
+
+~~~~BASH
+
+(ambiente-virtual-novo) root@1c297bab36f0:/teste#
+(ambiente-virtual-novo) root@1c297bab36f0:/teste# python3 script.py
+Traceback (most recent call last):
+  File "/teste/script.py", line 67, in <module>
+    post_creator(source_url, base_url, source_language, target_language, "publish")
+  File "/teste/script.py", line 33, in post_creator
+    title_translation = translator.translate(get_article_title, src=sourceLang, dest=targetLang)
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/teste/ambiente-virtual-novo/lib/python3.12/site-packages/googletrans/client.py", line 182, in translate
+    data = self._translate(text, dest, src, kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/teste/ambiente-virtual-novo/lib/python3.12/site-packages/googletrans/client.py", line 78, in _translate
+    token = self.token_acquirer.do(text)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/teste/ambiente-virtual-novo/lib/python3.12/site-packages/googletrans/gtoken.py", line 194, in do
+    self._update()
+  File "/teste/ambiente-virtual-novo/lib/python3.12/site-packages/googletrans/gtoken.py", line 62, in _update
+    code = self.RE_TKK.search(r.text).group(1).replace('var ', '')
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'NoneType' object has no attribute 'group'
+(ambiente-virtual-novo) root@1c297bab36f0:/teste#
+
+~~~~
+
+
+
+
+
+
+
+
+
+O erro AttributeError: 'NoneType' object has no attribute 'group' geralmente ocorre quando a biblioteca googletrans não consegue obter o token de autenticação necessário para a tradução. Isso pode ser devido a mudanças na API do Google Translate, problemas temporários com o serviço ou a versão da biblioteca.
+
+Para resolver isso, podemos tentar uma das seguintes abordagens:
+
+    Atualizar a biblioteca googletrans: Verifique se está usando a versão mais recente da biblioteca googletrans.
+
+    Usar uma biblioteca alternativa: Se a atualização não resolver o problema, considere usar uma biblioteca alternativa como deep-translator, que também oferece suporte para tradução com o Google Translate.
+
+Aqui está um exemplo de como usar a biblioteca deep-translator:
+
+Primeiro, instale a biblioteca:
+
+sh
+
+pip install deep-translator
+
+Em seguida, atualize o script para usar deep-translator:
+
+~~~~python
+
+import requests
+import json
+from deep_translator import GoogleTranslator
+from requests.auth import HTTPBasicAuth
+import os
+from dotenv import load_dotenv
+
+# Carrega as variáveis de ambiente do arquivo .env
+load_dotenv()
+
+source_url = os.getenv("SOURCE_URL")
+base_url = os.getenv("BASE_URL")
+source_language = os.getenv("SOURCE_LANGUAGE")
+target_language = os.getenv("TARGET_LANGUAGE")
+wp_app_username = os.getenv("WP_APP_USERNAME")
+wp_app_password = os.getenv("WP_APP_PASSWORD")
+
+def post_creator(sourceURL, wpBaseURL, sourceLang, targetLang, postStatus):
+    response_API = requests.get(sourceURL)
+    
+    if response_API.status_code != 200:
+        print(f"Erro ao acessar a URL: {response_API.status_code}")
+        return
+
+    data = response_API.json()
+    get_article_title = data['title']['rendered']
+    get_article_content = data['content']['rendered']
+
+    translator = GoogleTranslator(source=sourceLang, target=targetLang)
+
+    title_translation_text = translator.translate(get_article_title)
+    content_translation_text = translator.translate(get_article_content)
+
+    WP_url = wpBaseURL + "/wp-json/wp/v2/posts"
+
+    auth = HTTPBasicAuth(wp_app_username, wp_app_password)
+
+    headers = {
+        "Accept": "application/json",
+        "Content-Type": "application/json"
+    }
+
+    payload = json.dumps({ 
+        "status": postStatus,
+        "title": title_translation_text,
+        "content": content_translation_text
+    })
+
+    response = requests.post(
+        WP_url,
+        data=payload,
+        headers=headers,
+        auth=auth
+    )
+
+    if response.status_code == 201:
+        print("Post publicado com sucesso!")
+    else:
+        print(f"Erro ao publicar o post: {response.status_code}")
+        print(response.json())
+
+post_creator(source_url, base_url, source_language, target_language, "publish")
+~~~~
+
+Explicação das Alterações:
+
+    Substituição da Biblioteca: A biblioteca googletrans foi substituída pela deep-translator, que também fornece serviços de tradução utilizando o Google Translate.
+    Uso de GoogleTranslator da deep-translator: A função GoogleTranslator é usada para traduzir o título e o conteúdo do post.
+
+Essa abordagem deve contornar o problema com a biblioteca googletrans e permitir que você continue traduzindo e publicando posts no WordPress.
+
+
+
+
+
+- Criando v3
+
+~~~~python
+
+import requests
+import json
+from deep_translator import GoogleTranslator
+from requests.auth import HTTPBasicAuth
+import os
+from dotenv import load_dotenv
+
+# Carrega as variáveis de ambiente do arquivo .env
+load_dotenv()
+
+source_url = os.getenv("SOURCE_URL")
+base_url = os.getenv("BASE_URL")
+source_language = os.getenv("SOURCE_LANGUAGE")
+target_language = os.getenv("TARGET_LANGUAGE")
+wp_app_username = os.getenv("WP_APP_USERNAME")
+wp_app_password = os.getenv("WP_APP_PASSWORD")
+
+def post_creator(sourceURL, wpBaseURL, sourceLang, targetLang, postStatus):
+    response_API = requests.get(sourceURL)
+    
+    if response_API.status_code != 200:
+        print(f"Erro ao acessar a URL: {response_API.status_code}")
+        return
+
+    data = response_API.json()
+
+    # Adiciona um print para mostrar o conteúdo do post obtido
+    print("Conteúdo do post obtido:")
+    print(json.dumps(data, indent=4, ensure_ascii=False))
+
+    get_article_title = data['title']['rendered']
+    get_article_content = data['content']['rendered']
+
+    translator = GoogleTranslator(source=sourceLang, target=targetLang)
+
+    title_translation_text = translator.translate(get_article_title)
+    content_translation_text = translator.translate(get_article_content)
+
+    WP_url = wpBaseURL + "/wp-json/wp/v2/posts"
+
+    auth = HTTPBasicAuth(wp_app_username, wp_app_password)
+
+    headers = {
+        "Accept": "application/json",
+        "Content-Type": "application/json"
+    }
+
+    payload = json.dumps({ 
+        "status": postStatus,
+        "title": title_translation_text,
+        "content": content_translation_text
+    })
+
+    response = requests.post(
+        WP_url,
+        data=payload,
+        headers=headers,
+        auth=auth
+    )
+
+    if response.status_code == 201:
+        print("Post publicado com sucesso!")
+    else:
+        print(f"Erro ao publicar o post: {response.status_code}")
+        print(response.json())
+
+post_creator(source_url, base_url, source_language, target_language, "publish")
+~~~~
