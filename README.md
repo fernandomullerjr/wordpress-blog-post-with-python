@@ -7,6 +7,7 @@ Script que efetua a coleta de um post do Wordpress, traduz e efetua a publicaç�
 - [Instalação](#instalacao)
 - [Uso](#uso)
 - [Observações](#observacoes)
+- [Versões](#versoes)
 
 ## Instalação
 
@@ -58,3 +59,19 @@ import requests
 import json
 from deep_translator import GoogleTranslator
 ~~~~
+
+## Versões
+
+Seguem as versões utilizadas do Python e bibliotecas:
+
+````bash
+(ambiente-virtual-novo) root@1c297bab36f0:/# pip3 list | egrep 'deep|requests|dot'
+deep-translator    1.11.4
+python-dotenv      1.0.1
+requests           2.31.0
+(ambiente-virtual-novo) root@1c297bab36f0:/#
+(ambiente-virtual-novo) root@1c297bab36f0:/# python3 --version
+Python 3.12.3
+(ambiente-virtual-novo) root@1c297bab36f0:/#
+
+````

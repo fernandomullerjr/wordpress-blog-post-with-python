@@ -2115,3 +2115,30 @@ v3 funcionando!
 v3 funcionando!
 - OK
 v3 funcionando!
+
+
+
+
+
+
+
+
+
+
+## Dia 26/05/2024
+
+
+
+# #################################################################################################################################################
+# #################################################################################################################################################
+# #################################################################################################################################################
+# #################################################################################################################################################
+# #################################################################################################################################################
+## PENDENTE
+
+- Fixar versões contidas no "requirements.txt", definir versões exatas.
+- Criar Dockerfile e docker-compose, posteriormente.
+- Ver forma de acionar fácil o script para um blog e post especifico. Usar Makefile +CLI??? Variar ambiente virtual??? Avaliar as opções.
+- Adicionar try, exception, logs de erros.
+- Testar combo "Fedora 40 + PyTorch" , <https://www.tudocelular.com/tech/noticias/n219464/fedora-linux-40-beta-lancado-gnome-46-ia.html>
+
