@@ -1874,3 +1874,244 @@ def post_creator(sourceURL, wpBaseURL, sourceLang, targetLang, postStatus):
 
 post_creator(source_url, base_url, source_language, target_language, "publish")
 ~~~~
+
+
+
+
+
+
+
+- Teste
+
+~~~~bash
+
+(ambiente-virtual-novo) root@1c297bab36f0:/teste#
+(ambiente-virtual-novo) root@1c297bab36f0:/teste# python3 script.py
+Conteúdo do post obtido:
+{
+    "id": 1,
+    "date": "2024-05-11T12:14:35",
+    "date_gmt": "2024-05-11T15:14:35",
+    "guid": {
+        "rendered": "https://palegreen-hornet-335449.hostingersite.com/?p=1"
+    },
+    "modified": "2024-05-11T12:14:35",
+    "modified_gmt": "2024-05-11T15:14:35",
+    "slug": "ola-mundo",
+    "status": "publish",
+    "type": "post",
+    "link": "https://palegreen-hornet-335449.hostingersite.com/ola-mundo/",
+    "title": {
+        "rendered": "Olá, mundo!"
+    },
+    "content": {
+        "rendered": "\n<p>Boas-vindas ao WordPress. Esse é o seu primeiro post. Edite-o ou exclua-o, e então comece a escrever!</p>\n",
+        "protected": false
+    },
+    "excerpt": {
+        "rendered": "<p>Boas-vindas ao WordPress. Esse é o seu primeiro post. Edite-o ou exclua-o, e então comece a escrever!</p>\n",
+        "protected": false
+    },
+    "author": 1,
+    "featured_media": 0,
+    "comment_status": "open",
+    "ping_status": "open",
+    "sticky": false,
+    "template": "",
+    "format": "standard",
+    "meta": {
+        "site-sidebar-layout": "default",
+        "site-content-layout": "",
+        "ast-site-content-layout": "",
+        "site-content-style": "default",
+        "site-sidebar-style": "default",
+        "ast-global-header-display": "",
+        "ast-banner-title-visibility": "",
+        "ast-main-header-display": "",
+        "ast-hfb-above-header-display": "",
+        "ast-hfb-below-header-display": "",
+        "ast-hfb-mobile-header-display": "",
+        "site-post-title": "",
+        "ast-breadcrumbs-content": "",
+        "ast-featured-img": "",
+        "footer-sml-layout": "",
+        "theme-transparent-header-meta": "",
+        "adv-header-id-meta": "",
+        "stick-header-meta": "",
+        "header-above-stick-meta": "",
+        "header-main-stick-meta": "",
+        "header-below-stick-meta": "",
+        "astra-migrate-meta-layouts": "default",
+        "ast-page-background-enabled": "default",
+        "ast-page-background-meta": {
+            "desktop": {
+                "background-color": "var(--ast-global-color-4)",
+                "background-image": "",
+                "background-repeat": "repeat",
+                "background-position": "center center",
+                "background-size": "auto",
+                "background-attachment": "scroll",
+                "background-type": "",
+                "background-media": "",
+                "overlay-type": "",
+                "overlay-color": "",
+                "overlay-gradient": ""
+            },
+            "tablet": {
+                "background-color": "",
+                "background-image": "",
+                "background-repeat": "repeat",
+                "background-position": "center center",
+                "background-size": "auto",
+                "background-attachment": "scroll",
+                "background-type": "",
+                "background-media": "",
+                "overlay-type": "",
+                "overlay-color": "",
+                "overlay-gradient": ""
+            },
+            "mobile": {
+                "background-color": "",
+                "background-image": "",
+                "background-repeat": "repeat",
+                "background-position": "center center",
+                "background-size": "auto",
+                "background-attachment": "scroll",
+                "background-type": "",
+                "background-media": "",
+                "overlay-type": "",
+                "overlay-color": "",
+                "overlay-gradient": ""
+            }
+        },
+        "ast-content-background-meta": {
+            "desktop": {
+                "background-color": "var(--ast-global-color-5)",
+                "background-image": "",
+                "background-repeat": "repeat",
+                "background-position": "center center",
+                "background-size": "auto",
+                "background-attachment": "scroll",
+                "background-type": "",
+                "background-media": "",
+                "overlay-type": "",
+                "overlay-color": "",
+                "overlay-gradient": ""
+            },
+            "tablet": {
+                "background-color": "var(--ast-global-color-5)",
+                "background-image": "",
+                "background-repeat": "repeat",
+                "background-position": "center center",
+                "background-size": "auto",
+                "background-attachment": "scroll",
+                "background-type": "",
+                "background-media": "",
+                "overlay-type": "",
+                "overlay-color": "",
+                "overlay-gradient": ""
+            },
+            "mobile": {
+                "background-color": "var(--ast-global-color-5)",
+                "background-image": "",
+                "background-repeat": "repeat",
+                "background-position": "center center",
+                "background-size": "auto",
+                "background-attachment": "scroll",
+                "background-type": "",
+                "background-media": "",
+                "overlay-type": "",
+                "overlay-color": "",
+                "overlay-gradient": ""
+            }
+        },
+        "footnotes": ""
+    },
+    "categories": [
+        1
+    ],
+    "tags": [],
+    "aioseo_notices": [],
+    "_links": {
+        "self": [
+            {
+                "href": "https://palegreen-hornet-335449.hostingersite.com/wp-json/wp/v2/posts/1"
+            }
+        ],
+        "collection": [
+            {
+                "href": "https://palegreen-hornet-335449.hostingersite.com/wp-json/wp/v2/posts"
+            }
+        ],
+        "about": [
+            {
+                "href": "https://palegreen-hornet-335449.hostingersite.com/wp-json/wp/v2/types/post"
+            }
+        ],
+        "author": [
+            {
+                "embeddable": true,
+                "href": "https://palegreen-hornet-335449.hostingersite.com/wp-json/wp/v2/users/1"
+            }
+        ],
+        "replies": [
+            {
+                "embeddable": true,
+                "href": "https://palegreen-hornet-335449.hostingersite.com/wp-json/wp/v2/comments?post=1"
+            }
+        ],
+        "version-history": [
+            {
+                "count": 0,
+                "href": "https://palegreen-hornet-335449.hostingersite.com/wp-json/wp/v2/posts/1/revisions"
+            }
+        ],
+        "wp:attachment": [
+            {
+                "href": "https://palegreen-hornet-335449.hostingersite.com/wp-json/wp/v2/media?parent=1"
+            }
+        ],
+        "wp:term": [
+            {
+                "taxonomy": "category",
+                "embeddable": true,
+                "href": "https://palegreen-hornet-335449.hostingersite.com/wp-json/wp/v2/categories?post=1"
+            },
+            {
+                "taxonomy": "post_tag",
+                "embeddable": true,
+                "href": "https://palegreen-hornet-335449.hostingersite.com/wp-json/wp/v2/tags?post=1"
+            }
+        ],
+        "curies": [
+            {
+                "name": "wp",
+                "href": "https://api.w.org/{rel}",
+                "templated": true
+            }
+        ]
+    }
+}
+Post publicado com sucesso!
+(ambiente-virtual-novo) root@1c297bab36f0:/teste#
+(ambiente-virtual-novo) root@1c297bab36f0:/teste#
+(ambiente-virtual-novo) root@1c297bab36f0:/teste# date
+Sat May 25 22:23:36 -03 2024
+(ambiente-virtual-novo) root@1c297bab36f0:/teste#
+
+~~~~
+
+
+
+
+
+- OK
+v3 funcionando!
+
+
+- OK
+v3 funcionando!
+- OK
+v3 funcionando!
+- OK
+v3 funcionando!
