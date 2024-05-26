@@ -20,6 +20,15 @@ pip3 install deep-translator
 
 ## Uso
 
+Como eu criei um ambiente virtual, dentro de um container Docker usando o Ubuntu como base, é necessário:
+
+1. Iniciar o container Docker.
+2. Conectar no container.
+3. Carregar o ambiente virtual do Python.
+4. Executar o script em Python.
+
+Seguem os comandos utilizados:
+
 ```bash
 docker start ubuntu
 docker container exec -ti ubuntu bash
