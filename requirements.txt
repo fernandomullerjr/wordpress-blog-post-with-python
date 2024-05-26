@@ -1,3 +1,4 @@
 requests
-googletrans
+#googletrans
 python-dotenv
+deep-translator
