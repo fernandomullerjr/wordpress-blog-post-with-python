@@ -11,13 +11,23 @@ Script que efetua a coleta de um post do Wordpress, traduz e efetua a publicaç�
 
 ## Instalação
 
+### Bibliotecas
+
 Instruções sobre como instalar e configurar o ambiente necessário para o projeto.
+
+Primeiro, instalar os pacotes das bibliotecas que serão utilizadas:
 
 ```bash
 pip3 install requests
 pip3 install python-dotenv
 pip3 install deep-translator
 ```
+
+### Wordpress - APP Password
+
+Precisamos ir ao painel do nosso site WordPress e criar uma nova senha do aplicativo. Usaremos isso para construir nossa autenticação básica ao enviar postagens para nosso site. 
+Se você nunca fez isso antes, você pode verificar a documentação oficial do WordPress <https://make.wordpress.org/core/2020/11/05/application-passwords-integration-guide/> sobre como fazer isso.
+
 
 ## Uso
 

@@ -2136,6 +2136,219 @@ v3 funcionando!
 # #################################################################################################################################################
 ## PENDENTE
 
+- Testar com o Blog devopsmind.
+- Fixar versões contidas no "requirements.txt", definir versões exatas.
+- Criar Dockerfile e docker-compose, posteriormente.
+- Ver forma de acionar fácil o script para um blog e post especifico. Usar Makefile +CLI??? Variar ambiente virtual??? Avaliar as opções.
+- Adicionar try, exception, logs de erros.
+- Testar combo "Fedora 40 + PyTorch" , <https://www.tudocelular.com/tech/noticias/n219464/fedora-linux-40-beta-lancado-gnome-46-ia.html>
+
+
+
+
+
+
+
+
+
+- Testar com o Blog devopsmind.
+
+- ERRO
+
+~~~~BASH
+
+}
+Traceback (most recent call last):
+  File "/devopsmind/script.py", line 68, in <module>
+    post_creator(source_url, base_url, source_language, target_language, "publish")
+  File "/devopsmind/script.py", line 38, in post_creator
+    content_translation_text = translator.translate(get_article_content)
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/teste/ambiente-virtual-novo/lib/python3.12/site-packages/deep_translator/google.py", line 57, in translate
+    if is_input_valid(text, max_chars=5000):
+       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/teste/ambiente-virtual-novo/lib/python3.12/site-packages/deep_translator/validate.py", line 41, in is_input_valid
+    raise NotValidLength(text, min_chars, max_chars)
+deep_translator.exceptions.NotValidLength:
+<nav class="wp-block-stackable-table-of-contents stk-block-table-of-contents stk-block stk-957d752" data-block-id="957d752"><p class="stk-table-of-contents__title">Tópicos</p><ul class="stk-table-of-contents__table"><li><a href="#introducao">Introdução</a><ul><li><a href="#ideia">Ideia</a></li></ul></li><li><a href="#script-para-limpeza-de-branches">Script para limpeza de branches</a><ul><li><a href="#explicacao-detalhada">Explicação detalhada</a></li></ul></li><li><a href="#importante">Importante</a></li><li><a href="#material-de-apoio">Material de apoio</a></li><li><a href="#conclusao">Conclusão</a></li></ul></nav>
+
+
+ --> Text length need to be between 0 and 5000 characters
+~~~~
+
+
+
+ERRO PARECE SER DE MAXIMO DE CARACTERES DO DEEP
+
+
+
+
+
+I'd be glad to help you resolve the Text length need to be between 0 and 5000 characters error in your deep_translator script.
+
+Error Explanation:
+
+This error occurs because the deep_translator library has a built-in limitation where the text you want to translate cannot exceed 5,000 characters. The library raises a NotValidLength exception when you attempt to translate a text longer than this limit.
+
+Solutions:
+
+    Split the Text into Chunks:
+
+    The most straightforward approach is to divide your large text into smaller chunks, each under 5,000 characters. Then, translate each chunk individually and combine the translated parts back into the complete text.
+
+    Here's an example using Python:
+    Python
+
+    import deep_translator
+
+    def translate_large_text(text, source_language, target_language):
+        chunk_size = 4500  # Adjust chunk size as needed
+        translated_chunks = []
+        for i in range(0, len(text), chunk_size):
+            chunk = text[i:i+chunk_size]
+            translated_chunks.append(deep_translator.translate(chunk, source_language, target_language))
+        return ''.join(translated_chunks)
+
+    source_url = "..."  # Your source URL
+    base_url = "..."   # Your base URL (if applicable)
+    source_language = "..."  # Source language code
+    target_language = "..."  # Target language code
+
+    get_article_content = # Your function to get the article content
+
+    translated_content = translate_large_text(get_article_content(), source_language, target_language)
+
+    # ... (Use the translated_content)
+
+    Use o código com cuidado.
+
+    Consider Alternative Translation Libraries:
+
+    If you frequently deal with large texts, you might explore translation libraries that offer higher character limits or support chunking internally. Some options include:
+        Google Translate API: You can use the Google Translate API directly (requires an API key), which allows for larger character limits depending on your pricing tier.
+        Azure Cognitive Services Translator: This service offers similar functionality to Google Translate and potentially higher character limits depending on your plan.
+
+Choosing the Right Solution:
+
+    For occasional use: If you only need to translate large texts occasionally, splitting them into chunks is a practical approach.
+    For frequent use: If you regularly work with large texts, a different translation library or the Google Translate/Azure Translator API might be more efficient.
+
+Additional Tips:
+
+    Adjust the chunk_size in the first solution based on your needs and the library's limitations.
+    If you encounter errors specific to the Google Translate API or Azure Translator, refer to their respective documentation for troubleshooting.
+
+By implementing one of these solutions, you should be able to handle larger texts in your deep_translator script and avoid the character limit error.
+
+
+
+
+
+O erro que você está enfrentando é causado pelo fato de que o texto que está sendo passado para a função de tradução excede o limite de caracteres permitido pela biblioteca deep_translator. O limite máximo é de 5000 caracteres.
+
+Para resolver esse problema, você pode dividir o texto em partes menores, cada uma com no máximo 5000 caracteres, antes de passá-las para a função de tradução. Aqui está um exemplo de como você pode fazer isso:
+Passos
+
+    Divida o texto em partes menores:
+        Crie uma função para dividir o texto em partes menores com no máximo 5000 caracteres.
+
+    Traduza cada parte separadamente:
+        Traduza cada parte separadamente e depois combine os resultados.
+
+Exemplo de Implementação
+
+Aqui está um exemplo de como você pode implementar isso no seu código:
+
+python
+
+def dividir_texto(texto, tamanho_max):
+    """Divide o texto em partes menores de acordo com o tamanho máximo especificado."""
+    return [texto[i:i + tamanho_max] for i in range(0, len(texto), tamanho_max)]
+
+def traduzir_texto(texto, translator):
+    """Traduz o texto dividindo-o em partes menores se necessário."""
+    partes = dividir_texto(texto, 5000)
+    partes_traduzidas = [translator.translate(parte) for parte in partes]
+    return ' '.join(partes_traduzidas)
+
+def post_creator(source_url, base_url, source_language, target_language, action):
+    # ... (outros códigos do seu script)
+    content_translation_text = traduzir_texto(get_article_content, translator)
+    # ... (continuação do seu script)
+
+# Exemplo de uso:
+from deep_translator import GoogleTranslator
+
+translator = GoogleTranslator(source='auto', target='en')
+
+source_url = "http://example.com/source"
+base_url = "http://example.com"
+source_language = "pt"
+target_language = "en"
+
+post_creator(source_url, base_url, source_language, target_language, "publish")
+
+Explicação
+
+    Função dividir_texto:
+        Esta função divide o texto em partes menores com no máximo 5000 caracteres.
+
+    Função traduzir_texto:
+        Esta função usa a função dividir_texto para dividir o texto original e, em seguida, traduz cada parte separadamente. Finalmente, combina as partes traduzidas em um único texto.
+
+    Modificação na post_creator:
+        Substituímos a chamada direta para translator.translate pela função traduzir_texto para garantir que o texto seja dividido e traduzido corretamente.
+
+Considerações
+
+    Limite de Caracteres:
+        Certifique-se de que o limite de 5000 caracteres é apropriado para a função de tradução que você está usando. Se a biblioteca deep_translator tiver um limite diferente, ajuste o código conforme necessário.
+
+    Concatenar Partes Traduzidas:
+        O exemplo acima combina as partes traduzidas com um espaço (' '.join(partes_traduzidas)). Dependendo do seu caso de uso, você pode precisar de um delimitador diferente ou de algum tratamento adicional para garantir que a tradução final esteja correta.
+
+Dessa forma, você conseguirá traduzir textos longos sem ultrapassar o limite de caracteres permitido pela biblioteca de tradução.
+
+
+
+
+
+- ERRO
+
+~~~~BASH
+
+}
+Traceback (most recent call last):
+  File "/devopsmind/script.py", line 68, in <module>
+    post_creator(source_url, base_url, source_language, target_language, "publish")
+  File "/devopsmind/script.py", line 38, in post_creator
+    content_translation_text = translator.translate(get_article_content)
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/teste/ambiente-virtual-novo/lib/python3.12/site-packages/deep_translator/google.py", line 57, in translate
+    if is_input_valid(text, max_chars=5000):
+       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/teste/ambiente-virtual-novo/lib/python3.12/site-packages/deep_translator/validate.py", line 41, in is_input_valid
+    raise NotValidLength(text, min_chars, max_chars)
+deep_translator.exceptions.NotValidLength:
+<nav class="wp-block-stackable-table-of-contents stk-block-table-of-contents stk-block stk-957d752" data-block-id="957d752"><p class="stk-table-of-contents__title">Tópicos</p><ul class="stk-table-of-contents__table"><li><a href="#introducao">Introdução</a><ul><li><a href="#ideia">Ideia</a></li></ul></li><li><a href="#script-para-limpeza-de-branches">Script para limpeza de branches</a><ul><li><a href="#explicacao-detalhada">Explicação detalhada</a></li></ul></li><li><a href="#importante">Importante</a></li><li><a href="#material-de-apoio">Material de apoio</a></li><li><a href="#conclusao">Conclusão</a></li></ul></nav>
+
+
+ --> Text length need to be between 0 and 5000 characters
+~~~~
+
+
+
+
+
+# #################################################################################################################################################
+# #################################################################################################################################################
+# #################################################################################################################################################
+# #################################################################################################################################################
+# #################################################################################################################################################
+## PENDENTE
+
+- Tratar erro  "--> Text length need to be between 0 and 5000 characters" do deep_translator. Avaliar opções, como criar função para dividir o texto em chunks menores, etc.
+- Testar com o Blog devopsmind.
 - Fixar versões contidas no "requirements.txt", definir versões exatas.
 - Criar Dockerfile e docker-compose, posteriormente.
 - Ver forma de acionar fácil o script para um blog e post especifico. Usar Makefile +CLI??? Variar ambiente virtual??? Avaliar as opções.
