@@ -2469,15 +2469,12 @@ Neste código, a função split_text divide o texto do conteúdo em partes menor
 - Criando a v4 para teste
 /home/fernando/cursos/python/wordpress-blog-post-with-python/testes/script-v4.py
 
-
-
-
-
+~~~~bash
 Post publicado com sucesso!
 (ambiente-virtual-novo) root@1c297bab36f0:/devopsmind# date
 Sun May 26 22:55:47 -03 2024
 (ambiente-virtual-novo) root@1c297bab36f0:/devopsmind#
-
+~~~~
 
 
 - OK
@@ -2486,7 +2483,40 @@ CRIOU O POST
 <https://devopsmind.com.br/en/git-en/automating-branch-cleanup-in-git/>
 
 
+- OK
 
+CRIOU O POST
+<https://devopsmind.com.br/en/git-en/automating-branch-cleanup-in-git/>
+
+
+- OK
+
+CRIOU O POST
+<https://devopsmind.com.br/en/git-en/automating-branch-cleanup-in-git/>
+
+
+~~~~bash
+
+fernando@debian10x64:~/cursos/python/wordpress-blog-post-with-python$ git add .
+fernando@debian10x64:~/cursos/python/wordpress-blog-post-with-python$ git commit -m "OK, adicionando ajuste que quebra os chunks em até 4500 caracteres, para atender a limitação da biblioteca do Deep."
+[main c9b0150] OK, adicionando ajuste que quebra os chunks em até 4500 caracteres, para atender a limitação da biblioteca do Deep.
+ 4 files changed, 331 insertions(+), 5 deletions(-)
+ create mode 100644 testes/script-v3-b.py
+ create mode 100644 testes/script-v4.py
+fernando@debian10x64:~/cursos/python/wordpress-blog-post-with-python$ git push
+Enumerating objects: 9, done.
+Counting objects: 100% (9/9), done.
+Delta compression using up to 8 threads
+Compressing objects: 100% (5/5), done.
+Writing objects: 100% (5/5), 1.98 KiB | 1.98 MiB/s, done.
+Total 5 (delta 3), reused 0 (delta 0)
+remote: Resolving deltas: 100% (3/3), completed with 3 local objects.
+To github.com:fernandomullerjr/wordpress-blog-post-with-python.git
+   4da40fd..c9b0150  main -> main
+fernando@debian10x64:~/cursos/python/wordpress-blog-post-with-python$
+
+
+~~~~
 
 
 
@@ -2499,10 +2529,10 @@ CRIOU O POST
 # #################################################################################################################################################
 ## PENDENTE
 
-- Ver como pegar no JSON a capa do Post, imagem destaque, etc.
+- Ver como pegar no JSON a capa do Post, imagem destaque, etc. Verificar demais melhoriais que é possível realizar.
 - Testar com o Blog devopsmind.
 - Fixar versões contidas no "requirements.txt", definir versões exatas.
-- Criar Dockerfile e docker-compose, posteriormente.
+- Criar Dockerfile e docker-compose, posteriormente. Avaliar melhores práticas.
 - Ver forma de acionar fácil o script para um blog e post especifico, chamar uma CLI que vai perguntando os dados desejados. Usar Makefile +CLI??? Variar ambiente virtual??? Avaliar as opções.
 - Ver como obter os JSON de blogs do exterior e automatizar o processo de criar um post, com base na página do exterior, adicionar menções ao DevOps Mind no cabeçalho.
 - Adicionar try, exception, logs de erros.
