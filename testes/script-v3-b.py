@@ -1,3 +1,4 @@
+
 import requests
 import json
 from deep_translator import GoogleTranslator
@@ -34,27 +35,7 @@ def post_creator(sourceURL, wpBaseURL, sourceLang, targetLang, postStatus):
     translator = GoogleTranslator(source=sourceLang, target=targetLang)
 
     title_translation_text = translator.translate(get_article_title)
-
-    # Função para dividir o texto em pedaços menores que 4500 caracteres
-    def split_text(text, max_length):
-        parts = []
-        while len(text) > max_length:
-            split_index = text[:max_length].rfind(' ')
-            if split_index == -1:
-                split_index = max_length
-            parts.append(text[:split_index])
-            text = text[split_index:]
-        parts.append(text)
-        return parts
-
-    # Divide o conteúdo do artigo em partes menores que 4500 caracteres
-    content_parts = split_text(get_article_content, 4500)
-    
-    # Traduz cada parte
-    translated_parts = [translator.translate(part) for part in content_parts]
-    
-    # Junta as partes traduzidas de volta em um único texto
-    content_translation_text = ''.join(translated_parts)
+    content_translation_text = translator.translate(get_article_content)
 
     WP_url = wpBaseURL + "/wp-json/wp/v2/posts"
 
