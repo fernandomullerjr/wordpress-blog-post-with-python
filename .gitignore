@@ -5,7 +5,9 @@
 node_modules
 
 # Ignore arquivos relacionados às chaves de API
+.env.*site
 .env
+.env.site*
 
 # Ignore arquivos de configuração de SASS
 .sass-cache

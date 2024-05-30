@@ -44,6 +44,7 @@ Seguem os comandos utilizados:
 docker start ubuntu
 docker container exec -ti ubuntu bash
 source /teste/ambiente-virtual-novo/bin/activate
+# Editar o .env com o id do Post desejado
 python3 script.py
 ```
 
