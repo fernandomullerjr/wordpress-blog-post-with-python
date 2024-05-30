@@ -2529,7 +2529,7 @@ fernando@debian10x64:~/cursos/python/wordpress-blog-post-with-python$
 # #################################################################################################################################################
 ## PENDENTE
 
-- Ver como pegar no JSON a capa do Post, imagem destaque, etc. Verificar demais melhoriais que é possível realizar.
+- MELHORIAS, Ver como pegar no JSON a capa do Post, imagem destaque, definir categoria, linguagem,  etc. Verificar demais melhoriais que é possível realizar.
 - Testar com o Blog devopsmind.
 - Fixar versões contidas no "requirements.txt", definir versões exatas.
 - Criar Dockerfile e docker-compose, posteriormente. Avaliar melhores práticas.
