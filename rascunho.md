@@ -2940,6 +2940,13 @@ https://palegreen-hornet-335449.hostingersite.com/wp-admin/post.php?post=3292&ac
 
 
 
+<https://community.zapier.com/how-do-i-3/how-to-create-wordpress-post-using-block-editor-instead-of-classic-editor-in-zapier-28770>
+Hi @Kriswuhk, welcome to the Community! 👋
+
+I’ve been looking into this and it seems that the WordPress API doesn’t actually have the ability to select the block editor when creating a post. The options currently available for their “Create a Post” endpoint can be viewed here: https://developer.wordpress.org/rest-api/reference/posts/#create-a-post
+
+
+
 
 # #################################################################################################################################################
 # #################################################################################################################################################
@@ -2953,6 +2960,12 @@ ver como fazer:
     Converter post para Editor em Blocos ao invés do Editor Clássico.
     Ajustar HREFLANG do Post.
     Tratar para que o TOC(Table of Contents) venha corretamente.
+Ver idéia: <https://automatevalue.com/blog/wordpress-blocks-post-using-the-rest-api/>
+<https://jeremyrichardson.dev/blog/parsing-a-raw-wordpress-post-with-blocks>
+<https://community.zapier.com/how-do-i-3/how-to-create-wordpress-post-using-block-editor-instead-of-classic-editor-in-zapier-28770>
+<https://developer.wordpress.org/rest-api/reference/posts/#create-a-post>
+possível solução:
+<https://myshittycode.com/2023/01/03/wordpress-creating-gutenberg-block-compatible-posts-using-rest-api/>
 
 **MELHORIAS, V2** - Fazer que o post traduzido seja criado com Editor Wordpress avançado, ao invés do editor clássico. Que algumas formatações não se percam.
 **MELHORIAS, v3**, Ver como pegar no JSON a capa do Post, imagem destaque, definir categoria, linguagem,  etc. Verificar demais melhoriais que é possível realizar.
