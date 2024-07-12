@@ -44,6 +44,10 @@ Seguem os comandos utilizados:
 docker start ubuntu
 docker container exec -ti ubuntu bash
 source /teste/ambiente-virtual-novo/bin/activate
+# Acessar o diretório contendo o devido script e .env
+cd /devopsmind
+# ou /teste, para uso no Blog adicional
+cd /teste
 # Editar o .env com o id do Post desejado
 python3 script.py
 ```

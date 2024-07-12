@@ -2539,3 +2539,33 @@ fernando@debian10x64:~/cursos/python/wordpress-blog-post-with-python$
 - Ver como obter os JSON de blogs do exterior e automatizar o processo de criar um post, com base na página do exterior, adicionar menções ao DevOps Mind no cabeçalho.
 - Adicionar try, exception, logs de erros.
 - Testar combo "Fedora 40 + PyTorch" , <https://www.tudocelular.com/tech/noticias/n219464/fedora-linux-40-beta-lancado-gnome-46-ia.html>
+
+
+
+
+
+
+
+
+
+## Dia 11/07/2024
+
+Testes para v2
+
+**MELHORIAS, V2** - Fazer que o post traduzido seja criado com Editor Wordpress avançado, ao invés do editor clássico. Que algumas formatações não se percam.
+
+
+1. Iniciar o container Docker.
+2. Conectar no container.
+3. Carregar o ambiente virtual do Python.
+4. Executar o script em Python.
+
+Seguem os comandos utilizados:
+
+```bash
+docker start ubuntu
+docker container exec -ti ubuntu bash
+source /teste/ambiente-virtual-novo/bin/activate
+# Editar o .env com o id do Post desejado
+python3 script.py
+```
