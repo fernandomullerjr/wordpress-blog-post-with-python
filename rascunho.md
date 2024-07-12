@@ -51,6 +51,11 @@ git push
 
 
 
+## versão validada
+/home/fernando/cursos/python/wordpress-blog-post-with-python/testes/script-v4.py
+v1.0.0
+traduz, mas traz no editor classico
+
 
 ## TUTORIAL
 
@@ -2552,6 +2557,13 @@ fernando@debian10x64:~/cursos/python/wordpress-blog-post-with-python$
 
 
 
+
+
+# #################################################################################################################################################
+# #################################################################################################################################################
+# #################################################################################################################################################
+# #################################################################################################################################################
+# #################################################################################################################################################
 ## Dia 11/07/2024
 
 Testes para v2
@@ -2601,3 +2613,289 @@ Thu Jul 11 23:46:58 -03 2024
 git add .
 git commit -m "TESTES da V2 - Wordpress with Python."
 git push
+
+
+
+- ERRO
+verificando a saída do script
+tem erro devido input
+
+~~~~bash
+  ]
+    }
+}
+Traceback (most recent call last):
+  File "/teste/script.py", line 68, in <module>
+    post_creator(source_url, base_url, source_language, target_language, "publish")
+  File "/teste/script.py", line 38, in post_creator
+    content_translation_text = translator.translate(get_article_content)
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/teste/ambiente-virtual-novo/lib/python3.12/site-packages/deep_translator/google.py", line 57, in translate
+    if is_input_valid(text, max_chars=5000):
+       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/teste/ambiente-virtual-novo/lib/python3.12/site-packages/deep_translator/validate.py", line 41, in is_input_valid
+    raise NotValidLength(text, min_chars, max_chars)
+deep_translator.exceptions.NotValidLength:
+<hr class="wp-block-separator has-alpha-channel-opacity"/>
+~~~~
+
+
+
+- Pasta "teste" está com o script obsoleto, que não faz split em partes menores do JSON.
+copiando o script novo pra pasta
+cp /devopsmind/script.py .
+
+- Pasta "teste" está com o script obsoleto, que não faz split em partes menores do JSON.
+copiando o script novo pra pasta
+cp /devopsmind/script.py .
+- Pasta "teste" está com o script obsoleto, que não faz split em partes menores do JSON.
+copiando o script novo pra pasta
+cp /devopsmind/script.py .
+- Pasta "teste" está com o script obsoleto, que não faz split em partes menores do JSON.
+copiando o script novo pra pasta
+cp /devopsmind/script.py .
+
+- Novo teste OK:
+
+~~~~bash
+     }
+        ],
+        "wp:term": [
+            {
+                "taxonomy": "category",
+                "embeddable": true,
+                "href": "https://palegreen-hornet-335449.hostingersite.com/wp-json/wp/v2/categories?post=3282"
+            },
+            {
+                "taxonomy": "post_tag",
+                "embeddable": true,
+                "href": "https://palegreen-hornet-335449.hostingersite.com/wp-json/wp/v2/tags?post=3282"
+            }
+        ],
+        "curies": [
+            {
+                "name": "wp",
+                "href": "https://api.w.org/{rel}",
+                "templated": true
+            }
+        ]
+    }
+}
+Post publicado com sucesso!
+(ambiente-virtual-novo) root@1c297bab36f0:/teste#
+
+
+(ambiente-virtual-novo) root@1c297bab36f0:/teste# date
+Thu Jul 11 23:52:28 -03 2024
+(ambiente-virtual-novo) root@1c297bab36f0:/teste#
+ 29  cp /devopsmind/script.py .
+   30  ls -lhasp
+   31  python3 script.py
+   32  date
+   33  history | tail
+(ambiente-virtual-novo) root@1c297bab36f0:/teste# ls -lhasp
+total 20K
+4.0K drwxr-xr-x 3 root root 4.0K Jul 11 23:46 ./
+4.0K drwxr-xr-x 1 root root 4.0K May 26 13:12 ../
+4.0K -rw-r--r-- 1 root root  301 Jul 11 23:46 .env
+4.0K drwxr-xr-x 5 root root 4.0K May 12 11:36 ambiente-virtual-novo/
+4.0K -rw-r--r-- 1 root root 2.7K Jul 11 23:51 script.py
+(ambiente-virtual-novo) root@1c297bab36f0:/teste#
+
+~~~~
+
+- Gerou o post traduzido:
+<https://palegreen-hornet-335449.hostingersite.com/docker-sre-and-devops-an-integrated-approach-for-reliability-and-efficiency/>
+TOC veio em editor clássico.
+
+- Versão atual que foi utilizada:
+/home/fernando/cursos/python/wordpress-blog-post-with-python/testes/script-v4.py
+
+
+
+
+
+
+
+
+## GPT
+
+Para garantir que o seu script Python crie um novo post no WordPress com o editor de blocos (Gutenberg), você precisa ajustar o formato do conteúdo enviado para o endpoint da API REST do WordPress. O Gutenberg utiliza um formato específico para os blocos de conteúdo, que inclui tanto o HTML renderizado quanto metadados adicionais para cada bloco.
+
+Aqui estão as modificações necessárias no seu script para que o conteúdo seja formatado corretamente para o editor de blocos do WordPress:
+
+    Formatando o Conteúdo para Gutenberg:
+        Cada bloco de conteúdo no Gutenberg é representado por um objeto JSON dentro de um array chamado blocks.
+        Cada objeto de bloco tem um tipo (por exemplo, paragraph, heading, list, etc.) e um conjunto de atributos específicos para aquele tipo de bloco.
+
+    Atualizando o Payload JSON:
+        O payload JSON que você envia para criar o post no WordPress deve incluir uma chave blocks com uma lista de objetos de bloco formatados corretamente.
+
+    Exemplo de Conversão do Conteúdo:
+        Vamos assumir que o conteúdo traduzido já está no formato de texto simples. Você precisará converter isso em um formato adequado para o Gutenberg.
+
+Aqui está um exemplo de como você pode ajustar o seu script para formatar o conteúdo para o editor de blocos do WordPress:
+
+~~~~python
+
+import requests
+import json
+from deep_translator import GoogleTranslator
+from requests.auth import HTTPBasicAuth
+import os
+from dotenv import load_dotenv
+
+# Carrega as variáveis de ambiente do arquivo .env
+load_dotenv()
+
+source_url = os.getenv("SOURCE_URL")
+base_url = os.getenv("BASE_URL")
+source_language = os.getenv("SOURCE_LANGUAGE")
+target_language = os.getenv("TARGET_LANGUAGE")
+wp_app_username = os.getenv("WP_APP_USERNAME")
+wp_app_password = os.getenv("WP_APP_PASSWORD")
+
+def post_creator(sourceURL, wpBaseURL, sourceLang, targetLang, postStatus):
+    response_API = requests.get(sourceURL)
+    
+    if response_API.status_code != 200:
+        print(f"Erro ao acessar a URL: {response_API.status_code}")
+        return
+
+    data = response_API.json()
+
+    # Adiciona um print para mostrar o conteúdo do post obtido
+    print("Conteúdo do post obtido:")
+    print(json.dumps(data, indent=4, ensure_ascii=False))
+
+    get_article_title = data['title']['rendered']
+    get_article_content = data['content']['rendered']
+
+    translator = GoogleTranslator(source=sourceLang, target=targetLang)
+
+    title_translation_text = translator.translate(get_article_title)
+
+    # Função para dividir o texto em pedaços menores que 4500 caracteres
+    def split_text(text, max_length):
+        parts = []
+        while len(text) > max_length:
+            split_index = text[:max_length].rfind(' ')
+            if split_index == -1:
+                split_index = max_length
+            parts.append(text[:split_index])
+            text = text[split_index:]
+        parts.append(text)
+        return parts
+
+    # Divide o conteúdo do artigo em partes menores que 4500 caracteres
+    content_parts = split_text(get_article_content, 4500)
+    
+    # Traduz cada parte
+    translated_parts = [translator.translate(part) for part in content_parts]
+    
+    # Junta as partes traduzidas de volta em um único texto
+    content_translation_text = ''.join(translated_parts)
+
+    # Converte o conteúdo traduzido para o formato de blocos do Gutenberg
+    blocks = []
+    for paragraph in content_translation_text.split('\n'):
+        blocks.append({
+            "type": "paragraph",
+            "data": {
+                "text": paragraph.strip()
+            }
+        })
+
+    WP_url = wpBaseURL + "/wp-json/wp/v2/posts"
+
+    auth = HTTPBasicAuth(wp_app_username, wp_app_password)
+
+    headers = {
+        "Accept": "application/json",
+        "Content-Type": "application/json"
+    }
+
+    payload = {
+        "status": postStatus,
+        "title": title_translation_text,
+        "content": {
+            "blocks": blocks
+        }
+    }
+
+    response = requests.post(
+        WP_url,
+        json=payload,
+        headers=headers,
+        auth=auth
+    )
+
+    if response.status_code == 201:
+        print("Post publicado com sucesso!")
+    else:
+        print(f"Erro ao publicar o post: {response.status_code}")
+        print(response.json())
+
+post_creator(source_url, base_url, source_language, target_language, "publish")
+~~~~
+
+Neste exemplo ajustado:
+
+    content_parts é dividido em parágrafos individuais.
+    Cada parágrafo traduzido é formatado como um bloco de tipo paragraph.
+    O payload agora inclui content com a chave blocks contendo a lista de blocos formatados corretamente.
+
+Com essas alterações, seu script Python deve criar corretamente um novo post no WordPress com o editor de blocos (Gutenberg), refletindo o conteúdo traduzido de forma adequada e estruturada. Certifique-se de testar o script em um ambiente de desenvolvimento antes de aplicá-lo em produção.
+
+
+
+
+
+
+## COPILOT
+
+Para criar um post no WordPress com o conteúdo em blocos, você precisa formatar o conteúdo do post em um formato específico que o WordPress reconheça como blocos. O WordPress usa uma estrutura chamada "Gutenberg blocks" para o editor de blocos. Para enviar conteúdo nesse formato, você precisa estruturar o conteúdo do post como uma série de blocos em JSON.
+
+Aqui está um exemplo de como você pode modificar o seu script para criar um post com conteúdo em blocos:
+
+Converter o Conteúdo Traduzido em Blocos: Antes de enviar o conteúdo para o WordPress, converta o texto traduzido em uma estrutura de blocos. Cada parágrafo pode ser um bloco separado, por exemplo.
+
+Modificar o Payload: Use a estrutura de blocos no payload da requisição POST para criar o post.
+
+Segue um exemplo de como fazer isso:
+
+~~~~PYTHON
+# Função para converter o conteúdo traduzido em blocos Gutenberg
+def convert_to_blocks(content):
+    paragraphs = content.split('\n')  # Supondo que cada parágrafo é separado por uma nova linha
+    blocks = []
+    for paragraph in paragraphs:
+        if paragraph:  # Ignora linhas vazias
+            block = {
+                "blockName": "core/paragraph",
+                "attrs": {},
+                "innerBlocks": [],
+                "innerHTML": paragraph,
+                "innerContent": [paragraph],
+            }
+            blocks.append(block)
+    return blocks
+
+# Modifique a parte do script onde o payload é criado
+content_blocks = convert_to_blocks(content_translation_text)
+payload = json.dumps({
+    "status": postStatus,
+    "title": title_translation_text,
+    "content": "",  # O conteúdo agora vai nos blocos
+    "blocks": content_blocks  # Adiciona os blocos aqui
+})
+
+~~~~
+
+
+Nota Importante: Este exemplo assume que você está trabalhando com um WordPress que suporta a criação de posts com conteúdo em blocos via API REST. Certifique-se de que sua versão do WordPress e sua configuração permitem isso. Além disso, a estrutura de blocos pode precisar de ajustes dependendo de como você deseja que o conteúdo apareça e quais tipos de blocos você está usando.
+
+
+
+- Criando v5 para testes
+/home/fernando/cursos/python/wordpress-blog-post-with-python/testes/script-v5.py
