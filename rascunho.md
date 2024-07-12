@@ -2897,5 +2897,71 @@ Nota Importante: Este exemplo assume que você está trabalhando com um WordPres
 
 
 
-- Criando v5 para testes
+- Criando v5 para testes, baseada no GPT:
 /home/fernando/cursos/python/wordpress-blog-post-with-python/testes/script-v5.py
+
+
+- Testando
+
+~~~~bash
+Post publicado com sucesso!
+(ambiente-virtual-novo) root@1c297bab36f0:/teste#
+(ambiente-virtual-novo) root@1c297bab36f0:/teste# date
+Fri Jul 12 00:19:28 -03 2024
+(ambiente-virtual-novo) root@1c297bab36f0:/teste#
+~~~~
+
+não ok
+
+- Criou um post apenas com titulo, sem conteudo, conteudo vazio:
+https://palegreen-hornet-335449.hostingersite.com/wp-admin/post.php?post=3290&action=edit
+
+
+
+- Criando a v6 baseada no Copilot
+/home/fernando/cursos/python/wordpress-blog-post-with-python/testes/script-v6.py
+
+- Testando
+
+~~~~bash
+Post publicado com sucesso!
+(ambiente-virtual-novo) root@1c297bab36f0:/teste#
+(ambiente-virtual-novo) root@1c297bab36f0:/teste# date
+Fri Jul 12 00:26:13 -03 2024
+(ambiente-virtual-novo) root@1c297bab36f0:/teste#
+~~~~
+
+
+não ok
+
+- Criou um post apenas com titulo, sem conteudo, conteudo vazio:
+https://palegreen-hornet-335449.hostingersite.com/wp-admin/post.php?post=3292&action=edit
+
+
+
+
+
+# #################################################################################################################################################
+# #################################################################################################################################################
+# #################################################################################################################################################
+# #################################################################################################################################################
+# #################################################################################################################################################
+## PENDENTE
+
+- V2 com GPT e/ou Copilot
+ver como fazer:
+    Converter post para Editor em Blocos ao invés do Editor Clássico.
+    Ajustar HREFLANG do Post.
+    Tratar para que o TOC(Table of Contents) venha corretamente.
+
+**MELHORIAS, V2** - Fazer que o post traduzido seja criado com Editor Wordpress avançado, ao invés do editor clássico. Que algumas formatações não se percam.
+**MELHORIAS, v3**, Ver como pegar no JSON a capa do Post, imagem destaque, definir categoria, linguagem,  etc. Verificar demais melhoriais que é possível realizar.
+- MELHORIAS, Ver como pegar no JSON a capa do Post, imagem destaque, definir categoria, linguagem,  etc. Verificar demais melhoriais que é possível realizar.
+- Testar com o Blog devopsmind.
+- Fixar versões contidas no "requirements.txt", definir versões exatas.
+- Criar Dockerfile e docker-compose, posteriormente. Avaliar melhores práticas.
+- Ver forma de acionar fácil o script para um blog e post especifico, chamar uma CLI que vai perguntando os dados desejados. Usar Makefile +CLI??? Variar ambiente virtual??? Avaliar as opções.
+- Ver como obter os JSON de blogs do exterior e automatizar o processo de criar um post, com base na página do exterior, adicionar menções ao DevOps Mind no cabeçalho.
+- Adicionar try, exception, logs de erros.
+- Testar combo "Fedora 40 + PyTorch" , <https://www.tudocelular.com/tech/noticias/n219464/fedora-linux-40-beta-lancado-gnome-46-ia.html>
+
