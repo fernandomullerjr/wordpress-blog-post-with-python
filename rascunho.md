@@ -11,6 +11,10 @@
 # #################################################################################################################################################
 ## COMANDOS
 
+git add .
+git commit -m "Wordpress with Python."
+git push
+
 docker start ubuntu
 docker container exec -ti ubuntu bash
 
@@ -2569,3 +2573,31 @@ source /teste/ambiente-virtual-novo/bin/activate
 # Editar o .env com o id do Post desejado
 python3 script.py
 ```
+
+
+
+criando post
+"Docker, SRE e DevOps: Uma Abordagem Integrada para Confiabilidade e Eficiência"
+https://palegreen-hornet-335449.hostingersite.com/wp-admin/post.php?post=3282&action=edit
+
+<https://palegreen-hornet-335449.hostingersite.com/docker-sre-e-devops-uma-abordagem-integrada-para-confiabilidade-e-eficiencia/>
+
+
+- Executando
+python3 script.py
+
+~~~~bash
+<p>Espero que este post seja útil para os leitores! <a href="https://roadmap.sh/devops/devops-vs-sre" target="_blank" rel="noopener">Se tiver alguma pergunta adicional, estou à disposição. 😊🚀</a><a href="https://roadmap.sh/devops/devops-vs-sre" target="_blank" rel="noreferrer noopener"><sup>1</sup></a><a href="https://srestuff.com.br/" target="_blank" rel="noreferrer noopener"><sup>2</sup></a><a href="https://stackoverflow.com/questions/63043718/who-should-write-the-dockerfile-sre-or-developer" target="_blank" rel="noreferrer noopener"><sup>3</sup></a><a href="https://roadmap.sh/devops" target="_blank" rel="noreferrer noopener"><sup>4</sup></a></p>
+<p><a href="https://roadmap.sh/devops/devops-vs-sre" target="_blank" rel="noopener"></a><a href="https://roadmap.sh/devops/devops-vs-sre" target="_blank" rel="noreferrer noopener"><sup>1</sup></a>: <a is="cib-link" href="https://roadmap.sh/devops/devops-vs-sre" target="_blank" rel="noreferrer noopener">DevOps vs SRE: Key Differences Explained</a><a href="https://roadmap.sh/devops/devops-vs-sre" target="_blank" rel="noopener"> </a><a href="https://srestuff.com.br/" target="_blank" rel="noreferrer noopener"><sup>2</sup></a>: <a is="cib-link" href="https://srestuff.com.br/" target="_blank" rel="noreferrer noopener">SRE Stuff &#8211; Empowering DevOps and Cloud Technologies</a><a href="https://roadmap.sh/devops/devops-vs-sre" target="_blank" rel="noopener"> </a><a href="https://stackoverflow.com/questions/63043718/who-should-write-the-dockerfile-sre-or-developer" target="_blank" rel="noreferrer noopener"><sup>3</sup></a>: <a is="cib-link" href="https://stackoverflow.com/questions/63043718/who-should-write-the-dockerfile-sre-or-developer" target="_blank" rel="noreferrer noopener">Who should write the dockerfile, SRE or developer?</a><a href="https://roadmap.sh/devops/devops-vs-sre" target="_blank" rel="noopener"> </a><a href="https://roadmap.sh/devops" target="_blank" rel="noreferrer noopener"><sup>4</sup></a>: <a is="cib-link" href="https://roadmap.sh/devops" target="_blank" rel="noreferrer noopener">DevOps Roadmap: Learn to become a DevOps Engineer or SRE</a></p>
+ --> Text length need to be between 0 and 5000 characters
+(ambiente-virtual-novo) root@1c297bab36f0:/teste#
+(ambiente-virtual-novo) root@1c297bab36f0:/teste# date
+Thu Jul 11 23:46:58 -03 2024
+(ambiente-virtual-novo) root@1c297bab36f0:/teste#
+(ambiente-virtual-novo) root@1c297bab36f0:/teste#
+~~~~
+
+
+git add .
+git commit -m "TESTES da V2 - Wordpress with Python."
+git push

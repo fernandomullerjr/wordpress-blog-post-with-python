@@ -48,7 +48,7 @@ source /teste/ambiente-virtual-novo/bin/activate
 cd /devopsmind
 # ou /teste, para uso no Blog adicional
 cd /teste
-# Editar o .env com o id do Post desejado
+# Editar o .env com o id do Post desejado, editando a variável SOURCE_URL, ao final o número é obtido na página "Posts", passando o mouse por cima de um post e vendo seu id
 python3 script.py
 ```
 
