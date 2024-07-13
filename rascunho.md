@@ -3119,3 +3119,218 @@ não funcionou
 - Trouxe um post com o código abaixo, não é bem o eu queria ;s
 
 [{“blockName”: “core/heading”, “attrs”: {“level”: 1}, “innerBlocks”: [], “innerHTML”: “Introduction”, “innerContent”: [“Introduction”]}, {“blockName”: “core/paragraph”, “attrs”: {}, “innerBlocks”: [], “innerHTML”: “The world of technology is constantly evolving, and managing complex systems requires innovative approaches. In this context, two methodologies stand out: DevOps and Site Reliability Engineering (SRE). Both aim to improve software delivery and operational efficiency. And Docker, a container virtualization tool, plays a fundamental role in this scenario.”, “innerContent”: [“The world of technology is constantly evolving, and managing complex systems requires innovative approaches. In this context, two methodologies stand out: DevOps and Site Reliability Engineering (SRE). Both aim to improve software delivery and operational efficiency. And Docker, a container virtualization tool, plays a fundamental role in this scenario.”]}, {“blockName”: “core/heading”, “attrs”: {“level”: 3}, “innerBlocks”: [], “innerHTML”: “DevOps and SRE: What Are They?”, “innerContent”: [“DevOps and SRE: What Are They?”]}, {“blockName”: “core/heading”, “attrs”: {“level”: 2}, “innerBlocks”: [], “innerHTML”: “Main Content”, “innerContent”: [“Main Content”]}, {“blockName”: “core/heading”, “attrs”: {“level”: 3}, “innerBlocks”: [], “innerHTML”: “Essential Practices with Docker”, “innerContent”: [“Essential Practices with Docker”]}, {“blockName”: “core/heading”, “attrs”: {“level”: 3}, “innerBlocks”: [], “innerHTML”: “Tools and Technologies”, “innerContent”: [“Tools and Technologies”]}, {“blockName”: “core/heading”, “attrs”: {“level”: 3}, “innerBlocks”: [], “innerHTML”: “Benefits and Challenges”, “innerContent”: [“Benefits and Challenges”]}, {“blockName”: “core/heading”, “attrs”: {“level”: 2}, “innerBlocks”: [], “innerHTML”: “Examples of Success Stories”, “innerContent”: [“Examples of Success Stories”]}, {“blockName”: “core/heading”, “attrs”: {“level”: 2}, “innerBlocks”: [], “innerHTML”: “Conclusion”, “innerContent”: [“Conclusion”]}, {“blockName”: “core/paragraph”, “attrs”: {}, “innerBlocks”: [], “innerHTML”: “Docker is a key piece of the DevOps and SRE puzzle. By adopting this technology, companies can improve the reliability, efficiency and scalability of their systems. Want to know more? Visit the DevOps Mind blog for exclusive insights and ongoing updates.”, “innerContent”: [“Docker is a key piece of the DevOps and SRE puzzle. By adopting this technology, companies can improve the reliability, efficiency and scalability of their systems. Want to know more? Visit the DevOps Mind blog for exclusive insights and ongoing updates.”]}, {“blockName”: “core/paragraph”, “attrs”: {}, “innerBlocks”: [], “innerHTML”: “I hope this post is useful for readers! If you have any additional questions, I am at your disposal. \ud83d\ude0a\ud83d\ude801234”, “innerContent”: [“I hope this post is useful for readers! If you have any additional questions, I am at your disposal. \ud83d\ude0a\ud83d\ude801234”]}, {“blockName”: “core/paragraph”, “attrs”: {}, “innerBlocks”: [], “innerHTML”: “1: DevOps vs SRE: Key Differences Explained 2: SRE Stuff \u2013 Empowering DevOps and Cloud Technologies 3: Who should write the dockerfile, SRE or developer? 4: DevOps Roadmap: Learn to become a DevOps Engineer or SRE”, “innerContent”: [“1: DevOps vs SRE: Key Differences Explained 2: SRE Stuff \u2013 Empowering DevOps and Cloud Technologies 3: Who should write the dockerfile, SRE or developer? 4: DevOps Roadmap: Learn to become a DevOps Engineer or SRE”]}]
+
+
+
+
+
+
+
+
+- Idéia nova
+<https://myshittycode.com/2023/01/03/wordpress-creating-gutenberg-block-compatible-posts-using-rest-api/>
+
+
+
+
+seguindo esta idéia:
+https://myshittycode.com/2023/01/03/wordpress-creating-gutenberg-block-compatible-posts-using-rest-api/
+
+como eu faria algo equivalente usando python?
+
+Ótima sugestão! Vamos adaptar o código com base no exemplo fornecido no link. Aqui está uma versão em Python que cria posts no WordPress usando o editor de blocos do Gutenberg:
+
+~~~~python
+
+import requests
+import json
+from deep_translator import GoogleTranslator
+from requests.auth import HTTPBasicAuth
+import os
+from dotenv import load_dotenv
+
+# Carrega as variáveis de ambiente do arquivo .env
+load_dotenv()
+
+source_url = os.getenv("SOURCE_URL")
+base_url = os.getenv("BASE_URL")
+source_language = os.getenv("SOURCE_LANGUAGE")
+target_language = os.getenv("TARGET_LANGUAGE")
+wp_app_username = os.getenv("WP_APP_USERNAME")
+wp_app_password = os.getenv("WP_APP_PASSWORD")
+
+def create_gutenberg_block(block_name, attributes, inner_blocks, content):
+    block = {
+        "blockName": block_name,
+        "attrs": attributes,
+        "innerBlocks": inner_blocks,
+        "innerHTML": content
+    }
+    return block
+
+def post_creator(sourceURL, wpBaseURL, sourceLang, targetLang, postStatus):
+    response_API = requests.get(sourceURL)
+   
+    if response_API.status_code != 200:
+        print(f"Erro ao acessar a URL: {response_API.status_code}")
+        return
+
+    data = response_API.json()
+
+    # Adiciona um print para mostrar o conteúdo do post obtido
+    print("Conteúdo do post obtido:")
+    print(json.dumps(data, indent=4, ensure_ascii=False))
+
+    get_article_title = data['title']['rendered']
+    get_article_content = data['content']['rendered']
+
+    translator = GoogleTranslator(source=sourceLang, target=targetLang)
+
+    title_translation_text = translator.translate(get_article_title)
+
+    # Função para dividir o texto em pedaços menores que 4500 caracteres
+    def split_text(text, max_length):
+        parts = []
+        while len(text) > max_length:
+            split_index = text[:max_length].rfind(' ')
+            if split_index == -1:
+                split_index = max_length
+            parts.append(text[:split_index])
+            text = text[split_index:]
+        parts.append(text)
+        return parts
+
+    # Divide o conteúdo do artigo em partes menores que 4500 caracteres
+    content_parts = split_text(get_article_content, 4500)
+   
+    # Traduz cada parte
+    translated_parts = [translator.translate(part) for part in content_parts]
+   
+    # Junta as partes traduzidas de volta em um único texto
+    content_translation_text = ''.join(translated_parts)
+
+    # Cria os blocos de conteúdo do Gutenberg
+    content_blocks = [
+        create_gutenberg_block("core/paragraph", {}, [], content_translation_text)
+    ]
+
+    WP_url = wpBaseURL + "/wp-json/wp/v2/posts"
+
+    auth = HTTPBasicAuth(wp_app_username, wp_app_password)
+
+    headers = {
+        "Accept": "application/json",
+        "Content-Type": "application/json"
+    }
+
+    payload = json.dumps({
+        "status": postStatus,
+        "title": title_translation_text,
+        "content": json.dumps(content_blocks)
+    })
+
+    response = requests.post(
+        WP_url,
+        data=payload,
+        headers=headers,
+        auth=auth
+    )
+
+    if response.status_code == 201:
+        print("Post publicado com sucesso!")
+    else:
+        print(f"Erro ao publicar o post: {response.status_code}")
+        print(response.json())
+
+post_creator(source_url, base_url, source_language, target_language, "publish")
+~~~~
+
+As principais diferenças em relação ao código anterior são:
+
+    Adicion
+
+continue
+
+Continuando a explicação das principais diferenças em relação ao código anterior:
+
+    Adicionei uma nova função create_gutenberg_block que recebe os parâmetros necessários para criar um bloco de conteúdo do Gutenberg (nome do bloco, atributos, blocos internos e conteúdo). Essa função retorna um dicionário que representa o bloco.
+
+    Na seção de criação dos blocos de conteúdo, ao invés de usar a análise do HTML com BeautifulSoup, eu simplesmente crio um bloco de parágrafo com o conteúdo traduzido. Você pode adicionar mais condições nessa seção para criar outros tipos de blocos, como títulos, imagens, listas, etc.
+
+    No payload do POST request, eu uso json.dumps(content_blocks) para enviar o conteúdo no formato esperado pelo Gutenberg, com a estrutura de blocos.
+
+Essa abordagem é mais simples e direta do que a versão anterior, pois não requer a análise do HTML com BeautifulSoup. Ela também permite uma maior flexibilidade na criação dos blocos de conteúdo, já que você pode adicionar novos tipos de blocos conforme necessário.
+
+Observe que, se você quiser adicionar suporte para outros tipos de blocos (como Imagem, Lista, Citação, etc.), basta adicionar mais chamadas à função create_gutenberg_block na seção de criação dos blocos de conteúdo, com os atributos e conteúdo apropriados.
+
+
+
+
+
+
+
+- Criando a v8
+/home/fernando/cursos/python/wordpress-blog-post-with-python/testes/script-v8.py
+
+- Testando
+não funcionou
+
+- Trouxe 1 bloco com o titulo, que não é bloco Gutemberg
+e um bloco com o html etc
+
+
+
+
+
+- Criando a v9
+/home/fernando/cursos/python/wordpress-blog-post-with-python/testes/script-v9.py
+
+nada ocorreu
+
+
+(ambiente-virtual-novo) root@1c297bab36f0:/teste# python3 script.py
+(ambiente-virtual-novo) root@1c297bab36f0:/teste#
+
+
+
+
+
+
+# #################################################################################################################################################
+# #################################################################################################################################################
+# #################################################################################################################################################
+# #################################################################################################################################################
+# #################################################################################################################################################
+## PENDENTE
+
+- OBS
+Lidar com Blocos pode demandar conhecimento avançado em Javascript, NodeJS, etc.
+Pode ser uma opção aceitar o formato atual, converter para blocos manualmente e ajustar o que vem errado, como: TOC, Listas, Imagens(vem errado o ALT e a amostra no editor, mas imagem aparece no post)
+
+- Avaliar se vale a pena tentar com BeautifulSoup.
+- Criar uma v2 com   HREFLANG do Post em ingles????
+
+- V2 com GPT e/ou Copilot
+ver como fazer:
+    Converter post para Editor em Blocos ao invés do Editor Clássico.
+    Ajustar HREFLANG do Post.
+    Tratar para que o TOC(Table of Contents) venha corretamente.
+Ver idéia: <https://automatevalue.com/blog/wordpress-blocks-post-using-the-rest-api/>
+<https://jeremyrichardson.dev/blog/parsing-a-raw-wordpress-post-with-blocks>
+<https://community.zapier.com/how-do-i-3/how-to-create-wordpress-post-using-block-editor-instead-of-classic-editor-in-zapier-28770>
+<https://developer.wordpress.org/rest-api/reference/posts/#create-a-post>
+possível solução:
+<https://myshittycode.com/2023/01/03/wordpress-creating-gutenberg-block-compatible-posts-using-rest-api/>
+
+**MELHORIAS, V2** - Fazer que o post traduzido seja criado com Editor Wordpress avançado, ao invés do editor clássico. Que algumas formatações não se percam.
+**MELHORIAS, v3**, Ver como pegar no JSON a capa do Post, imagem destaque, definir categoria, linguagem,  etc. Verificar demais melhoriais que é possível realizar.
+- MELHORIAS, Ver como pegar no JSON a capa do Post, imagem destaque, definir categoria, linguagem,  etc. Verificar demais melhoriais que é possível realizar.
+- Testar com o Blog devopsmind.
+- Fixar versões contidas no "requirements.txt", definir versões exatas.
+- Criar Dockerfile e docker-compose, posteriormente. Avaliar melhores práticas.
+- Ver forma de acionar fácil o script para um blog e post especifico, chamar uma CLI que vai perguntando os dados desejados. Usar Makefile +CLI??? Variar ambiente virtual??? Avaliar as opções.
+- Ver como obter os JSON de blogs do exterior e automatizar o processo de criar um post, com base na página do exterior, adicionar menções ao DevOps Mind no cabeçalho.
+- Adicionar try, exception, logs de erros.
+- Testar combo "Fedora 40 + PyTorch" , <https://www.tudocelular.com/tech/noticias/n219464/fedora-linux-40-beta-lancado-gnome-46-ia.html>
+
+
