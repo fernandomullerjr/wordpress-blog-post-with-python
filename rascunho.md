@@ -3006,9 +3006,73 @@ python3 script.py
 
 
 
+Para ajustar o código para lidar com diferentes tipos de blocos, como parágrafos, imagens, títulos (h1, h2, etc.), e table of contents no WordPress, você precisará analisar o conteúdo HTML original e converter cada elemento HTML relevante em seu respectivo bloco Gutenberg. Aqui está um plano de como você pode fazer isso:
 
+Analisar o HTML: Use uma biblioteca de parsing de HTML como BeautifulSoup para analisar o conteúdo HTML obtido do post original.
 
+Identificar Elementos: Identifique os diferentes elementos HTML (como <p>, <img>, <h1>, <h2>, etc.) e converta cada um deles em seu respectivo bloco Gutenberg.
 
+Criar Blocos Gutenberg: Para cada tipo de elemento, crie um dicionário Python que represente o bloco Gutenberg correspondente.
+
+Montar os Blocos: Combine todos os blocos criados em uma lista que representará o conteúdo completo do post em formato de blocos.
+
+Segue um exemplo de como você pode começar a implementar essas etapas:
+
+~~~~python
+from bs4 import BeautifulSoup
+from deep_translator import GoogleTranslator
+
+def html_to_blocks(html_content, sourceLang, targetLang):
+    soup = BeautifulSoup(html_content, 'html.parser')
+    blocks = []
+    translator = GoogleTranslator(source=sourceLang, target=targetLang)
+
+    for element in soup.children:
+        if element.name == 'p':
+            translated_text = translator.translate(element.text)
+            blocks.append({
+                "blockName": "core/paragraph",
+                "attrs": {},
+                "innerBlocks": [],
+                "innerHTML": translated_text,
+                "innerContent": [translated_text],
+            })
+        elif element.name in ['h1', 'h2', 'h3', 'h4', 'h5', 'h6']:
+            translated_text = translator.translate(element.text)
+            blocks.append({
+                "blockName": f"core/heading",
+                "attrs": {"level": int(element.name[1])},
+                "innerBlocks": [],
+                "innerHTML": translated_text,
+                "innerContent": [translated_text],
+            })
+        elif element.name == 'img':
+            # Supondo que a imagem não precisa ser traduzida, mas você pode adicionar lógica aqui se necessário
+            blocks.append({
+                "blockName": "core/image",
+                "attrs": {
+                    "url": element['src'],
+                    "alt": element.get('alt', '')
+                },
+                "innerBlocks": [],
+                "innerHTML": '',
+                "innerContent": [],
+            })
+        # Adicione mais condições conforme necessário para outros tipos de blocos
+
+    return blocks
+
+# Use a função html_to_blocks no lugar onde você cria os blocos Gutenberg
+content_blocks = html_to_blocks(get_article_content, source_language, target_language)
+~~~~
+
+Nota: Este exemplo usa BeautifulSoup para analisar o HTML e identificar diferentes tipos de elementos. Para cada tipo de elemento, ele cria um bloco Gutenberg correspondente. Você precisará instalar a biblioteca BeautifulSoup (beautifulsoup4) e talvez atualizar a biblioteca deep_translator para a versão mais recente, se ainda não o fez.
+
+Este é um ponto de partida. Dependendo da complexidade do HTML do seu conteúdo e dos tipos específicos de blocos que você deseja suportar, você pode precisar expandir e ajustar a lógica de conversão.
+
+- Validando que o bs4 está instalado:
+
+~~~~bash
 (ambiente-virtual-novo) root@1c297bab36f0:/teste# pip3 list
 Package            Version
 ------------------ --------
@@ -3035,11 +3099,23 @@ soupsieve          2.5
 urllib3            2.2.1
 (ambiente-virtual-novo) root@1c297bab36f0:/teste#
 
+~~~~
 
 
+- Criando a v7
+/home/fernando/cursos/python/wordpress-blog-post-with-python/testes/script-v7.py
 
 
-
+git status
 git add .
 git commit -m "Testando laço para criar blocos Gutemberg."
 git push
+git status
+
+
+- Testando
+não funcionou
+
+- Trouxe um post com o código abaixo, não é bem o eu queria ;s
+
+[{“blockName”: “core/heading”, “attrs”: {“level”: 1}, “innerBlocks”: [], “innerHTML”: “Introduction”, “innerContent”: [“Introduction”]}, {“blockName”: “core/paragraph”, “attrs”: {}, “innerBlocks”: [], “innerHTML”: “The world of technology is constantly evolving, and managing complex systems requires innovative approaches. In this context, two methodologies stand out: DevOps and Site Reliability Engineering (SRE). Both aim to improve software delivery and operational efficiency. And Docker, a container virtualization tool, plays a fundamental role in this scenario.”, “innerContent”: [“The world of technology is constantly evolving, and managing complex systems requires innovative approaches. In this context, two methodologies stand out: DevOps and Site Reliability Engineering (SRE). Both aim to improve software delivery and operational efficiency. And Docker, a container virtualization tool, plays a fundamental role in this scenario.”]}, {“blockName”: “core/heading”, “attrs”: {“level”: 3}, “innerBlocks”: [], “innerHTML”: “DevOps and SRE: What Are They?”, “innerContent”: [“DevOps and SRE: What Are They?”]}, {“blockName”: “core/heading”, “attrs”: {“level”: 2}, “innerBlocks”: [], “innerHTML”: “Main Content”, “innerContent”: [“Main Content”]}, {“blockName”: “core/heading”, “attrs”: {“level”: 3}, “innerBlocks”: [], “innerHTML”: “Essential Practices with Docker”, “innerContent”: [“Essential Practices with Docker”]}, {“blockName”: “core/heading”, “attrs”: {“level”: 3}, “innerBlocks”: [], “innerHTML”: “Tools and Technologies”, “innerContent”: [“Tools and Technologies”]}, {“blockName”: “core/heading”, “attrs”: {“level”: 3}, “innerBlocks”: [], “innerHTML”: “Benefits and Challenges”, “innerContent”: [“Benefits and Challenges”]}, {“blockName”: “core/heading”, “attrs”: {“level”: 2}, “innerBlocks”: [], “innerHTML”: “Examples of Success Stories”, “innerContent”: [“Examples of Success Stories”]}, {“blockName”: “core/heading”, “attrs”: {“level”: 2}, “innerBlocks”: [], “innerHTML”: “Conclusion”, “innerContent”: [“Conclusion”]}, {“blockName”: “core/paragraph”, “attrs”: {}, “innerBlocks”: [], “innerHTML”: “Docker is a key piece of the DevOps and SRE puzzle. By adopting this technology, companies can improve the reliability, efficiency and scalability of their systems. Want to know more? Visit the DevOps Mind blog for exclusive insights and ongoing updates.”, “innerContent”: [“Docker is a key piece of the DevOps and SRE puzzle. By adopting this technology, companies can improve the reliability, efficiency and scalability of their systems. Want to know more? Visit the DevOps Mind blog for exclusive insights and ongoing updates.”]}, {“blockName”: “core/paragraph”, “attrs”: {}, “innerBlocks”: [], “innerHTML”: “I hope this post is useful for readers! If you have any additional questions, I am at your disposal. \ud83d\ude0a\ud83d\ude801234”, “innerContent”: [“I hope this post is useful for readers! If you have any additional questions, I am at your disposal. \ud83d\ude0a\ud83d\ude801234”]}, {“blockName”: “core/paragraph”, “attrs”: {}, “innerBlocks”: [], “innerHTML”: “1: DevOps vs SRE: Key Differences Explained 2: SRE Stuff \u2013 Empowering DevOps and Cloud Technologies 3: Who should write the dockerfile, SRE or developer? 4: DevOps Roadmap: Learn to become a DevOps Engineer or SRE”, “innerContent”: [“1: DevOps vs SRE: Key Differences Explained 2: SRE Stuff \u2013 Empowering DevOps and Cloud Technologies 3: Who should write the dockerfile, SRE or developer? 4: DevOps Roadmap: Learn to become a DevOps Engineer or SRE”]}]
