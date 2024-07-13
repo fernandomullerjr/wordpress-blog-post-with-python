@@ -2978,3 +2978,60 @@ possível solução:
 - Adicionar try, exception, logs de erros.
 - Testar combo "Fedora 40 + PyTorch" , <https://www.tudocelular.com/tech/noticias/n219464/fedora-linux-40-beta-lancado-gnome-46-ia.html>
 
+
+
+
+
+
+
+
+1. Iniciar o container Docker.
+2. Conectar no container.
+3. Carregar o ambiente virtual do Python.
+4. Executar o script em Python.
+
+Seguem os comandos utilizados:
+
+```bash
+docker start ubuntu
+docker container exec -ti ubuntu bash
+source /teste/ambiente-virtual-novo/bin/activate
+# Acessar o diretório contendo o devido script e .env
+cd /devopsmind
+# ou /teste, para uso no Blog adicional
+cd /teste
+# Editar o .env com o id do Post desejado, editando a variável SOURCE_URL, ao final o número é obtido na página "Posts", passando o mouse por cima de um post e vendo seu id
+python3 script.py
+```
+
+
+
+
+
+
+(ambiente-virtual-novo) root@1c297bab36f0:/teste# pip3 list
+Package            Version
+------------------ --------
+beautifulsoup4     4.12.3
+certifi            2024.2.2
+chardet            3.0.4
+charset-normalizer 3.3.2
+deep-translator    1.11.4
+googletrans        3.0.0
+h11                0.9.0
+h2                 3.2.0
+hpack              3.0.0
+hstspreload        2024.5.1
+httpcore           0.9.1
+httpx              0.13.3
+hyperframe         5.2.0
+idna               2.10
+pip                24.0
+python-dotenv      1.0.1
+requests           2.31.0
+rfc3986            1.5.0
+sniffio            1.3.1
+soupsieve          2.5
+urllib3            2.2.1
+(ambiente-virtual-novo) root@1c297bab36f0:/teste#
+
