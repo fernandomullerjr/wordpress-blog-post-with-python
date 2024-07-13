@@ -57,15 +57,48 @@ def post_creator(sourceURL, wpBaseURL, sourceLang, targetLang, postStatus):
     # Junta as partes traduzidas de volta em um único texto
     content_translation_text = ''.join(translated_parts)
 
-    # Cria o conteúdo do post usando o editor de blocos do Gutenberg
-    content_blocks = [
-        {
-            "blockName": "core/paragraph",
-            "attrs": {},
-            "innerBlocks": [],
-            "innerHTML": content_translation_text
-        }
-    ]
+    def html_to_blocks(html_content, sourceLang, targetLang):
+        soup = BeautifulSoup(html_content, 'html.parser')
+        blocks = []
+        translator = GoogleTranslator(source=sourceLang, target=targetLang)
+
+        for element in soup.children:
+            if element.name == 'p':
+                translated_text = translator.translate(element.text)
+                blocks.append({
+                    "blockName": "core/paragraph",
+                    "attrs": {},
+                    "innerBlocks": [],
+                    "innerHTML": translated_text,
+                    "innerContent": [translated_text],
+                })
+            elif element.name in ['h1', 'h2', 'h3', 'h4', 'h5', 'h6']:
+                translated_text = translator.translate(element.text)
+                blocks.append({
+                    "blockName": f"core/heading",
+                    "attrs": {"level": int(element.name[1])},
+                    "innerBlocks": [],
+                    "innerHTML": translated_text,
+                    "innerContent": [translated_text],
+                })
+            elif element.name == 'img':
+                # Supondo que a imagem não precisa ser traduzida, mas você pode adicionar lógica aqui se necessário
+                blocks.append({
+                    "blockName": "core/image",
+                    "attrs": {
+                        "url": element['src'],
+                        "alt": element.get('alt', '')
+                    },
+                    "innerBlocks": [],
+                    "innerHTML": '',
+                    "innerContent": [],
+                })
+            # Adicione mais condições conforme necessário para outros tipos de blocos
+
+        return blocks
+
+    # Use a função html_to_blocks no lugar onde você cria os blocos Gutenberg
+    content_blocks = html_to_blocks(get_article_content, source_language, target_language)
 
     WP_url = wpBaseURL + "/wp-json/wp/v2/posts"
 

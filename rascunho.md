@@ -3035,3 +3035,11 @@ soupsieve          2.5
 urllib3            2.2.1
 (ambiente-virtual-novo) root@1c297bab36f0:/teste#
 
+
+
+
+
+
+git add .
+git commit -m "Testando laço para criar blocos Gutemberg."
+git push
