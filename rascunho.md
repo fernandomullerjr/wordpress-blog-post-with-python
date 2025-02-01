@@ -3293,7 +3293,20 @@ nada ocorreu
 
 
 
+# #################################################################################################################################################
+# #################################################################################################################################################
+# #################################################################################################################################################
+# #################################################################################################################################################
+# #################################################################################################################################################
+## Dia 01/02/2025
 
+- Testando
+cria o post ok
+porém:
+1. O "Table of Contents" vem como editor clássico no post traduzido.
+2. Capa é perdida.
+3. HREFLANG, idioma vem igual ao idioma do post original, necessário ajustar lógica do script para ajustar o HREFLANG para o TARGET_LANGUAGE.
+4. Paragrafos vem em editor clássico, precisam vir em Blocos.
 
 
 # #################################################################################################################################################
@@ -3302,6 +3315,14 @@ nada ocorreu
 # #################################################################################################################################################
 # #################################################################################################################################################
 ## PENDENTE
+
+- Testando
+cria o post ok
+porém:
+1. O "Table of Contents" vem como editor clássico no post traduzido.
+2. Capa é perdida.
+3. HREFLANG, idioma vem igual ao idioma do post original, necessário ajustar lógica do script para ajustar o HREFLANG para o TARGET_LANGUAGE.
+4. Paragrafos vem em editor clássico, precisam vir em Blocos.
 
 - OBS
 Lidar com Blocos pode demandar conhecimento avançado em Javascript, NodeJS, etc.
