@@ -6,6 +6,7 @@ import os
 from dotenv import load_dotenv
 
 # Carrega as variáveis de ambiente do arquivo .env
+# Importando ter o dotenv instalado, caso não tenha, instale com o comando: pip install python-dotenv
 load_dotenv()
 
 source_url = os.getenv("SOURCE_URL")

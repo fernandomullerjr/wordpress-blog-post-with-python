@@ -3317,19 +3317,18 @@ porém:
 ## PENDENTE
 
 - Testando
-cria o post ok
-porém:
-1. O "Table of Contents" vem como editor clássico no post traduzido.
-2. Capa é perdida.
-3. HREFLANG, idioma vem igual ao idioma do post original, necessário ajustar lógica do script para ajustar o HREFLANG para o TARGET_LANGUAGE.
-4. Paragrafos vem em editor clássico, precisam vir em Blocos.
+    1. O "Table of Contents" vem como editor clássico no post traduzido.
+    2. Capa é perdida.
+    3. HREFLANG, idioma vem igual ao idioma do post original, necessário ajustar lógica do script para ajustar o HREFLANG para o TARGET_LANGUAGE.
+    4. Paragrafos vem em editor clássico, precisam vir em Blocos.
 
 - OBS
-Lidar com Blocos pode demandar conhecimento avançado em Javascript, NodeJS, etc.
-Pode ser uma opção aceitar o formato atual, converter para blocos manualmente e ajustar o que vem errado, como: TOC, Listas, Imagens(vem errado o ALT e a amostra no editor, mas imagem aparece no post)
+  Lidar com Blocos pode demandar conhecimento avançado em Javascript, NodeJS, etc.
+  Pode ser uma opção aceitar o formato atual, converter para blocos manualmente e ajustar o que vem errado, como: TOC, Listas, Imagens(vem errado o ALT e a amostra no editor, mas imagem aparece no post)
 
 - Avaliar se vale a pena tentar com BeautifulSoup.
 - Criar uma v2 com   HREFLANG do Post em ingles????
+- Criar variável para pegar o ID do Post via variável cadastrada no .env
 
 - V2 com GPT e/ou Copilot
 ver como fazer:

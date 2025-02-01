@@ -9,6 +9,18 @@ Script que efetua a coleta de um post do Wordpress, traduz e efetua a publicaç�
 - [Observações](#observacoes)
 - [Versões](#versoes)
 
+## Resumido
+
+Comandos necessários resumidos:
+
+```bash
+pip3 install requests
+pip3 install python-dotenv
+pip3 install deep-translator
+cd /wordpress-blog-post-with-python/
+python3 script.py
+```
+
 ## Instalação
 
 ### Bibliotecas
