@@ -3513,3 +3513,289 @@ Sun Feb  2 17:25:40 -03 2025
 
 
 
+
+git status
+git add .
+git commit -m "Wordpress with Python."
+git push
+git status
+
+
+
+
+
+
+
+
+
+Ao tentar executar script em python ocorre o erro abaixo
+porém antes estava ok
+
+o que pode ser?
+o dig indica tudo certo para resolução de nomes
+
+ERRO:
+
+~~~~bash
+ python3 script.py
+Traceback (most recent call last):
+  File "/home/fernando/.asdf/installs/python/3.12.6/lib/python3.12/site-packages/urllib3/connection.py", line 198, in _new_conn
+    sock = connection.create_connection(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/fernando/.asdf/installs/python/3.12.6/lib/python3.12/site-packages/urllib3/util/connection.py", line 60, in create_connection
+    for res in socket.getaddrinfo(host, port, family, socket.SOCK_STREAM):
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/fernando/.asdf/installs/python/3.12.6/lib/python3.12/socket.py", line 976, in getaddrinfo
+    for res in _socket.getaddrinfo(host, port, family, type, proto, flags):
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+socket.gaierror: [Errno -3] Temporary failure in name resolution
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/fernando/cursos/python/wordpress-blog-post-with-python/script.py", line 108, in <module>
+    post_creator(source_url, base_url, source_language, target_language, "publish")
+  File "/home/fernando/cursos/python/wordpress-blog-post-with-python/script.py", line 19, in post_creator
+    response_API = requests.get(sourceURL)
+                   ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/fernando/.asdf/installs/python/3.12.6/lib/python3.12/site-packages/requests/api.py", line 73, in get
+    return request("get", url, params=params, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/fernando/.asdf/installs/python/3.12.6/lib/python3.12/site-packages/requests/api.py", line 59, in request
+    return session.request(method=method, url=url, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/fernando/.asdf/installs/python/3.12.6/lib/python3.12/site-packages/requests/sessions.py", line 589, in request
+    resp = self.send(prep, **send_kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/fernando/.asdf/installs/python/3.12.6/lib/python3.12/site-packages/requests/sessions.py", line 703, in send
+    r = adapter.send(request, **kwargs)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/fernando/.asdf/installs/python/3.12.6/lib/python3.12/site-packages/requests/adapters.py", line 700, in send
+    raise ConnectionError(e, request=request)
+requests.exceptions.ConnectionError: HTTPSConnectionPool(host='palegreen-hornet-335449.hostingersite.com', port=443): Max retries exceeded with url: /wp-json/wp/v2/posts/3282 (Caused by NameResolutionError("<urllib3.connection.HTTPSConnection object at 0x7f3d2d379eb0>: Failed to resolve 'palegreen-hornet-335449.hostingersite.com' ([Errno -3] Temporary failure in name resolution)"))
+~~~~
+
+
+> dig palegreen-hornet-335449.hostingersite.com
+
+; <<>> DiG 9.18.30-0ubuntu0.22.04.2-Ubuntu <<>> palegreen-hornet-335449.hostingersite.com
+;; global options: +cmd
+;; Got answer:
+;; ->>HEADER<<- opcode: QUERY, status: NOERROR, id: 42781
+;; flags: qr rd ra; QUERY: 1, ANSWER: 2, AUTHORITY: 0, ADDITIONAL: 1
+
+;; OPT PSEUDOSECTION:
+; EDNS: version: 0, flags:; udp: 512
+;; QUESTION SECTION:
+;palegreen-hornet-335449.hostingersite.com. IN A
+
+;; ANSWER SECTION:
+palegreen-hornet-335449.hostingersite.com. 3507 IN CNAME free.cdn.hstgr.net.
+free.cdn.hstgr.net.     60      IN      A       89.116.213.130
+
+;; Query time: 29 msec
+;; SERVER: 8.8.8.8#53(8.8.8.8) (UDP)
+;; WHEN: Sun Feb 02 17:25:35 -03 2025
+;; MSG SIZE  rcvd: 118
+
+> date
+Sun Feb  2 17:25:40 -03 2025
+
+
+
+- TSHOOT
+
+
+> curl -I https://palegreen-hornet-335449.hostingersite.com/wp-json/wp/v2/posts/3282
+curl: (6) Could not resolve host: palegreen-hornet-335449.hostingersite.com
+> nslookup palegreen-hornet-335449.hostingersite.com
+;; communications error to 8.8.8.8#53: timed out
+;; communications error to 8.8.8.8#53: timed out
+^C
+> nslookup google.com
+;; communications error to 8.8.8.8#53: timed out
+;; communications error to 8.8.8.8#53: timed out
+^C
+
+
+
+
+- OK:
+
+> cat /etc/resolv.conf
+nameserver 8.8.8.8
+>
+>
+>
+> nslookup google.com
+Server:         8.8.8.8
+Address:        8.8.8.8#53
+
+Non-authoritative answer:
+Name:   google.com
+Address: 172.217.30.46
+Name:   google.com
+Address: 2800:3f0:4001:806::200e
+
+
+
+
+> curl -I https://palegreen-hornet-335449.hostingersite.com/wp-json/wp/v2/posts/3282
+curl: (35) error:0A000438:SSL routines::tlsv1 alert internal error
+
+
+
+
+
+
+
+
+
+
+> openssl s_client -connect palegreen-hornet-335449.hostingersite.com:443 -showcerts
+CONNECTED(00000003)
+4047B745857F0000:error:0A000438:SSL routines:ssl3_read_bytes:tlsv1 alert internal error:../ssl/record/rec_layer_s3.c:1593:SSL alert number 80
+---
+no peer certificate available
+---
+No client certificate CA names sent
+---
+SSL handshake has read 7 bytes and written 343 bytes
+Verification: OK
+---
+New, (NONE), Cipher is (NONE)
+Secure Renegotiation IS NOT supported
+Compression: NONE
+Expansion: NONE
+No ALPN negotiated
+Early data was not sent
+Verify return code: 0 (ok)
+---
+
+
+
+
+O erro **`tlsv1 alert internal error`** e a mensagem **`no peer certificate available`** indicam que o servidor **não está respondendo corretamente às conexões SSL**.  
+
+Isso significa que o problema está no servidor do **Hostinger** (ou no CDN que ele usa), e **não na sua máquina**.
+
+---
+
+## 🔍 **Possíveis causas e soluções**
+
+### 1️⃣ **Servidor pode estar com problemas no SSL**  
+- Como o erro ocorre no **handshake**, pode ser um problema no certificado SSL.  
+- **Se o site for seu**, acesse o painel da Hostinger e tente **renovar/reinstalar o SSL**.
+
+✅ **Solução:**  
+No painel da Hostinger:
+- Vá até **Hospedagem > Domínios > SSL**
+- Verifique o status e tente renovar o certificado.
+
+---
+
+### 2️⃣ **Cloudflare pode estar bloqueando**  
+Se o domínio estiver usando **Cloudflare**, o erro pode ser causado por um problema no modo SSL.
+
+✅ **Solução:**  
+Acesse o painel do **Cloudflare** e altere o modo SSL para:
+- **"Full"** (se estiver em "Full (Strict)")
+- **"Flexible"** (para testar)
+
+---
+
+### 3️⃣ **CDN ou Firewall bloqueando**  
+O domínio **palegreen-hornet-335449.hostingersite.com** resolve para um **CDN da Hostinger**, que pode estar bloqueando seu IP.
+
+✅ **Solução:**  
+Tente **acessar de outra rede** (por exemplo, um hotspot do celular).  
+Se funcionar, a Hostinger pode estar bloqueando sua rede.
+
+---
+
+### 4️⃣ **Problema no Certificado SSL do CDN**  
+Se o site estiver atrás de um **CDN da Hostinger**, pode haver um problema com a comunicação entre o CDN e o servidor.
+
+✅ **Solução:**  
+- Se for seu site, tente desativar o CDN temporariamente no painel da Hostinger.  
+- Se não for seu site, o problema é do **Hostinger/CDN**, e você precisará esperar ou entrar em contato com o suporte.
+
+---
+
+### 5️⃣ **Testar com HTTP (sem SSL)**  
+Se o erro for no SSL, veja se o servidor responde via **HTTP**:
+```bash
+curl -I http://palegreen-hornet-335449.hostingersite.com
+```
+Se funcionar, mas o **HTTPS continuar falhando**, o problema está no certificado SSL.
+
+---
+
+## 🚀 **Conclusão**  
+🔴 **O problema não está no seu Python, nem no seu `curl`.**  
+🔴 **O erro está no SSL do servidor da Hostinger ou no CDN.**  
+
+✅ **Se o site for seu:**  
+1. **Renove/reinstale o SSL** no painel da Hostinger.  
+2. **Teste sem CDN** ou **mude as configurações SSL no Cloudflare**.  
+3. **Entre em contato com o suporte da Hostinger** se o problema persistir.  
+
+✅ **Se o site não for seu:**  
+- **O servidor está com problemas** e você terá que esperar ou entrar em contato com o dono.  
+
+---
+
+Me avise se precisar de mais ajuda! 🚀
+
+
+
+
+
+- No Sandbox do lab ta ok:
+
+
+student-node ~ ➜  nslookup palegreen-hornet-335449.hostingersite.com
+Server:         10.96.0.10
+Address:        10.96.0.10#53
+
+Non-authoritative answer:
+palegreen-hornet-335449.hostingersite.com       canonical name = free.cdn.hstgr.net.
+Name:   free.cdn.hstgr.net
+Address: 77.37.42.32
+Name:   free.cdn.hstgr.net
+Address: 2a02:4780:4e:c278:35b9:b924:f9dc:b21d
+
+
+student-node ~ ➜  curl -I https://palegreen-hornet-335449.hostingersite.com/wp-json/wp/v2/posts/3282
+HTTP/2 200 
+date: Sun, 02 Feb 2025 21:21:06 GMT
+content-type: application/json; charset=UTF-8
+vary: Accept-Encoding
+x-powered-by: PHP/8.1.27
+x-robots-tag: noindex
+x-content-type-options: nosniff
+access-control-expose-headers: X-WP-Total, X-WP-TotalPages, Link
+access-control-allow-headers: Authorization, X-WP-Nonce, Content-Disposition, Content-MD5, Content-Type
+link: <https://palegreen-hornet-335449.hostingersite.com/docker-sre-e-devops-uma-abordagem-integrada-para-confiabilidade-e-eficiencia/>; rel="alternate"; type=text/html
+allow: GET
+platform: hostinger
+panel: hpanel
+content-security-policy: upgrade-insecure-requests
+server: hcdn
+x-hcdn-request-id: d39c3e17c652726d88d4bf773f1383e3-bos-edge4
+x-hcdn-cache-status: DYNAMIC
+x-hcdn-upstream-rt: 0.778
+
+
+
+
+
+- Segue erro:
+
+
+    raise SSLError(e, request=request)
+requests.exceptions.SSLError: HTTPSConnectionPool(host='palegreen-hornet-335449.hostingersite.com', port=443): Max retries exceeded with url: /wp-json/wp/v2/posts/3282 (Caused by SSLError(SSLError(1, '[SSL: TLSV1_ALERT_INTERNAL_ERROR] tlsv1 alert internal error (_ssl.c:1000)')))
+
+
+## PENDENTE:
+- TSHOOT do WSL2 e DNS, SSL
