@@ -56,6 +56,27 @@ def post_creator(sourceURL, wpBaseURL, sourceLang, targetLang, postStatus):
     # Junta as partes traduzidas de volta em um único texto
     content_translation_text = ''.join(translated_parts)
 
+    # Adiciona o bloco de "Table of Contents" no formato Gutenberg
+    toc_block = {
+        "blockName": "core/table-of-contents",
+        "attrs": {},
+        "innerBlocks": [],
+        "innerHTML": ""
+    }
+
+    # Converte o conteúdo traduzido para o formato de blocos Gutenberg
+    content_blocks = []
+    for part in translated_parts:
+        content_blocks.append({
+            "blockName": "core/paragraph",
+            "attrs": {},
+            "innerBlocks": [],
+            "innerHTML": part
+        })
+
+    # Cria a estrutura de blocos Gutenberg
+    gutenberg_content = json.dumps([toc_block] + content_blocks)
+
     WP_url = wpBaseURL + "/wp-json/wp/v2/posts"
 
     auth = HTTPBasicAuth(wp_app_username, wp_app_password)
@@ -68,7 +89,7 @@ def post_creator(sourceURL, wpBaseURL, sourceLang, targetLang, postStatus):
     payload = json.dumps({ 
         "status": postStatus,
         "title": title_translation_text,
-        "content": content_translation_text
+        "content": gutenberg_content
     })
 
     response = requests.post(

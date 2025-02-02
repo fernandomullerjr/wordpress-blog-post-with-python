@@ -11,9 +11,11 @@
 # #################################################################################################################################################
 ## COMANDOS
 
+git status
 git add .
 git commit -m "Wordpress with Python."
 git push
+git status
 
 docker start ubuntu
 docker container exec -ti ubuntu bash
@@ -50,13 +52,32 @@ git push
 
 
 
-
+# #################################################################################################################################################
+# #################################################################################################################################################
+# #################################################################################################################################################
+# #################################################################################################################################################
+# #################################################################################################################################################
 ## versão validada
+
 /home/fernando/cursos/python/wordpress-blog-post-with-python/testes/script-v4.py
 v1.0.0
 traduz, mas traz no editor classico
 
+- Testando
+cria o post ok
+porém:
+1. O "Table of Contents" vem como editor clássico no post traduzido.
+2. Capa é perdida.
+3. HREFLANG, idioma vem igual ao idioma do post original, necessário ajustar lógica do script para ajustar o HREFLANG para o TARGET_LANGUAGE.
+4. Paragrafos vem em editor clássico, precisam vir em Blocos.
 
+
+
+# #################################################################################################################################################
+# #################################################################################################################################################
+# #################################################################################################################################################
+# #################################################################################################################################################
+# #################################################################################################################################################
 ## TUTORIAL
 
 
@@ -3352,5 +3373,143 @@ possível solução:
 - Ver como obter os JSON de blogs do exterior e automatizar o processo de criar um post, com base na página do exterior, adicionar menções ao DevOps Mind no cabeçalho.
 - Adicionar try, exception, logs de erros.
 - Testar combo "Fedora 40 + PyTorch" , <https://www.tudocelular.com/tech/noticias/n219464/fedora-linux-40-beta-lancado-gnome-46-ia.html>
+
+
+### N8N + IA
+
+- Opç
+
+
+
+
+
+
+# #################################################################################################################################################
+# #################################################################################################################################################
+# #################################################################################################################################################
+# #################################################################################################################################################
+# #################################################################################################################################################
+## Dia 02/02/2025
+
+como melhorar este código, para que O "Table of Contents" não venha como editor clássico no post traduzido, mas sim em blocos Gutenberg ?
+
+não só o table of contents, o resto do conteudo do post traduzido fica com editor classico.
+quero que todo o post inteiro seja convertido para blocos gutenberg logo na tradução, para nao precisar modificar para blocos gutenberg, como fazer?
+
+
+- Criando v10
+/home/fernando/cursos/python/wordpress-blog-post-with-python/testes/script-v10.py
+
+- Testando
+
+
+ERRO
+
+~~~~bash
+ python3 script.py
+Traceback (most recent call last):
+  File "/home/fernando/.asdf/installs/python/3.12.6/lib/python3.12/site-packages/urllib3/connection.py", line 198, in _new_conn
+    sock = connection.create_connection(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/fernando/.asdf/installs/python/3.12.6/lib/python3.12/site-packages/urllib3/util/connection.py", line 60, in create_connection
+    for res in socket.getaddrinfo(host, port, family, socket.SOCK_STREAM):
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/fernando/.asdf/installs/python/3.12.6/lib/python3.12/socket.py", line 976, in getaddrinfo
+    for res in _socket.getaddrinfo(host, port, family, type, proto, flags):
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+socket.gaierror: [Errno -3] Temporary failure in name resolution
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/fernando/.asdf/installs/python/3.12.6/lib/python3.12/site-packages/urllib3/connectionpool.py", line 787, in urlopen
+    response = self._make_request(
+               ^^^^^^^^^^^^^^^^^^^
+  File "/home/fernando/.asdf/installs/python/3.12.6/lib/python3.12/site-packages/urllib3/connectionpool.py", line 488, in _make_request
+    raise new_e
+  File "/home/fernando/.asdf/installs/python/3.12.6/lib/python3.12/site-packages/urllib3/connectionpool.py", line 464, in _make_request
+    self._validate_conn(conn)
+  File "/home/fernando/.asdf/installs/python/3.12.6/lib/python3.12/site-packages/urllib3/connectionpool.py", line 1093, in _validate_conn
+    conn.connect()
+  File "/home/fernando/.asdf/installs/python/3.12.6/lib/python3.12/site-packages/urllib3/connection.py", line 704, in connect
+    self.sock = sock = self._new_conn()
+                       ^^^^^^^^^^^^^^^^
+  File "/home/fernando/.asdf/installs/python/3.12.6/lib/python3.12/site-packages/urllib3/connection.py", line 205, in _new_conn
+    raise NameResolutionError(self.host, self, e) from e
+urllib3.exceptions.NameResolutionError: <urllib3.connection.HTTPSConnection object at 0x7f3d2d379eb0>: Failed to resolve 'palegreen-hornet-335449.hostingersite.com' ([Errno -3] Temporary failure in name resolution)
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/fernando/.asdf/installs/python/3.12.6/lib/python3.12/site-packages/requests/adapters.py", line 667, in send
+    resp = conn.urlopen(
+           ^^^^^^^^^^^^^
+  File "/home/fernando/.asdf/installs/python/3.12.6/lib/python3.12/site-packages/urllib3/connectionpool.py", line 841, in urlopen
+    retries = retries.increment(
+              ^^^^^^^^^^^^^^^^^^
+  File "/home/fernando/.asdf/installs/python/3.12.6/lib/python3.12/site-packages/urllib3/util/retry.py", line 519, in increment
+    raise MaxRetryError(_pool, url, reason) from reason  # type: ignore[arg-type]
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+urllib3.exceptions.MaxRetryError: HTTPSConnectionPool(host='palegreen-hornet-335449.hostingersite.com', port=443): Max retries exceeded with url: /wp-json/wp/v2/posts/3282 (Caused by NameResolutionError("<urllib3.connection.HTTPSConnection object at 0x7f3d2d379eb0>: Failed to resolve 'palegreen-hornet-335449.hostingersite.com' ([Errno -3] Temporary failure in name resolution)"))
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/fernando/cursos/python/wordpress-blog-post-with-python/script.py", line 108, in <module>
+    post_creator(source_url, base_url, source_language, target_language, "publish")
+  File "/home/fernando/cursos/python/wordpress-blog-post-with-python/script.py", line 19, in post_creator
+    response_API = requests.get(sourceURL)
+                   ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/fernando/.asdf/installs/python/3.12.6/lib/python3.12/site-packages/requests/api.py", line 73, in get
+    return request("get", url, params=params, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/fernando/.asdf/installs/python/3.12.6/lib/python3.12/site-packages/requests/api.py", line 59, in request
+    return session.request(method=method, url=url, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/fernando/.asdf/installs/python/3.12.6/lib/python3.12/site-packages/requests/sessions.py", line 589, in request
+    resp = self.send(prep, **send_kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/fernando/.asdf/installs/python/3.12.6/lib/python3.12/site-packages/requests/sessions.py", line 703, in send
+    r = adapter.send(request, **kwargs)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/fernando/.asdf/installs/python/3.12.6/lib/python3.12/site-packages/requests/adapters.py", line 700, in send
+    raise ConnectionError(e, request=request)
+requests.exceptions.ConnectionError: HTTPSConnectionPool(host='palegreen-hornet-335449.hostingersite.com', port=443): Max retries exceeded with url: /wp-json/wp/v2/posts/3282 (Caused by NameResolutionError("<urllib3.connection.HTTPSConnection object at 0x7f3d2d379eb0>: Failed to resolve 'palegreen-hornet-335449.hostingersite.com' ([Errno -3] Temporary failure in name resolution)"))
+~~~~
+
+
+
+- Utilizando o v4 que é OK, deu mesmo erro.
+- Utilizando o v4 que é OK, deu mesmo erro.
+
+
+- Resolução parece ok
+
+
+> dig palegreen-hornet-335449.hostingersite.com
+
+; <<>> DiG 9.18.30-0ubuntu0.22.04.2-Ubuntu <<>> palegreen-hornet-335449.hostingersite.com
+;; global options: +cmd
+;; Got answer:
+;; ->>HEADER<<- opcode: QUERY, status: NOERROR, id: 42781
+;; flags: qr rd ra; QUERY: 1, ANSWER: 2, AUTHORITY: 0, ADDITIONAL: 1
+
+;; OPT PSEUDOSECTION:
+; EDNS: version: 0, flags:; udp: 512
+;; QUESTION SECTION:
+;palegreen-hornet-335449.hostingersite.com. IN A
+
+;; ANSWER SECTION:
+palegreen-hornet-335449.hostingersite.com. 3507 IN CNAME free.cdn.hstgr.net.
+free.cdn.hstgr.net.     60      IN      A       89.116.213.130
+
+;; Query time: 29 msec
+;; SERVER: 8.8.8.8#53(8.8.8.8) (UDP)
+;; WHEN: Sun Feb 02 17:25:35 -03 2025
+;; MSG SIZE  rcvd: 118
+
+> date
+Sun Feb  2 17:25:40 -03 2025
+
 
 
