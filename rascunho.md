@@ -3799,3 +3799,44 @@ requests.exceptions.SSLError: HTTPSConnectionPool(host='palegreen-hornet-335449.
 
 ## PENDENTE:
 - TSHOOT do WSL2 e DNS, SSL
+
+
+
+
+
+# #################################################################################################################################################
+# #################################################################################################################################################
+# #################################################################################################################################################
+# #################################################################################################################################################
+# #################################################################################################################################################
+## Dia 03/02/2025
+
+
+- Hoje estava ok o WSL2
+sem erros de DNS
+
+
+
+- Testando script-v10
+/home/fernando/cursos/python/wordpress-blog-post-with-python/testes/script-v10.py
+
+- Script sem erros ao executar
+porém o post traduzido ficou:
+1. Num bloco inteiro, com editor clássico.
+2. Diversas linhas contendo informações aleatórias. Como "[{"blockName": "core/table-of-contents", "attrs": {}, "innerBlocks": [], "innerHTML": ""}, {"blockName": "core/paragraph", "attrs": {}, "innerBlocks": [], "innerHTML"" , etc, além de "\n\n\n\n"
+
+Preciso que o código não gere um post num bloco único
+Não pode ser usado editor clássico do wordpress
+traduzir independente do tipo de Bloco do WordPress na origem, pensando que ao final da tradução cada Bloco do WordPress fique no padrão utilizado pelo editor Gutenberg na origem seja um bloco Gutenberg no destino(post traduzido).
+
+
+
+
+Hoje eu possuo um script em Python que traduz posts do Wordpress, porém ele tem algumas limitações:
+
+    1. O "Table of Contents" vem como editor clássico no post traduzido.
+    2. Capa é perdida.
+    3. HREFLANG, idioma vem igual ao idioma do post original, necessário ajustar lógica do script para ajustar o HREFLANG com base na variavel TARGET_LANGUAGE.
+    4. Paragrafos vem em editor clássico, não vem em Blocos Wordpress no padrão Gutenberg.
+
+Utilizar o n8n para traduzir os posts Wordpress pode ser uma opção? Como seria feito?
