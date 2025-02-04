@@ -3850,6 +3850,8 @@ Utilizar o n8n para traduzir os posts Wordpress pode ser uma opção? Como seria
 
 
 
+
+
 https://github.com/n8n-io/self-hosted-ai-starter-kit
 
 Installation
@@ -3887,3 +3889,283 @@ db2914f53fd4   ollama/ollama:latest   "/bin/ollama serve"      14 minutes ago   
 
 ótimo video:
 https://www.youtube.com/watch?v=tQLpKlmlmak
+
+
+
+
+
+
+- Como fazer via n8n
+
+### DeepSeek
+
+Sim, utilizar o n8n para traduzir posts do WordPress pode ser uma opção viável e eficiente, especialmente para automatizar o processo e resolver as limitações que você mencionou. O n8n é uma ferramenta de automação de fluxo de trabalho que permite integrar diferentes serviços e APIs, o que pode ser útil para manipular posts do WordPress, traduzir conteúdo e ajustar metadados como HREFLANG.
+
+Aqui está um exemplo de como você poderia configurar um fluxo de trabalho no n8n para traduzir posts do WordPress:
+
+### Passos para Configurar o Fluxo de Trabalho no n8n:
+
+1. **Obter Posts do WordPress:**
+   - Use o nó "HTTP Request" ou "WordPress" (se disponível) para buscar os posts do WordPress que precisam ser traduzidos.
+   - Configure o nó para acessar a API REST do WordPress e buscar os posts.
+
+2. **Extrair Conteúdo do Post:**
+   - Use nós como "Function" ou "Set" para extrair o conteúdo do post, como título, corpo, metadados, etc.
+
+3. **Traduzir o Conteúdo:**
+   - Use um serviço de tradução como o Google Translate, DeepL, ou outro via API.
+   - Configure um nó "HTTP Request" para enviar o conteúdo para a API de tradução e receber o texto traduzido.
+
+4. **Ajustar Metadados (HREFLANG):**
+   - Use um nó "Function" para ajustar o metadado HREFLANG com base na variável `TARGET_LANGUAGE`.
+   - Atualize os metadados do post traduzido para refletir o idioma correto.
+
+5. **Converter Conteúdo para Blocos Gutenberg:**
+   - Use um nó "Function" para converter o conteúdo traduzido para o formato de blocos Gutenberg.
+   - Isso pode envolver a manipulação de strings para adicionar os blocos necessários.
+
+6. **Manter a Capa do Post:**
+   - Extraia a URL da imagem de capa do post original.
+   - Use um nó "HTTP Request" para fazer o upload da imagem de capa no WordPress traduzido.
+   - Associe a imagem de capa ao novo post traduzido.
+
+7. **Publicar o Post Traduzido:**
+   - Use o nó "HTTP Request" ou "WordPress" para criar um novo post no WordPress com o conteúdo traduzido e os metadados ajustados.
+   - Certifique-se de que o novo post seja publicado no idioma correto.
+
+### Exemplo de Fluxo de Trabalho no n8n:
+
+1. **Trigger:** Inicie o fluxo de trabalho manualmente ou agende-o para rodar automaticamente.
+2. **HTTP Request (WordPress API):** Busque os posts que precisam ser traduzidos.
+3. **Function Node:** Extraia o conteúdo do post, incluindo título, corpo, metadados e URL da imagem de capa.
+4. **HTTP Request (API de Tradução):** Envie o conteúdo para tradução.
+5. **Function Node:** Ajuste o metadado HREFLANG com base na variável `TARGET_LANGUAGE`.
+6. **Function Node:** Converta o conteúdo traduzido para o formato de blocos Gutenberg.
+7. **HTTP Request (WordPress API):** Faça o upload da imagem de capa e associe ao novo post.
+8. **HTTP Request (WordPress API):** Crie e publique o novo post traduzido.
+
+### Considerações Finais:
+
+- **Autenticação:** Certifique-se de configurar a autenticação corretamente para acessar a API do WordPress e a API de tradução.
+- **Tratamento de Erros:** Adicione nós para tratar erros, como falhas na tradução ou na publicação do post.
+- **Testes:** Teste o fluxo de trabalho com alguns posts antes de colocá-lo em produção para garantir que tudo funcione como esperado.
+
+Utilizando o n8n, você pode automatizar todo o processo de tradução e publicação de posts no WordPress, resolvendo as limitações que você mencionou e melhorando a eficiência do seu workflow.
+
+
+
+
+
+
+--- 
+
+
+README:
+<https://github.com/n8n-io/self-hosted-ai-starter-kit/blob/main/README.md>
+
+## 👓 Recommended reading
+
+n8n is full of useful content for getting started quickly with its AI concepts
+and nodes. If you run into an issue, go to [support](#support).
+
+- [AI agents for developers: from theory to practice with n8n](https://blog.n8n.io/ai-agents/)
+- [Tutorial: Build an AI workflow in n8n](https://docs.n8n.io/advanced-ai/intro-tutorial/)
+- [Langchain Concepts in n8n](https://docs.n8n.io/advanced-ai/langchain/langchain-n8n/)
+- [Demonstration of key differences between agents and chains](https://docs.n8n.io/advanced-ai/examples/agent-chain-comparison/)
+- [What are vector databases?](https://docs.n8n.io/advanced-ai/examples/understand-vector-databases/)
+
+## 🎥 Video walkthrough
+
+- [Installing and using Local AI for n8n](https://www.youtube.com/watch?v=xz_X2N-hPg0)
+
+## 🛍️ More AI templates
+
+For more AI workflow ideas, visit the [**official n8n AI template
+gallery**](https://n8n.io/workflows/?categories=AI). From each workflow,
+select the **Use workflow** button to automatically import the workflow into
+your local n8n instance.
+
+### Learn AI key concepts
+
+- [AI Agent Chat](https://n8n.io/workflows/1954-ai-agent-chat/)
+- [AI chat with any data source (using the n8n workflow too)](https://n8n.io/workflows/2026-ai-chat-with-any-data-source-using-the-n8n-workflow-tool/)
+- [Chat with OpenAI Assistant (by adding a memory)](https://n8n.io/workflows/2098-chat-with-openai-assistant-by-adding-a-memory/)
+- [Use an open-source LLM (via Hugging Face)](https://n8n.io/workflows/1980-use-an-open-source-llm-via-huggingface/)
+- [Chat with PDF docs using AI (quoting sources)](https://n8n.io/workflows/2165-chat-with-pdf-docs-using-ai-quoting-sources/)
+- [AI agent that can scrape webpages](https://n8n.io/workflows/2006-ai-agent-that-can-scrape-webpages/)
+
+### Local AI templates
+
+- [Tax Code Assistant](https://n8n.io/workflows/2341-build-a-tax-code-assistant-with-qdrant-mistralai-and-openai/)
+- [Breakdown Documents into Study Notes with MistralAI and Qdrant](https://n8n.io/workflows/2339-breakdown-documents-into-study-notes-using-templating-mistralai-and-qdrant/)
+- [Financial Documents Assistant using Qdrant and](https://n8n.io/workflows/2335-build-a-financial-documents-assistant-using-qdrant-and-mistralai/) [Mistral.ai](http://mistral.ai/)
+- [Recipe Recommendations with Qdrant and Mistral](https://n8n.io/workflows/2333-recipe-recommendations-with-qdrant-and-mistral/)
+
+## Tips & tricks
+
+### Accessing local files
+
+The self-hosted AI starter kit will create a shared folder (by default,
+located in the same directory) which is mounted to the n8n container and
+allows n8n to access files on disk. This folder within the n8n container is
+located at `/data/shared` -- this is the path you’ll need to use in nodes that
+interact with the local filesystem.
+
+**Nodes that interact with the local filesystem**
+
+- [Read/Write Files from Disk](https://docs.n8n.io/integrations/builtin/core-nodes/n8n-nodes-base.filesreadwrite/)
+- [Local File Trigger](https://docs.n8n.io/integrations/builtin/core-nodes/n8n-nodes-base.localfiletrigger/)
+- [Execute Command](https://docs.n8n.io/integrations/builtin/core-nodes/n8n-nodes-base.executecommand/)
+
+
+
+
+
+
+
+
+
+
+
+
+Para extrair o conteúdo do post, incluindo título, corpo, metadados e URL da imagem de capa, você pode usar um **Function Node** no n8n. Esse nó permite escrever código JavaScript personalizado para manipular os dados que passam pelo fluxo de trabalho.
+
+Aqui está um exemplo de como você pode configurar o **Function Node** para extrair essas informações:
+
+---
+
+### Passo a Passo:
+
+1. **Adicione um Function Node:**
+   - No n8n, arraste e solte um nó **Function** no seu fluxo de trabalho.
+   - Conecte-o ao nó anterior (por exemplo, um nó que busca os posts via API do WordPress).
+
+2. **Escreva o Código JavaScript:**
+   - No **Function Node**, você pode escrever código JavaScript para processar os dados recebidos.
+   - Abaixo está um exemplo de código para extrair o título, corpo, metadados e URL da imagem de capa de um post do WordPress:
+
+```javascript
+// O n8n passa os dados recebidos em um array chamado `items`
+return items.map(item => {
+  // Extrair o título do post
+  const title = item.json.title?.rendered || 'Sem título';
+
+  // Extrair o corpo do post (conteúdo)
+  const content = item.json.content?.rendered || 'Sem conteúdo';
+
+  // Extrair metadados (exemplo: HREFLANG, idioma, etc.)
+  const metadata = item.json.meta || {};
+
+  // Extrair a URL da imagem de capa (featured image)
+  const featuredImageUrl = item.json.featured_media_url || item.json._links?.['wp:featuredmedia']?.[0]?.href || 'Sem imagem de capa';
+
+  // Retornar os dados extraídos
+  return {
+    json: {
+      title,
+      content,
+      metadata,
+      featuredImageUrl,
+      // Você pode adicionar outros campos aqui, se necessário
+    }
+  };
+});
+```
+
+---
+
+### Explicação do Código:
+
+1. **`items.map(item => { ... })`:**
+   - O n8n passa os dados recebidos em um array chamado `items`. O método `map` é usado para processar cada item individualmente.
+
+2. **Extrair o Título:**
+   - O título do post geralmente está no campo `title.rendered` da resposta da API do WordPress.
+
+3. **Extrair o Corpo do Post:**
+   - O conteúdo do post está no campo `content.rendered`.
+
+4. **Extrair Metadados:**
+   - Os metadados do post estão no campo `meta`. Dependendo da configuração do WordPress, isso pode incluir campos personalizados, como HREFLANG.
+
+5. **Extrair a URL da Imagem de Capa:**
+   - A URL da imagem de capa pode estar no campo `featured_media_url` ou no campo `_links['wp:featuredmedia'][0].href` (dependendo da resposta da API do WordPress).
+
+6. **Retornar os Dados:**
+   - O n8n espera que o **Function Node** retorne um array de objetos com a estrutura `{ json: { ... } }`. Aqui, retornamos os dados extraídos nesse formato.
+
+---
+
+### Exemplo de Saída:
+
+Se o post do WordPress tiver os seguintes dados:
+
+```json
+{
+  "title": {
+    "rendered": "Meu Post"
+  },
+  "content": {
+    "rendered": "<p>Este é o conteúdo do post.</p>"
+  },
+  "meta": {
+    "hreflang": "pt-BR"
+  },
+  "featured_media_url": "https://exemplo.com/imagem.jpg"
+}
+```
+
+O **Function Node** retornará:
+
+```json
+{
+  "json": {
+    "title": "Meu Post",
+    "content": "<p>Este é o conteúdo do post.</p>",
+    "metadata": {
+      "hreflang": "pt-BR"
+    },
+    "featuredImageUrl": "https://exemplo.com/imagem.jpg"
+  }
+}
+```
+
+---
+
+### Dicas:
+
+1. **Verifique a Estrutura da API do WordPress:**
+   - A estrutura da resposta da API do WordPress pode variar dependendo da configuração do seu site. Use o nó **HTTP Request** para testar a API e verificar como os dados são retornados.
+
+2. **Trate Campos Opcionais:**
+   - Use operadores como `?.` para evitar erros caso algum campo não exista na resposta.
+
+3. **Adicione Mais Campos:**
+   - Se precisar de mais informações, como tags, categorias ou autor, você pode adicionar mais campos ao código.
+
+4. **Teste o Function Node:**
+   - Execute o fluxo de trabalho e verifique se os dados estão sendo extraídos corretamente.
+
+---
+
+Com isso, você terá um **Function Node** que extrai o título, conteúdo, metadados e URL da imagem de capa de um post do WordPress, pronto para ser usado no restante do seu fluxo de trabalho no n8n!
+
+
+
+
+
+
+
+
+# #################################################################################################################################################
+# #################################################################################################################################################
+# #################################################################################################################################################
+# #################################################################################################################################################
+# #################################################################################################################################################
+## PENDENTE
+
+- Efetuar testes com n8n
+1. seguir README:
+<https://github.com/n8n-io/self-hosted-ai-starter-kit/blob/main/README.md>
+2. seguir fluxo resumido/sugerido pelo DeepSeek
+3. Ver sobre "Function Node" no n8n, para executar códigos JavaScript para obter o JSON e processar os dados recebidos.
