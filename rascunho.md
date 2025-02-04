@@ -3840,3 +3840,50 @@ Hoje eu possuo um script em Python que traduz posts do Wordpress, porém ele tem
     4. Paragrafos vem em editor clássico, não vem em Blocos Wordpress no padrão Gutenberg.
 
 Utilizar o n8n para traduzir os posts Wordpress pode ser uma opção? Como seria feito?
+
+
+
+
+
+
+
+
+
+
+https://github.com/n8n-io/self-hosted-ai-starter-kit
+
+Installation
+Cloning the Repository
+
+git clone https://github.com/n8n-io/self-hosted-ai-starter-kit.git
+cd self-hosted-ai-starter-kit
+
+Running n8n using Docker Compose
+For Nvidia GPU users
+
+git clone https://github.com/n8n-io/self-hosted-ai-starter-kit.git
+cd self-hosted-ai-starter-kit
+docker compose --profile gpu-nvidia up
+
+
+- Deu erro
+reinstalando o Docker Desktop
+
+- Executando novamente
+docker compose --profile gpu-nvidia up
+
+
+> docker ps
+CONTAINER ID   IMAGE                  COMMAND                  CREATED          STATUS                    PORTS                              NAMES
+d47580122786   n8nio/n8n:latest       "tini -- /docker-ent…"   14 minutes ago   Up 14 minutes             0.0.0.0:5678->5678/tcp             n8n
+41a2d1b5e62c   qdrant/qdrant          "./entrypoint.sh"        14 minutes ago   Up 14 minutes             0.0.0.0:6333->6333/tcp, 6334/tcp   qdrant
+fce35e5c3cc0   postgres:16-alpine     "docker-entrypoint.s…"   14 minutes ago   Up 14 minutes (healthy)   5432/tcp                           self-hosted-ai-starter-kit-postgres-1
+db2914f53fd4   ollama/ollama:latest   "/bin/ollama serve"      14 minutes ago   Up 14 minutes             0.0.0.0:11434->11434/tcp           ollama
+
+ ~           
+
+
+
+
+ótimo video:
+https://www.youtube.com/watch?v=tQLpKlmlmak
