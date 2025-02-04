@@ -4155,6 +4155,353 @@ Com isso, você terá um **Function Node** que extrai o título, conteúdo, meta
 
 
 
+Se você não tem acesso a uma API de tradução paga, como Google Translate ou DeepL, e deseja traduzir o conteúdo obtido via **Function Node** usando uma solução local como o **Ollama**, isso é perfeitamente possível! O Ollama é uma ferramenta que permite rodar modelos de linguagem grandes (LLMs) localmente, como o **LLaMA**, **Mistral**, ou outros modelos que podem ser usados para tradução.
+
+Aqui está um passo a passo de como você pode integrar o Ollama ao n8n para traduzir o conteúdo:
+
+---
+
+### Passo 1: Configurar o Ollama Localmente
+
+1. **Instale o Ollama:**
+   - Siga as instruções de instalação do Ollama no seu sistema operacional. Você pode encontrar o guia oficial no repositório do Ollama: [Ollama GitHub](https://github.com/jmorganca/ollama).
+
+2. **Baixe um Modelo de Tradução:**
+   - O Ollama suporta vários modelos. Para tradução, você pode usar modelos como o **LLaMA**, **Mistral**, ou outros que sejam adequados para tarefas de tradução.
+   - Por exemplo, para baixar o modelo Mistral, use o comando:
+     ```bash
+     ollama pull mistral
+     ```
+
+3. **Teste o Ollama Localmente:**
+   - Certifique-se de que o Ollama está funcionando corretamente. Você pode testar enviando uma solicitação de tradução via linha de comando ou usando uma ferramenta como o `curl`:
+     ```bash
+     curl http://localhost:11434/api/generate -d '{
+       "model": "mistral",
+       "prompt": "Traduza para o inglês: Olá, como você está?",
+       "stream": false
+     }'
+     ```
+
+---
+
+### Passo 2: Configurar o n8n para Usar o Ollama
+
+1. **Adicione um Nó HTTP Request no n8n:**
+   - O Ollama expõe uma API local na porta `11434`. Você pode usar o nó **HTTP Request** no n8n para enviar o conteúdo a ser traduzido para o Ollama.
+
+2. **Configure o Nó HTTP Request:**
+   - **URL:** `http://localhost:11434/api/generate`
+   - **Método:** POST
+   - **Headers:** Adicione um cabeçalho `Content-Type: application/json`.
+   - **Body (JSON):**
+     ```json
+     {
+       "model": "mistral",
+       "prompt": "Traduza para o {{$node["Function"].json["targetLanguage"]}}: {{$node["Function"].json["content"]}}",
+       "stream": false
+     }
+     ```
+     - Substitua `{{$node["Function"].json["targetLanguage"]}}` pelo idioma de destino (ex: `inglês`, `espanhol`, etc.).
+     - Substitua `{{$node["Function"].json["content"]}}` pelo conteúdo que você extraiu no **Function Node**.
+
+3. **Processe a Resposta do Ollama:**
+   - O Ollama retornará a tradução no campo `response` da resposta JSON.
+   - Use um **Function Node** ou **Set Node** para extrair o texto traduzido e adicioná-lo ao fluxo de trabalho.
+
+---
+
+### Passo 3: Exemplo de Fluxo de Trabalho no n8n
+
+Aqui está um exemplo de como o fluxo de trabalho pode ser estruturado:
+
+1. **Function Node:**
+   - Extraia o conteúdo do post (título, corpo, etc.) e defina o idioma de destino (`targetLanguage`).
+
+2. **HTTP Request Node:**
+   - Envie o conteúdo para o Ollama para tradução.
+
+3. **Function Node (Pós-Tradução):**
+   - Extraia o texto traduzido da resposta do Ollama.
+
+4. **HTTP Request Node (WordPress API):**
+   - Use o conteúdo traduzido para criar um novo post no WordPress.
+
+---
+
+### Exemplo de Código no Function Node (Pré-Tradução):
+
+```javascript
+// Extrair conteúdo e definir idioma de destino
+return items.map(item => {
+  const content = item.json.content || 'Sem conteúdo';
+  const targetLanguage = 'inglês'; // Defina o idioma de destino aqui
+
+  return {
+    json: {
+      content,
+      targetLanguage
+    }
+  };
+});
+```
+
+---
+
+### Exemplo de Código no Function Node (Pós-Tradução):
+
+```javascript
+// Extrair a tradução da resposta do Ollama
+return items.map(item => {
+  const translatedText = item.json.response || 'Tradução falhou';
+
+  return {
+    json: {
+      translatedText
+    }
+  };
+});
+```
+
+---
+
+### Passo 4: Executar e Testar
+
+1. **Execute o Fluxo de Trabalho:**
+   - Certifique-se de que o Ollama está rodando localmente e que o n8n está configurado corretamente para se comunicar com ele.
+
+2. **Verifique os Resultados:**
+   - Após a execução, verifique se o conteúdo foi traduzido corretamente e se o novo post foi criado no WordPress.
+
+---
+
+### Considerações Finais:
+
+- **Desempenho:** Traduzir conteúdo localmente com Ollama pode ser mais lento do que usar uma API de tradução dedicada, dependendo do hardware disponível.
+- **Qualidade da Tradução:** A qualidade da tradução depende do modelo usado. Experimente diferentes modelos para obter os melhores resultados.
+- **Segurança:** Como o Ollama roda localmente, seus dados não são enviados para servidores externos, o que é uma vantagem em termos de privacidade.
+
+Com essa configuração, você pode traduzir conteúdo do WordPress usando o Ollama localmente, sem depender de APIs de tradução externas! 🚀
+
+
+
+
+
+
+
+- Testando Endpoint do Ollama local:
+
+> curl http://localhost:11434/api/generate -d '{
+  "model": "llama",
+  "prompt": "Traduza para o inglês: Olá, como você está?",
+  "stream": false
+}'
+{"error":"model 'llama' not found"}%
+> ollama pull mistral
+pulling manifest
+pulling ff82381e2bea... 100% ▕████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████▏ 4.1 GB
+pulling 43070e2d4e53... 100% ▕████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████▏  11 KB
+pulling 491dfa501e59... 100% ▕████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████▏  801 B
+pulling ed11eda7790d... 100% ▕████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████▏   30 B
+pulling 42347cd80dc8... 100% ▕████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████▏  485 B
+verifying sha256 digest
+writing manifest
+success
+> curl http://localhost:11434/api/generate -d '{
+  "model": "mistral",
+  "prompt": "Traduza para o inglês: Olá, como você está?",
+  "stream": false
+}'
+{"model":"mistral","created_at":"2025-02-04T03:12:47.957345415Z","response":" Hello, how are you?","done":true,"done_reason":"stop","context":[3,29473,18349,29486,2934,3414,1057,4923,29482,17962,29515,7780,29588,29493,3886,8669,29644,11944,29572,4,1027,23325,29493,1678,1228,1136,29572],"total_duration":4488770212,"load_duration":3503574739,"prompt_eval_count":22,"prompt_eval_duration":835000000,"eval_count":7,"eval_duration":146000000}%
+
+ ~                                                   
+
+
+- Após baixar mistral, ficou ok o curl para traduzir
+
+
+
+
+
+No n8n, você pode acessar os dados de nós anteriores usando **expressões**. Essas expressões permitem referenciar valores de outros nós no fluxo de trabalho. Para substituir `{{$node["Function"].json["content"]}}` pelo conteúdo extraído no **Function Node**, siga os passos abaixo:
+
+---
+
+### Passo 1: Certifique-se de que o Function Node Retorna o Conteúdo
+
+No **Function Node**, você deve retornar o conteúdo que deseja traduzir. Por exemplo:
+
+```javascript
+return items.map(item => {
+  const content = item.json.content || 'Sem conteúdo'; // Extrai o conteúdo
+  const targetLanguage = 'inglês'; // Define o idioma de destino
+
+  return {
+    json: {
+      content, // Conteúdo a ser traduzido
+      targetLanguage // Idioma de destino
+    }
+  };
+});
+```
+
+Isso garante que o conteúdo esteja disponível para ser referenciado em nós subsequentes.
+
+---
+
+### Passo 2: Usar Expressões no HTTP Request Node
+
+No nó **HTTP Request** que envia o conteúdo para o Ollama, você pode usar uma expressão para acessar o conteúdo retornado pelo **Function Node**.
+
+1. **Abra o Nó HTTP Request:**
+   - No campo **Body (JSON)**, você verá uma opção para usar expressões.
+
+2. **Use a Expressão Correta:**
+   - Para acessar o conteúdo do **Function Node**, use a seguinte expressão:
+     ```plaintext
+     {{$node["Function"].json["content"]}}
+     ```
+   - Para acessar o idioma de destino, use:
+     ```plaintext
+     {{$node["Function"].json["targetLanguage"]}}
+     ```
+
+3. **Exemplo de Configuração do Body (JSON):**
+   ```json
+   {
+     "model": "mistral",
+     "prompt": "Traduza para o {{$node["Function"].json["targetLanguage"]}}: {{$node["Function"].json["content"]}}",
+     "stream": false
+   }
+   ```
+
+   Aqui:
+   - `{{$node["Function"].json["targetLanguage"]}}` será substituído pelo valor de `targetLanguage` retornado pelo **Function Node**.
+   - `{{$node["Function"].json["content"]}}` será substituído pelo valor de `content` retornado pelo **Function Node**.
+
+---
+
+### Passo 3: Testar a Expressão
+
+1. **Execute o Fluxo de Trabalho:**
+   - Clique em **Execute Workflow** para testar o fluxo.
+
+2. **Verifique o Body Enviado:**
+   - Após a execução, abra o nó **HTTP Request** e verifique a aba **Request**.
+   - Certifique-se de que o corpo da solicitação (Body) foi preenchido corretamente com o conteúdo e o idioma de destino.
+
+   Exemplo de Body enviado:
+   ```json
+   {
+     "model": "mistral",
+     "prompt": "Traduza para o inglês: Este é o conteúdo do post.",
+     "stream": false
+   }
+   ```
+
+---
+
+### Passo 4: Lidar com Erros
+
+Se a expressão não funcionar corretamente:
+1. **Verifique o Nome do Nó:**
+   - Certifique-se de que o nome do nó no fluxo de trabalho corresponde ao usado na expressão. Por exemplo, se o nó se chama "Function 1", use:
+     ```plaintext
+     {{$node["Function 1"].json["content"]}}
+     ```
+
+2. **Verifique a Estrutura dos Dados:**
+   - Use o **Debug Node** ou inspecione a saída do **Function Node** para garantir que os dados estejam no formato esperado.
+
+3. **Teste Expressões Simples:**
+   - Teste expressões simples, como `{{$node["Function"].json}}`, para verificar se os dados estão sendo passados corretamente.
+
+---
+
+### Exemplo Completo do Fluxo de Trabalho
+
+1. **Function Node:**
+   - Extrai o conteúdo e define o idioma de destino.
+
+2. **HTTP Request Node:**
+   - Envia o conteúdo para o Ollama usando expressões para preencher o Body.
+
+3. **Function Node (Pós-Tradução):**
+   - Extrai o texto traduzido da resposta do Ollama.
+
+4. **HTTP Request Node (WordPress API):**
+   - Cria um novo post no WordPress com o conteúdo traduzido.
+
+---
+
+### Dicas Finais:
+
+- **Use o Debug Node:**
+  - Adicione um nó **Debug** após o **Function Node** para visualizar os dados retornados e garantir que estão no formato correto.
+
+- **Documentação do n8n:**
+  - Consulte a [documentação oficial do n8n sobre expressões](https://docs.n8n.io/code-examples/expressions/) para mais exemplos e detalhes.
+
+Com isso, você conseguirá substituir `{{$node["Function"].json["content"]}}` pelo conteúdo extraído no **Function Node** e enviá-lo para o Ollama para tradução! 🚀
+
+
+
+
+
+
+
+
+- Tratar workflow
+Problem in node ‘HTTP Request - para enviar ao Ollama local traduzir‘
+
+JSON parameter needs to be valid JSON
+{
+  "nodes": [
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://localhost:11434/api/generate",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "{\n  \"model\": \"mistral\",\n  \"prompt\": \"Traduza para o {{$node[\"Function\"].json[\"inglês\"]}}: {{$node[\"Function\"].json[\"content\"]}}\",\n  \"stream\": false\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        820,
+        -40
+      ],
+      "id": "1117b7f8-bc44-41d7-987c-cc3c809dfb3c",
+      "name": "HTTP Request - para enviar ao Ollama local traduzir"
+    }
+  ],
+  "connections": {},
+  "pinData": {},
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "558d88703fb65b2d0e44613bc35916258b0f0bf983c5d4730c00c424b77ca36a"
+  }
+}
+
+
+
+
+Problem in node ‘HTTP Request - para enviar ao Ollama local traduzir‘
+
+JSON parameter needs to be valid JSON
+
+
+
 
 
 # #################################################################################################################################################
@@ -4163,6 +4510,25 @@ Com isso, você terá um **Function Node** que extrai o título, conteúdo, meta
 # #################################################################################################################################################
 # #################################################################################################################################################
 ## PENDENTE
+
+- Comandos para subir ambiente:
+
+~~~~bash
+git clone https://github.com/n8n-io/self-hosted-ai-starter-kit.git
+cd self-hosted-ai-starter-kit
+
+cd /home/fernando/cursos/n8n/self-hosted-ai-starter-kit
+docker compose --profile gpu-nvidia up
+
+accessible via:
+n8n                | http://localhost:5678/
+~~~~
+
+
+- Tratar workflow
+  Problem in node ‘HTTP Request - para enviar ao Ollama local traduzir‘
+  JSON parameter needs to be valid JSON
+ver como acessar JSON, seguir passos do DeepSeek acima.
 
 - Efetuar testes com n8n
 1. seguir README:
