@@ -4551,6 +4551,56 @@ como eu crio um step do tipo HTTP Request para Traduzir o Conteúdo Usando o Oll
 
 
 
+Codigo-Extrair-dados-do-post
+
+{
+  "model": "mistral",
+  "prompt": "Traduza para o {{$node["Function"].json["inglês"]}}: {{$node["Function"].json["content"]}}",
+  "stream": false
+}
+
+
+- Ajustando
+
+{
+  "model": "mistral",
+  "prompt": "Traduza para o {{$node["Codigo-Extrair-dados-do-post"].json["targetLanguage"]}}: {{$node["Codigo-Extrair-dados-do-post"].json["content"]}}": Importante manter a estrutura do post sem afetar a formatação ou elementos do wordpress,
+  "stream": false
+}
+
+
+
+JSON parameter needs to be valid JSON
+
+Error details
+Other info
+
+Item Index
+
+0
+
+Node type
+
+n8n-nodes-base.httpRequest
+
+Node version
+
+4.2 (Latest)
+
+n8n version
+
+1.76.2 (Self Hosted)
+
+Time
+
+05/02/2025, 11:38:04
+
+Stack trace
+
+NodeOperationError: JSON parameter needs to be valid JSON at ExecuteContext.execute (/usr/local/lib/node_modules/n8n/node_modules/n8n-nodes-base/dist/nodes/HttpRequest/V3/HttpRequestV3.node.js:207:39) at WorkflowExecute.runNode (/usr/local/lib/node_modules/n8n/node_modules/n8n-core/dist/execution-engine/workflow-execute.js:632:42) at /usr/local/lib/node_modules/n8n/node_modules/n8n-core/dist/execution-engine/workflow-execute.js:881:62 at processTicksAndRejections (node:internal/process/task_queues:95:5) at /usr/local/lib/node_modules/n8n/node_modules/n8n-core/dist/execution-engine/workflow-execute.js:1215:20
+
+
+
 
 
 
