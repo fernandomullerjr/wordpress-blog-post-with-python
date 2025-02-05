@@ -4601,8 +4601,243 @@ NodeOperationError: JSON parameter needs to be valid JSON at ExecuteContext.exec
 
 
 
+tentei 
 
 
+{
+  "model": "mistral",
+  "prompt": "Traduza para o {{$node["Codigo-Extrair-dados-do-post"].json["targetLanguage"]}}: {{$node["Codigo-Extrair-dados-do-post"].json["content"]}}": Importante manter a estrutura do post sem afetar a formatação ou elementos do wordpress,
+  "stream": false
+}
+
+
+deu erro
+JSON parameter needs to be valid JSON
+
+
+
+
+
+O erro "JSON parameter needs to be valid JSON" indica que o JSON que você está tentando enviar não é válido. No seu caso, há um problema de sintaxe no JSON. Vamos corrigir isso.
+
+Problemas Identificados
+Erro de Sintaxe: Há um : extra após a expressão {{$node["Codigo-Extrair-dados-do-post"].json["content"]}}.
+Aspas: Certifique-se de que todas as aspas estejam corretamente fechadas.
+
+JSON Corrigido:
+
+{
+  "model": "mistral",
+  "prompt": "Traduza para o {{$node["Codigo-Extrair-dados-do-post"].json["targetLanguage"]}}: {{$node["Codigo-Extrair-dados-do-post"].json["content"]}}. Importante manter a estrutura do post sem afetar a formatação ou elementos do wordpress.",
+  "stream": false
+}
+
+
+
+
+JSON parameter needs to be valid JSON
+
+Error details
+Other info
+
+Item Index
+
+0
+
+Node type
+
+n8n-nodes-base.httpRequest
+
+Node version
+
+4.2 (Latest)
+
+n8n version
+
+1.76.2 (Self Hosted)
+
+Time
+
+05/02/2025, 11:39:46
+
+Stack trace
+
+NodeOperationError: JSON parameter needs to be valid JSON at ExecuteContext.execute (/usr/local/lib/node_modules/n8n/node_modules/n8n-nodes-base/dist/nodes/HttpRequest/V3/HttpRequestV3.node.js:207:39) at WorkflowExecute.runNode (/usr/local/lib/node_modules/n8n/node_modules/n8n-core/dist/execution-engine/workflow-execute.js:632:42) at /usr/local/lib/node_modules/n8n/node_modules/n8n-core/dist/execution-engine/workflow-execute.js:881:62 at processTicksAndRejections (node:internal/process/task_queues:95:5) at /usr/local/lib/node_modules/n8n/node_modules/n8n-core/dist/execution-engine/workflow-execute.js:1215:20
+
+
+
+
+- ERRO
+JSON.parse: bad control character in string literal at line 3 column 37 of the JSON data
+
+
+
+
+O erro "JSON.parse: bad control character in string literal" geralmente ocorre quando há caracteres de controle inválidos ou problemas de formatação no JSON. Vamos revisar o JSON e garantir que ele esteja corretamente formatado.
+
+### JSON Corrigido
+
+Certifique-se de que o JSON esteja corretamente formatado e que todas as aspas estejam fechadas corretamente. Aqui está o JSON corrigido:
+
+```json
+{
+  "model": "mistral",
+  "prompt": "Traduza para o {{$node['Codigo-Extrair-dados-do-post'].json['targetLanguage']}}: {{$node['Codigo-Extrair-dados-do-post'].json['content']}}. Importante manter a estrutura do post sem afetar a formatação ou elementos do wordpress.",
+  "stream": false
+}
+```
+
+
+
+
+
+
+Sim, é possível que o conteúdo do trecho `content` contenha caracteres que precisam ser escapados para que o JSON seja válido. Vamos garantir que todos os caracteres especiais no conteúdo sejam escapados corretamente.
+
+### Função para Escapar Caracteres Especiais
+
+Você pode usar uma função JavaScript para escapar caracteres especiais no conteúdo antes de incluí-lo no JSON. Aqui está um exemplo de como fazer isso:
+
+```js
+function escapeJsonString(str) {
+  return str.replace(/\\/g, '\\\\')
+            .replace(/"/g, '\\"')
+            .replace(/\n/g, '\\n')
+            .replace(/\r/g, '\\r')
+            .replace(/\t/g, '\\t');
+}
+
+// O n8n passa os dados recebidos em um array chamado `items`
+return items.map(item => {
+  // Extrair o título do post
+  const title = item.json.title?.rendered || 'Sem título';
+
+  // Extrair o corpo do post (conteúdo) e escapar caracteres especiais
+  const content = escapeJsonString(item.json.content?.rendered || 'Sem conteúdo');
+
+  // Extrair metadados (exemplo: HREFLANG, idioma, etc.)
+  const metadata = item.json.meta || {};
+
+  // Extrair a URL da imagem de capa (featured image)
+  const featuredImageUrl = item.json.featured_media_url || item.json._links?.['wp:featuredmedia']?.[0]?.href || 'Sem imagem de capa';
+
+  const targetLanguage = 'inglês'; // Define o idioma de destino
+
+  // Retornar os dados extraídos
+  return {
+    json: {
+      title,
+      content,
+      metadata,
+      featuredImageUrl,
+      targetLanguage // Idioma de destino
+      // Você pode adicionar outros campos aqui, se necessário
+    }
+  };
+});
+```
+
+### Atualização do Corpo da Requisição JSON
+
+Com o conteúdo escapado, você pode atualizar o corpo da requisição JSON no nó HTTP Request:
+
+```json
+{
+  "model": "mistral",
+  "prompt": "Traduza para o {{$node['Codigo-Extrair-dados-do-post'].json['targetLanguage']}}: {{$node['Codigo-Extrair-dados-do-post'].json['content']}}. Importante manter a estrutura do post sem afetar a formatação ou elementos do wordpress.",
+  "stream": false
+}
+```
+
+
+
+
+The service refused the connection - perhaps it is offline
+
+Error details
+From HTTP Request
+
+Error code
+
+ECONNREFUSED
+
+Full message
+
+connect ECONNREFUSED ::1:11434
+
+Request
+
+{ "body": { "model": "mistral", "prompt": "Traduza para o {{$node['Codigo-Extrair-dados-do-post'].json['targetLanguage']}}: {{$node['Codigo-Extrair-dados-do-post'].json['content']}}. Importante manter a estrutura do post sem afetar a formatação ou elementos do wordpress.", "stream": false }, "headers": { "content-type": "application/json", "accept": "application/json,text/html,application/xhtml+xml,application/xml,text/*;q=0.9, image/*;q=0.8, */*;q=0.7" }, "method": "POST", "uri": "http://localhost:11434/api/generate", "gzip": true, "rejectUnauthorized": true, "followRedirect": true, "resolveWithFullResponse": true, "followAllRedirects": true, "timeout": 300000, "encoding": null, "json": false, "useStream": true }
+
+Other info
+
+
+postgres-1         | 2025-02-05 14:47:15.315 UTC [27] LOG:  checkpoint starting: time
+postgres-1         | 2025-02-05 14:47:16.827 UTC [27] LOG:  checkpoint complete: wrote 16 buffers (0.1%); 0 WAL file(s) added, 0 removed, 0 recycled; write=1.504 s, sync=0.004 s, total=1.512 s; sync files=15, longest=0.002 s, average=0.001 s; distance=37 kB, estimate=51 kB; lsn=0/1C88AB8, redo lsn=0/1C88A80
+n8n                | connect ECONNREFUSED ::1:11434
+n8n                | connect ECONNREFUSED ::1:11434
+
+
+
+
+
+no step que faz HTTP request ao Ollama Local ocorre o erro abaixo:
+
+Error code
+
+ECONNREFUSED
+
+Full message
+
+connect ECONNREFUSED ::1:11434
+
+o que pode ser?
+
+
+
+
+
+- Verificando o workflow demo
+- O host é diferente
+
+
+- Ajustando
+DE:
+http://localhost:11434/api/generate
+PARA:
+http://ollama:11434/api/generate
+
+
+então erro de conexão cessou!
+então erro de conexão cessou!
+então erro de conexão cessou!
+então erro de conexão cessou!
+
+
+
+
+
+[
+  {
+    "model": "mistral",
+    "created_at": "2025-02-05T21:00:20.110432037Z",
+    "response": " traduzir para o {{ $node['Codigo-Extrair-dados-do-post'].json['targetLanguage'] }}: {{ $node['Codigo-Extrair-dados-do-post'].json['content'] }} é importante manter a estrutura do post sem afetar a formatação ou elementos do WordPress.\n\nNão parece que essa string seja PHP, então não consegui identificar onde você deveria fazer essas modificações. Por favor forneça mais informações sobre como você está usando essa string para que possamos ajudá-lo corretamente.",
+    "done": true,
+    "done_reason": "stop",
+    "context": [
+      3,
+      29473,
+      [.........]
+      29491
+    ],
+    "total_duration": 3181830400,
+    "load_duration": 4767904,
+    "prompt_eval_count": 87,
+    "prompt_eval_duration": 3000000,
+    "eval_count": 150,
+    "eval_duration": 3172000000
+  }
+]
 
 
 # #################################################################################################################################################
