@@ -4504,6 +4504,57 @@ JSON parameter needs to be valid JSON
 
 
 
+
+# #################################################################################################################################################
+# #################################################################################################################################################
+# #################################################################################################################################################
+# #################################################################################################################################################
+# #################################################################################################################################################
+## Dia 05/02/2025
+
+num workflow do n8n, onde eu quero obter post do Wordpress, traduzir usando ollama local e postar o post traduzido no wordpress, como podem ser os steps?
+
+
+
+código que usei no n8n para extrair dados do post wordpress:
+
+````js
+// O n8n passa os dados recebidos em um array chamado `items`
+return items.map(item => {
+  // Extrair o título do post
+  const title = item.json.title?.rendered || 'Sem título';
+
+  // Extrair o corpo do post (conteúdo)
+  const content = item.json.content?.rendered || 'Sem conteúdo';
+
+  // Extrair metadados (exemplo: HREFLANG, idioma, etc.)
+  const metadata = item.json.meta || {};
+
+  // Extrair a URL da imagem de capa (featured image)
+  const featuredImageUrl = item.json.featured_media_url || item.json._links?.['wp:featuredmedia']?.[0]?.href || 'Sem imagem de capa';
+
+  // Retornar os dados extraídos
+  return {
+    json: {
+      title,
+      content,
+      metadata,
+      featuredImageUrl,
+      // Você pode adicionar outros campos aqui, se necessário
+    }
+  };
+});
+````
+
+como eu crio um step do tipo HTTP Request para Traduzir o Conteúdo Usando o Ollama Local?
+
+
+
+
+
+
+
+
 # #################################################################################################################################################
 # #################################################################################################################################################
 # #################################################################################################################################################
