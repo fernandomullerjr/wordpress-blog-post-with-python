@@ -4840,6 +4840,294 @@ então erro de conexão cessou!
 ]
 
 
+
+"response": " traduzir para o {{ $node['Codigo-Extrair-dados-do-post'].json['targetLanguage'] }}: {{ $node['Codigo-Extrair-dados-do-post'].json['content'] }} é importante manter a estrutura do post sem afetar a formatação ou elementos do WordPress.\n\nNão parece que essa string seja PHP, então não consegui identificar onde você deveria fazer essas modificações. Por favor forneça mais informações sobre como você está usando essa string para que possamos ajudá-lo corretamente.",
+
+
+
+
+Ao utilizar o JSON:
+
+~~~~json
+{
+  "model": "mistral",
+  "prompt": "Traduza para o {{$node['Codigo-Extrair-dados-do-post'].json['targetLanguage']}}: {{$node['Codigo-Extrair-dados-do-post'].json['content']}}. Importante manter a estrutura do post sem afetar a formatação ou elementos do wordpress.",
+  "stream": false
+}
+~~~~
+
+
+traz a resposta:
+
+~~~~
+
+"response": " traduzir para o {{ $node['Codigo-Extrair-dados-do-post'].json['targetLanguage'] }}: {{ $node['Codigo-Extrair-dados-do-post'].json['content'] }} é importante manter a estrutura do post sem afetar a formatação ou elementos do WordPress.\n\nNão parece que essa string seja PHP, então não consegui identificar onde você deveria fazer essas modificações. Por favor forneça mais informações sobre como você está usando essa string para que possamos ajudá-lo corretamente.",
+
+~~~~
+
+
+
+
+
+
+no N8N, como eu faço para acessar valores do step anterior?
+
+no step anterior o código é este:
+
+~~~~js
+function escapeJsonString(str) {
+  return str.replace(/\\/g, '\\\\')
+            .replace(/"/g, '\\"')
+            .replace(/\n/g, '\\n')
+            .replace(/\r/g, '\\r')
+            .replace(/\t/g, '\\t');
+}
+
+// O n8n passa os dados recebidos em um array chamado `items`
+return items.map(item => {
+  // Extrair o título do post
+  const title = item.json.title?.rendered || 'Sem título';
+
+  // Extrair o corpo do post (conteúdo) e escapar caracteres especiais
+  const content = escapeJsonString(item.json.content?.rendered || 'Sem conteúdo');
+
+  // Extrair metadados (exemplo: HREFLANG, idioma, etc.)
+  const metadata = item.json.meta || {};
+
+  // Extrair a URL da imagem de capa (featured image)
+  const featuredImageUrl = item.json.featured_media_url || item.json._links?.['wp:featuredmedia']?.[0]?.href || 'Sem imagem de capa';
+
+  const targetLanguage = 'inglês'; // Define o idioma de destino
+
+  // Retornar os dados extraídos
+  return {
+    json: {
+      title,
+      content,
+      metadata,
+      featuredImageUrl,
+      targetLanguage // Idioma de destino
+      // Você pode adicionar outros campos aqui, se necessário
+    }
+  };
+});
+~~~~
+
+quero acessar o title, content e targetLanguage, para usar num prompt no JSON do próximo step que é um HTTP Request para um Ollama Local.
+
+Como eu acesso estes valores?
+
+
+
+
+
+No n8n, para acessar os valores do step anterior você utiliza as **expressões**. Por exemplo, se no step anterior você retornou os campos `title`, `content` e `targetLanguage`, você pode acessá-los no próximo step (como no HTTP Request) utilizando a sintaxe:
+
+- **Título:** `{{$json.title}}`
+- **Conteúdo:** `{{$json.content}}`
+- **Idioma de destino:** `{{$json.targetLanguage}}`
+
+### Exemplo no HTTP Request
+
+Suponha que você queira enviar um JSON com esses valores para o endpoint do Ollama. No campo **Body Parameters** (em modo JSON) do nó HTTP Request, você pode usar:
+
+```json
+{
+  "input": "={{ $json.content }}",
+  "prompt": "Traduzir o post com título: {{$json.title}} para {{$json.targetLanguage}}.",
+  "target_language": "={{ $json.targetLanguage }}"
+}
+```
+
+Essa configuração irá pegar os valores retornados do step anterior e utilizá-los para compor a requisição que será enviada ao Ollama Local. Basta clicar no botão de “expressões” (ícone de ⚙️) e inserir a expressão conforme mostrado.
+
+
+
+
+
+
+No n8n, para acessar os valores de um step anterior, você pode usar a sintaxe `$node[NomeDoStep].json[CampoQueVocêQuerAcessar]`. No seu caso, você quer acessar os campos `title`, `content` e `targetLanguage` do step anterior para usar em um prompt no próximo step, que é um HTTP Request para um Ollama Local.
+
+Aqui está um exemplo de como você pode fazer isso:
+
+### Passo 1: Certifique-se de que o step anterior está configurado corretamente
+O código que você forneceu já está retornando os campos `title`, `content` e `targetLanguage` no formato JSON. Isso significa que esses campos estão disponíveis para serem acessados no próximo step.
+
+### Passo 2: Configurar o HTTP Request para Ollama Local
+No step do HTTP Request, você pode acessar os valores do step anterior da seguinte maneira:
+
+1. **URL**: Defina a URL do seu Ollama Local.
+2. **Método**: Geralmente, você usará `POST` para enviar dados.
+3. **Headers**: Se necessário, adicione os headers apropriados (por exemplo, `Content-Type: application/json`).
+4. **Body**: Aqui você vai construir o JSON que será enviado no corpo da requisição. Você pode acessar os valores do step anterior usando a sintaxe mencionada.
+
+Exemplo de como configurar o Body do HTTP Request:
+
+```json
+{
+  "prompt": "Traduza o seguinte texto para {{$node["NomeDoStepAnterior"].json["targetLanguage"]}}: {{$node["NomeDoStepAnterior"].json["title"]}}\n{{$node["NomeDoStepAnterior"].json["content"]}}"
+}
+```
+
+### Explicação:
+- `{{$node["NomeDoStepAnterior"].json["targetLanguage"]}}`: Acessa o valor de `targetLanguage` do step anterior.
+- `{{$node["NomeDoStepAnterior"].json["title"]}}`: Acessa o valor de `title` do step anterior.
+- `{{$node["NomeDoStepAnterior"].json["content"]}}`: Acessa o valor de `content` do step anterior.
+
+### Passo 3: Executar o fluxo
+Depois de configurar o HTTP Request com os valores do step anterior, você pode executar o fluxo e o n8n irá substituir as expressões `{{...}}` pelos valores correspondentes.
+
+### Exemplo Completo:
+Aqui está um exemplo completo de como o Body do HTTP Request pode ficar:
+
+```json
+{
+  "prompt": "Traduza o seguinte texto para {{$node["NomeDoStepAnterior"].json["targetLanguage"]}}: {{$node["NomeDoStepAnterior"].json["title"]}}\n{{$node["NomeDoStepAnterior"].json["content"]}}"
+}
+```
+
+Substitua `"NomeDoStepAnterior"` pelo nome real do step anterior no seu fluxo.
+
+### Dica:
+Se você estiver usando a interface gráfica do n8n, você pode clicar no ícone de "Expressão" (um ícone de chave inglesa) ao lado do campo onde deseja inserir o valor, e o n8n irá sugerir automaticamente os campos disponíveis dos steps anteriores.
+
+Isso deve permitir que você acesse e utilize os valores `title`, `content` e `targetLanguage` no seu próximo step.
+
+
+
+
+
+
+- Ajustar o JSON:
+
+~~~~json
+{
+  "model": "mistral",
+  "prompt": "Traduza o seguinte texto para {{$node["Codigo-Extrair-dados-do-post"].json["targetLanguage"]}}: {{$node["Codigo-Extrair-dados-do-post"].json["title"]}}\n{{$node["Codigo-Extrair-dados-do-post"].json["content"]}}",
+  "stream": false
+}
+~~~~
+
+funcionou
+porém ele nao traduz direto, fica explicando as coisas
+
+
+
+- Ajustar o JSON:
+
+~~~~json
+{
+  "model": "mistral",
+  "prompt": "Traduza o seguinte texto para {{$node["Codigo-Extrair-dados-do-post"].json["targetLanguage"]}}: {{$node["Codigo-Extrair-dados-do-post"].json["title"]}}\n{{$node["Codigo-Extrair-dados-do-post"].json["content"]}} . Preciso que o texto seja traduzido, não preciso de explicações a respeito do que ele é ou faz. Somente traduza o que foi fornecido.",
+  "stream": false
+}
+~~~~
+
+
+trouxe uma tradução, mas bem menor que o post original:
+
+
+
+~~~~json
+[
+  {
+    "model": "mistral",
+    "created_at": "2025-02-06T15:11:26.86991565Z",
+    "response": "1. Introdução\n     - DevOps e SRE (Site Reliability Engineering) são abordagens de engenharia em TI que visam aumentar a eficiência e confiabilidade dos sistemas.\n     - A adoção dessas abordagens pode trazer benefícios como melhoria na confiabilidade, eficiência e escalabilidade de sistemas TI.\n\n  2. DevOps\n     - O DevOps é uma prática que envolve a colaboração entre desenvolvedores e operações para criar um ciclo contínuo de desenvolvimento e implantação.\n     - Os principais objetivos do DevOps são aumentar a velocidade da entrega, reduzir o tempo de resposta e melhorar a qualidade dos sistemas TI.\n\n  3. SRE (Site Reliability Engineering)\n     - O SRE é uma abordagem que se baseia no conceito de \"todos os engenheiros são engenheiros de site confiável\" e foca em garantir a disponibilidade, a performance e a escalabilidade dos sistemas TI.\n     - O SRE envolve práticas como monitoramento contínuo, diagnóstico e correção rápida de problemas e melhoria contínua do sistema.\n\n  4. Docker\n     - O Docker é uma ferramenta de containerização que permite criar e gerenciar sistemas TI em containerizados, facilitando a movimentação dos mesmos entre ambientes diferentes.\n     - O uso do Docker pode trazer benefícios como melhoria na portabilidade, redução de tempo de implantação e escalabilidade horizontal.\n\n  5. Conclusão\n     - O Docker é uma peça-chave no quebra-cabeça DevOps e SRE. A adoção dessa tecnologia pode melhorar a confiabilidade, eficiência e escalabilidade de sistemas TI.",
+    "done": true,
+    "done_reason": "stop",
+    "context": [
+      3,
+      29473,
+      29491
+    ],
+    "total_duration": 11499820761,
+    "load_duration": 4840658,
+    "prompt_eval_count": 2048,
+    "prompt_eval_duration": 1003000000,
+    "eval_count": 487,
+    "eval_duration": 10490000000
+  }
+]
+~~~~
+
+
+
+
+- Testar DeepSeek via Ollama
+
+https://www.datacamp.com/tutorial/deepseek-r1-ollama
+
+Step 2: Download and run DeepSeek-R1
+
+Let’s test the setup and download our model. Launch the terminal and type the following command.
+
+ollama run deepseek-r1
+
+Step 2: Accessing DeepSeek-R1 via API
+
+To integrate DeepSeek-R1 into applications, use the Ollama API using curl:
+
+curl http://localhost:11434/api/chat -d '{
+  "model": "deepseek-r1",
+  "messages": [{ "role": "user", "content": "Solve: 25 * 25" }],
+  "stream": false
+}'
+
+https://ollama.com/library/deepseek-r1
+
+ollama run deepseek-r1:671b
+
+# ollama run deepseek-r1:671b
+pulling manifest 
+pulling 9801e7fce27d...   0% ▕                                                                                                                                                                                                                                                           ▏  36 MB/404 GB  7.9 MB/s  14h15m^C
+
+ollama run deepseek-r1
+
+# ollama run deepseek-r1
+pulling manifest 
+pulling 96c415656d37...   1% ▕█                                                                                                                                                                                                                                                          ▏  29 MB/4.7 GB  7.3 MB/s  10m36s
+
+
+- Baixando o deepseek-r1 de 4,7GB, pois o deepseek-r1:671b pesa 404GB:
+
+
+# ollama run deepseek-r1
+pulling manifest 
+pulling 96c415656d37...  13% ▕███████████████████████████████                                                                                                                                                                                                                            ▏ 591 MB/4.7 GB   10 MB/s   6m15s
+
+
+
+
+
+- ANTES
+
+> df -h
+Filesystem      Size  Used Avail Use% Mounted on
+none            7.8G     0  7.8G   0% /usr/lib/modules/5.15.167.4-microsoft-standard-WSL2
+none            7.8G  4.0K  7.8G   1% /mnt/wsl
+drivers         150G  144G  5.4G  97% /usr/lib/wsl/drivers
+/dev/sdc       1007G   33G  924G   4% /
+
+
+- DEPOIS
+
+> ncdu
+> ncdu -x /
+> df -h
+Filesystem      Size  Used Avail Use% Mounted on
+none            7.8G     0  7.8G   0% /usr/lib/modules/5.15.167.4-microsoft-standard-WSL2
+none            7.8G  4.0K  7.8G   1% /mnt/wsl
+drivers         150G  145G  5.4G  97% /usr/lib/wsl/drivers
+/dev/sdc       1007G   30G  926G   4% /
+
+
+
+- Tratar espaço em disco do Windows vs WSL.
+1. ncdu
+2. EXCLUIR mistral
+
+
 # #################################################################################################################################################
 # #################################################################################################################################################
 # #################################################################################################################################################
@@ -4860,14 +5148,15 @@ accessible via:
 n8n                | http://localhost:5678/
 ~~~~
 
-
-- Tratar workflow
-  Problem in node ‘HTTP Request - para enviar ao Ollama local traduzir‘
-  JSON parameter needs to be valid JSON
-ver como acessar JSON, seguir passos do DeepSeek acima.
-
 - Efetuar testes com n8n
-1. seguir README:
-<https://github.com/n8n-io/self-hosted-ai-starter-kit/blob/main/README.md>
-2. seguir fluxo resumido/sugerido pelo DeepSeek
-3. Ver sobre "Function Node" no n8n, para executar códigos JavaScript para obter o JSON e processar os dados recebidos.
+    1. seguir README:
+    <https://github.com/n8n-io/self-hosted-ai-starter-kit/blob/main/README.md>
+    2. seguir fluxo resumido/sugerido pelo DeepSeek
+    3. Ver sobre "Function Node" no n8n, para executar códigos JavaScript para obter o JSON e processar os dados recebidos.
+
+
+- Tratar espaço em disco do Windows vs WSL.
+1. ncdu
+2. EXCLUIR mistral
+
+- Avaliar uso do DeepSeek no lugar do Ollama.
